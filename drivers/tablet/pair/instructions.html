@@ -1,0 +1,97 @@
+<style>
+  .adb-field { margin-bottom: 1em; }
+  .adb-field label { display: block; margin-bottom: .3em; font-weight: 500; }
+  .adb-field input, .adb-field select { width: 100%; box-sizing: border-box; }
+  .adb-row { display: flex; gap: 1em; }
+  .adb-row .adb-field { flex: 1; }
+  .adb-note { opacity: .7; font-size: .9em; margin: .5em 0 1em; }
+  .adb-section { margin: 1.5em 0 .5em; font-weight: 600; }
+  .adb-link { display: inline-block; margin: 0 0 1em; color: #0082fa; cursor: pointer; text-decoration: underline; font-weight: 500; }
+  .adb-help { margin-bottom: 1.5em; }
+  .adb-help h3 { margin: 1em 0 .4em; font-size: 1em; }
+  .adb-help h3:first-of-type { margin-top: .5em; }
+  .adb-help ol { margin: 0; padding-left: 1.4em; }
+  .adb-help li { margin-bottom: .45em; line-height: 1.35; }
+  .adb-tip { margin-top: 1em; padding: .7em .9em; border-radius: 8px; background: rgba(255, 170, 0, .15); font-size: .92em; line-height: 1.35; }
+  .adb-found { display: flex; flex-wrap: wrap; gap: .5em; margin-bottom: 1em; }
+  .adb-chip { border: 1px solid rgba(128, 128, 128, .5); border-radius: 999px; padding: .4em .9em; cursor: pointer; font-size: .9em; background: transparent; color: inherit; }
+  .adb-chip.selected { border-color: #0082fa; color: #0082fa; }
+  .adb-chip.added { opacity: .5; }
+</style>
+
+<!-- Opened from "How do I pair my device?" on the connect page. Homey's back
+     button (navigation.prev in driver.compose.json) returns to the form. -->
+
+<header class="homey-header">
+  <h1 class="homey-title" data-i18n="help_show"></h1>
+</header>
+
+<div class="adb-help">
+  <div class="adb-field">
+    <label class="homey-form-label" for="brand" data-i18n="brand_label"></label>
+    <select class="homey-form-select" id="brand"></select>
+  </div>
+  <div id="helpSteps"></div>
+</div>
+
+<script type="application/javascript">
+  function field(id) { return document.getElementById(id); }
+
+  /* All texts live in /locales/<language>.json under "pair". */
+  function t(key) { return Homey.__('pair.' + key); }
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'), function (el) {
+    el.innerHTML = t(el.getAttribute('data-i18n'));
+  });
+
+  /* ---------- Pairing instructions per brand ---------- */
+
+  var COMMON_PAIR = ['common_1', 'common_2', 'common_3', 'common_4', 'common_5', 'common_6'];
+
+  var BRANDS = [
+    { id: 'oneplus', unlock: 2, tip: true },
+    { id: 'samsung', unlock: 2, tip: true },
+    { id: 'pixel', unlock: 2, tip: false },
+    { id: 'xiaomi', unlock: 2, tip: true },
+    { id: 'lenovo', unlock: 2, tip: true },
+    { id: 'old', custom: 5, tip: true }
+  ];
+
+  function numbered(prefix, count) {
+    var keys = [];
+    for (var i = 1; i <= count; i++) keys.push(prefix + i);
+    return keys;
+  }
+
+  function list(keys) {
+    return '<ol>' + keys.map(function (key) { return '<li>' + t(key) + '</li>'; }).join('') + '</ol>';
+  }
+
+  function renderHelp() {
+    var brand = BRANDS.filter(function (b) { return b.id === field('brand').value; })[0] || BRANDS[0];
+    var html;
+    if (brand.custom) {
+      html = '<h3>' + t('step_classic') + '</h3>' + list(numbered(brand.id + '_', brand.custom));
+    } else {
+      html = '<h3>' + t('step_unlock') + '</h3>' + list(numbered(brand.id + '_unlock_', brand.unlock))
+        + '<h3>' + t('step_pair') + '</h3>' + list([brand.id + '_where'].concat(COMMON_PAIR));
+    }
+    if (brand.tip) html += '<div class="adb-tip">' + t(brand.id + '_tip') + '</div>';
+    html += '<p class="adb-note">' + t('footer') + '</p>';
+    field('helpSteps').innerHTML = html;
+  }
+
+  BRANDS.forEach(function (brand) {
+    var option = document.createElement('option');
+    option.value = brand.id;
+    option.textContent = t(brand.id + '_name');
+    field('brand').appendChild(option);
+  });
+  try { if (localStorage.getItem('adbBrand')) field('brand').value = localStorage.getItem('adbBrand'); } catch (e) {}
+  field('brand').addEventListener('change', function () {
+    try { localStorage.setItem('adbBrand', field('brand').value); } catch (e) {}
+    renderHelp();
+  });
+  renderHelp();
+
+</script>

@@ -1,0 +1,11 @@
+{
+  "name": "com.android.adb",
+  "version": "1.3.0",
+  "main": "app.js",
+  "private": true,
+  "dependencies": {
+    "@noble/curves": "^2.4.0",
+    "@yume-chan/adb": "^2.6.4",
+    "@yume-chan/stream-extra": "^2.6.1"
+  }
+}

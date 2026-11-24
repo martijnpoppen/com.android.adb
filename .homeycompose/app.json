@@ -1,0 +1,53 @@
+{
+  "id": "com.android.adb",
+  "version": "1.0.0",
+  "compatibility": ">=12.2.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "Android Control",
+    "nl": "Android Control",
+    "de": "Android Control",
+    "fr": "Android Control",
+    "it": "Android Control",
+    "sv": "Android Control",
+    "no": "Android Control",
+    "es": "Android Control",
+    "da": "Android Control",
+    "ru": "Android Control",
+    "pl": "Android Control",
+    "ko": "Android Control",
+    "ar": "Android Control"
+  },
+  "description": {
+    "en": "Control your Android phone or tablet from Homey",
+    "nl": "Bedien je Android-telefoon of -tablet vanuit Homey",
+    "de": "Steuere dein Android-Smartphone oder -Tablet mit Homey",
+    "fr": "Contrôlez votre téléphone ou tablette Android depuis Homey",
+    "it": "Controlla il tuo telefono o tablet Android da Homey",
+    "sv": "Styr din Android-telefon eller surfplatta från Homey",
+    "no": "Styr Android-telefonen eller -nettbrettet ditt fra Homey",
+    "es": "Controla tu teléfono o tablet Android desde Homey",
+    "da": "Styr din Android-telefon eller -tablet fra Homey",
+    "ru": "Управляйте телефоном или планшетом Android из Homey",
+    "pl": "Steruj telefonem lub tabletem z Androidem z poziomu Homey",
+    "ko": "Homey에서 Android 휴대전화나 태블릿을 제어하세요",
+    "ar": "تحكّم في هاتف Android أو جهازك اللوحي من Homey"
+  },
+  "category": [
+    "tools"
+  ],
+  "brandColor": "#188649",
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Your Name",
+    "email": "you@example.com"
+  }
+}

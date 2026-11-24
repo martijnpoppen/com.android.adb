@@ -1,0 +1,147 @@
+{
+  "name": {
+    "en": "Android device",
+    "nl": "Android-apparaat",
+    "de": "Android-Gerät",
+    "fr": "Appareil Android",
+    "it": "Dispositivo Android",
+    "sv": "Android-enhet",
+    "no": "Android-enhet",
+    "es": "Dispositivo Android",
+    "da": "Android-enhed",
+    "ru": "Устройство Android",
+    "pl": "Urządzenie z Androidem",
+    "ko": "Android 기기",
+    "ar": "جهاز Android"
+  },
+  "class": "other",
+  "capabilities": [
+    "onoff",
+    "dim",
+    "volume_set",
+    "measure_battery",
+    "battery_charging_state"
+  ],
+  "capabilitiesOptions": {
+    "onoff": {
+      "title": {
+        "en": "Screen",
+        "nl": "Scherm",
+        "de": "Bildschirm",
+        "fr": "Écran",
+        "it": "Schermo",
+        "sv": "Skärm",
+        "no": "Skjerm",
+        "es": "Pantalla",
+        "da": "Skærm",
+        "ru": "Экран",
+        "pl": "Ekran",
+        "ko": "화면",
+        "ar": "الشاشة"
+      },
+      "insightsTitleTrue": {
+        "en": "Screen turned on",
+        "nl": "Scherm aangezet",
+        "de": "Bildschirm eingeschaltet",
+        "fr": "Écran allumé",
+        "it": "Schermo acceso",
+        "sv": "Skärmen slogs på",
+        "no": "Skjermen ble slått på",
+        "es": "Pantalla encendida",
+        "da": "Skærm tændt",
+        "ru": "Экран включён",
+        "pl": "Ekran włączony",
+        "ko": "화면 켜짐",
+        "ar": "تم تشغيل الشاشة"
+      },
+      "insightsTitleFalse": {
+        "en": "Screen turned off",
+        "nl": "Scherm uitgezet",
+        "de": "Bildschirm ausgeschaltet",
+        "fr": "Écran éteint",
+        "it": "Schermo spento",
+        "sv": "Skärmen stängdes av",
+        "no": "Skjermen ble slått av",
+        "es": "Pantalla apagada",
+        "da": "Skærm slukket",
+        "ru": "Экран выключен",
+        "pl": "Ekran wyłączony",
+        "ko": "화면 꺼짐",
+        "ar": "تم إيقاف الشاشة"
+      }
+    },
+    "dim": {
+      "title": {
+        "en": "Brightness",
+        "nl": "Helderheid",
+        "de": "Helligkeit",
+        "fr": "Luminosité",
+        "it": "Luminosità",
+        "sv": "Ljusstyrka",
+        "no": "Lysstyrke",
+        "es": "Brillo",
+        "da": "Lysstyrke",
+        "ru": "Яркость",
+        "pl": "Jasność",
+        "ko": "밝기",
+        "ar": "السطوع"
+      }
+    },
+    "volume_set": {
+      "title": {
+        "en": "Media volume",
+        "nl": "Mediavolume",
+        "de": "Medienlautstärke",
+        "fr": "Volume multimédia",
+        "it": "Volume contenuti multimediali",
+        "sv": "Medievolym",
+        "no": "Medievolum",
+        "es": "Volumen multimedia",
+        "da": "Medielydstyrke",
+        "ru": "Громкость мультимедиа",
+        "pl": "Głośność multimediów",
+        "ko": "미디어 볼륨",
+        "ar": "مستوى صوت الوسائط"
+      }
+    }
+  },
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "lan"
+  ],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "connect"
+    },
+    {
+      "id": "instructions",
+      "navigation": {
+        "prev": "connect"
+      }
+    }
+  ],
+  "discovery": "adb-tls",
+  "repair": [
+    {
+      "id": "connect"
+    },
+    {
+      "id": "instructions",
+      "navigation": {
+        "prev": "connect"
+      }
+    }
+  ],
+  "energy": {
+    "batteries": [
+      "INTERNAL"
+    ]
+  }
+}

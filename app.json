@@ -1,0 +1,1468 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "com.android.adb",
+  "version": "1.0.0",
+  "compatibility": ">=12.2.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "Android Control",
+    "nl": "Android Control",
+    "de": "Android Control",
+    "fr": "Android Control",
+    "it": "Android Control",
+    "sv": "Android Control",
+    "no": "Android Control",
+    "es": "Android Control",
+    "da": "Android Control",
+    "ru": "Android Control",
+    "pl": "Android Control",
+    "ko": "Android Control",
+    "ar": "Android Control"
+  },
+  "description": {
+    "en": "Control your Android phone or tablet from Homey",
+    "nl": "Bedien je Android-telefoon of -tablet vanuit Homey",
+    "de": "Steuere dein Android-Smartphone oder -Tablet mit Homey",
+    "fr": "Contrôlez votre téléphone ou tablette Android depuis Homey",
+    "it": "Controlla il tuo telefono o tablet Android da Homey",
+    "sv": "Styr din Android-telefon eller surfplatta från Homey",
+    "no": "Styr Android-telefonen eller -nettbrettet ditt fra Homey",
+    "es": "Controla tu teléfono o tablet Android desde Homey",
+    "da": "Styr din Android-telefon eller -tablet fra Homey",
+    "ru": "Управляйте телефоном или планшетом Android из Homey",
+    "pl": "Steruj telefonem lub tabletem z Androidem z poziomu Homey",
+    "ko": "Homey에서 Android 휴대전화나 태블릿을 제어하세요",
+    "ar": "تحكّم في هاتف Android أو جهازك اللوحي من Homey"
+  },
+  "category": [
+    "tools"
+  ],
+  "brandColor": "#188649",
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Your Name",
+    "email": "you@example.com"
+  },
+  "flow": {
+    "conditions": [
+      {
+        "id": "is_charging",
+        "title": {
+          "en": "Is !{{charging|not charging}}",
+          "nl": "!{{Wordt|Wordt niet}} opgeladen",
+          "de": "!{{Lädt|Lädt nicht}}",
+          "fr": "!{{Est en charge|N'est pas en charge}}",
+          "it": "!{{È in carica|Non è in carica}}",
+          "sv": "!{{Laddas|Laddas inte}}",
+          "no": "!{{Lader|Lader ikke}}",
+          "es": "!{{Está cargando|No está cargando}}",
+          "da": "!{{Lader op|Lader ikke op}}",
+          "ru": "!{{Заряжается|Не заряжается}}",
+          "pl": "!{{Ładuje się|Nie ładuje się}}",
+          "ko": "!{{충전 중임|충전 중이 아님}}",
+          "ar": "!{{قيد الشحن|ليس قيد الشحن}}"
+        },
+        "hint": {
+          "en": "True when the device is connected to a charger (also when the battery is full).",
+          "nl": "Waar als het apparaat aan een lader is aangesloten (ook als de batterij vol is).",
+          "de": "Wahr, wenn das Gerät an einem Ladegerät hängt (auch wenn der Akku voll ist).",
+          "fr": "Vrai lorsque l'appareil est branché sur un chargeur (même quand la batterie est pleine).",
+          "it": "Vero quando il dispositivo è collegato a un caricabatterie (anche a batteria carica).",
+          "sv": "Sant när enheten är ansluten till en laddare (även när batteriet är fullt).",
+          "no": "Sann når enheten er koblet til en lader (også når batteriet er fullt).",
+          "es": "Se cumple cuando el dispositivo está conectado a un cargador (también con la batería llena).",
+          "da": "Sand, når enheden er sluttet til en oplader (også når batteriet er fuldt).",
+          "ru": "Выполняется, когда устройство подключено к зарядному устройству (в том числе при полном заряде батареи).",
+          "pl": "Prawda, gdy urządzenie jest podłączone do ładowarki (także gdy bateria jest pełna).",
+          "ko": "기기가 충전기에 연결되어 있으면 참이에요(배터리가 가득 찬 경우도 포함).",
+          "ar": "يتحقق عندما يكون الجهاز متصلاً بشاحن (حتى عندما تكون البطارية ممتلئة)."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          }
+        ]
+      },
+      {
+        "id": "app_in_foreground",
+        "title": {
+          "en": "App !{{is|is not}} open on screen",
+          "nl": "App !{{is|is niet}} open op het scherm",
+          "de": "App !{{ist|ist nicht}} auf dem Bildschirm geöffnet",
+          "fr": "L'app !{{est|n'est pas}} ouverte à l'écran",
+          "it": "L'app !{{è|non è}} aperta sullo schermo",
+          "sv": "App !{{är|är inte}} öppen på skärmen",
+          "no": "App !{{er|er ikke}} åpen på skjermen",
+          "es": "La app !{{está|no está}} abierta en pantalla",
+          "da": "App !{{er|er ikke}} åben på skærmen",
+          "ru": "Приложение !{{открыто|не открыто}} на экране",
+          "pl": "Aplikacja !{{jest|nie jest}} otwarta na ekranie",
+          "ko": "앱이 화면에 열려 !{{있음|있지 않음}}",
+          "ar": "التطبيق !{{مفتوح|غير مفتوح}} على الشاشة"
+        },
+        "titleFormatted": {
+          "en": "[[app]] !{{is|is not}} open on screen",
+          "nl": "[[app]] !{{is|is niet}} open op het scherm",
+          "de": "[[app]] !{{ist|ist nicht}} auf dem Bildschirm geöffnet",
+          "fr": "[[app]] !{{est|n'est pas}} ouverte à l'écran",
+          "it": "[[app]] !{{è|non è}} aperta sullo schermo",
+          "sv": "[[app]] !{{är|är inte}} öppen på skärmen",
+          "no": "[[app]] !{{er|er ikke}} åpen på skjermen",
+          "es": "[[app]] !{{está|no está}} abierta en pantalla",
+          "da": "[[app]] !{{er|er ikke}} åben på skærmen",
+          "ru": "[[app]] !{{открыто|не открыто}} на экране",
+          "pl": "[[app]] !{{jest|nie jest}} otwarta na ekranie",
+          "ko": "[[app]] 앱이 화면에 열려 !{{있음|있지 않음}}",
+          "ar": "[[app]] !{{مفتوح|غير مفتوح}} على الشاشة"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          },
+          {
+            "type": "autocomplete",
+            "name": "app",
+            "title": {
+              "en": "App",
+              "nl": "App",
+              "de": "App",
+              "fr": "App",
+              "it": "App",
+              "sv": "App",
+              "no": "App",
+              "es": "App",
+              "da": "App",
+              "ru": "Приложение",
+              "pl": "Aplikacja",
+              "ko": "앱",
+              "ar": "التطبيق"
+            },
+            "placeholder": {
+              "en": "Search app...",
+              "nl": "Zoek app...",
+              "de": "App suchen...",
+              "fr": "Rechercher une app...",
+              "it": "Cerca app...",
+              "sv": "Sök app...",
+              "no": "Søk etter app...",
+              "es": "Buscar app...",
+              "da": "Søg efter app...",
+              "ru": "Найти приложение...",
+              "pl": "Szukaj aplikacji...",
+              "ko": "앱 검색...",
+              "ar": "البحث عن تطبيق..."
+            }
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "run_shell_command",
+        "title": {
+          "en": "Run ADB shell command",
+          "nl": "ADB-shellopdracht uitvoeren",
+          "de": "ADB-Shell-Befehl ausführen",
+          "fr": "Exécuter une commande shell ADB",
+          "it": "Esegui comando shell ADB",
+          "sv": "Kör ADB-skalkommando",
+          "no": "Kjør ADB shell-kommando",
+          "es": "Ejecutar comando shell de ADB",
+          "da": "Kør ADB-shellkommando",
+          "ru": "Выполнить команду ADB shell",
+          "pl": "Uruchom polecenie powłoki ADB",
+          "ko": "ADB 셸 명령 실행",
+          "ar": "تشغيل أمر ADB shell"
+        },
+        "titleFormatted": {
+          "en": "Run ADB shell command [[command]]",
+          "nl": "ADB-shellopdracht [[command]] uitvoeren",
+          "de": "ADB-Shell-Befehl [[command]] ausführen",
+          "fr": "Exécuter la commande shell ADB [[command]]",
+          "it": "Esegui comando shell ADB [[command]]",
+          "sv": "Kör ADB-skalkommando [[command]]",
+          "no": "Kjør ADB shell-kommando [[command]]",
+          "es": "Ejecutar comando shell de ADB [[command]]",
+          "da": "Kør ADB-shellkommando [[command]]",
+          "ru": "Выполнить команду ADB shell [[command]]",
+          "pl": "Uruchom polecenie powłoki ADB [[command]]",
+          "ko": "ADB 셸 명령 [[command]] 실행",
+          "ar": "تشغيل أمر ADB shell [[command]]"
+        },
+        "hint": {
+          "en": "Runs a command as the shell user, like 'adb shell <command>'.",
+          "nl": "Voert een opdracht uit als de shell-gebruiker, zoals 'adb shell <command>'.",
+          "de": "Führt einen Befehl als Shell-Benutzer aus, wie 'adb shell <command>'.",
+          "fr": "Exécute une commande en tant qu'utilisateur shell, comme « adb shell <command> ».",
+          "it": "Esegue un comando come utente shell, come 'adb shell <command>'.",
+          "sv": "Kör ett kommando som skalanvändaren, som 'adb shell <command>'.",
+          "no": "Kjører en kommando som shell-brukeren, som 'adb shell <command>'.",
+          "es": "Ejecuta un comando como el usuario shell, como 'adb shell <command>'.",
+          "da": "Kører en kommando som shell-brugeren, ligesom 'adb shell <command>'.",
+          "ru": "Выполняет команду от имени пользователя shell, как «adb shell <command>».",
+          "pl": "Uruchamia polecenie jako użytkownik powłoki, jak 'adb shell <command>'.",
+          "ko": "'adb shell <command>'처럼 셸 사용자 권한으로 명령을 실행해요.",
+          "ar": "يشغّل أمرًا بصلاحيات مستخدم shell، مثل «adb shell <command>»."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          },
+          {
+            "type": "text",
+            "name": "command",
+            "title": {
+              "en": "Command",
+              "nl": "Opdracht",
+              "de": "Befehl",
+              "fr": "Commande",
+              "it": "Comando",
+              "sv": "Kommando",
+              "no": "Kommando",
+              "es": "Comando",
+              "da": "Kommando",
+              "ru": "Команда",
+              "pl": "Polecenie",
+              "ko": "명령",
+              "ar": "الأمر"
+            },
+            "placeholder": {
+              "en": "input keyevent KEYCODE_HOME",
+              "nl": "input keyevent KEYCODE_HOME",
+              "de": "input keyevent KEYCODE_HOME",
+              "fr": "input keyevent KEYCODE_HOME",
+              "it": "input keyevent KEYCODE_HOME",
+              "sv": "input keyevent KEYCODE_HOME",
+              "no": "input keyevent KEYCODE_HOME",
+              "es": "input keyevent KEYCODE_HOME",
+              "da": "input keyevent KEYCODE_HOME",
+              "ru": "input keyevent KEYCODE_HOME",
+              "pl": "input keyevent KEYCODE_HOME",
+              "ko": "input keyevent KEYCODE_HOME",
+              "ar": "input keyevent KEYCODE_HOME"
+            }
+          }
+        ],
+        "tokens": [
+          {
+            "name": "output",
+            "type": "string",
+            "title": {
+              "en": "Output",
+              "nl": "Uitvoer",
+              "de": "Ausgabe",
+              "fr": "Sortie",
+              "it": "Output",
+              "sv": "Utdata",
+              "no": "Utdata",
+              "es": "Salida",
+              "da": "Output",
+              "ru": "Вывод",
+              "pl": "Wynik",
+              "ko": "출력",
+              "ar": "المخرجات"
+            },
+            "example": "volume is 7 in range [0..15]"
+          }
+        ]
+      },
+      {
+        "id": "launch_app",
+        "title": {
+          "en": "Open app",
+          "nl": "App openen",
+          "de": "App öffnen",
+          "fr": "Ouvrir une app",
+          "it": "Apri app",
+          "sv": "Öppna app",
+          "no": "Åpne app",
+          "es": "Abrir app",
+          "da": "Åbn app",
+          "ru": "Открыть приложение",
+          "pl": "Otwórz aplikację",
+          "ko": "앱 열기",
+          "ar": "فتح تطبيق"
+        },
+        "titleFormatted": {
+          "en": "Open app [[app]]",
+          "nl": "App [[app]] openen",
+          "de": "App [[app]] öffnen",
+          "fr": "Ouvrir l'app [[app]]",
+          "it": "Apri app [[app]]",
+          "sv": "Öppna appen [[app]]",
+          "no": "Åpne appen [[app]]",
+          "es": "Abrir app [[app]]",
+          "da": "Åbn appen [[app]]",
+          "ru": "Открыть приложение [[app]]",
+          "pl": "Otwórz aplikację [[app]]",
+          "ko": "[[app]] 앱 열기",
+          "ar": "فتح التطبيق [[app]]"
+        },
+        "hint": {
+          "en": "Search on (part of) the package name, for example 'spotify' or 'chrome'.",
+          "nl": "Zoek op (een deel van) de pakketnaam, bijvoorbeeld 'spotify' of 'chrome'.",
+          "de": "Suche nach dem Paketnamen (oder einem Teil davon), zum Beispiel 'spotify' oder 'chrome'.",
+          "fr": "Recherchez sur (une partie du) nom de paquet, par exemple « spotify » ou « chrome ».",
+          "it": "Cerca per (parte del) nome del pacchetto, ad esempio 'spotify' o 'chrome'.",
+          "sv": "Sök på (en del av) paketnamnet, till exempel 'spotify' eller 'chrome'.",
+          "no": "Søk på (deler av) pakkenavnet, for eksempel 'spotify' eller 'chrome'.",
+          "es": "Busca por (parte del) nombre del paquete, por ejemplo 'spotify' o 'chrome'.",
+          "da": "Søg på (en del af) pakkenavnet, for eksempel 'spotify' eller 'chrome'.",
+          "ru": "Поиск по названию пакета (или его части), например «spotify» или «chrome».",
+          "pl": "Wyszukaj po (części) nazwy pakietu, na przykład 'spotify' lub 'chrome'.",
+          "ko": "패키지 이름(또는 그 일부)으로 검색하세요. 예: 'spotify', 'chrome'",
+          "ar": "ابحث باسم الحزمة (أو جزء منه)، مثل «spotify» أو «chrome»."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          },
+          {
+            "type": "autocomplete",
+            "name": "app",
+            "title": {
+              "en": "App",
+              "nl": "App",
+              "de": "App",
+              "fr": "App",
+              "it": "App",
+              "sv": "App",
+              "no": "App",
+              "es": "App",
+              "da": "App",
+              "ru": "Приложение",
+              "pl": "Aplikacja",
+              "ko": "앱",
+              "ar": "التطبيق"
+            },
+            "placeholder": {
+              "en": "Search app...",
+              "nl": "Zoek app...",
+              "de": "App suchen...",
+              "fr": "Rechercher une app...",
+              "it": "Cerca app...",
+              "sv": "Sök app...",
+              "no": "Søk etter app...",
+              "es": "Buscar app...",
+              "da": "Søg efter app...",
+              "ru": "Найти приложение...",
+              "pl": "Szukaj aplikacji...",
+              "ko": "앱 검색...",
+              "ar": "البحث عن تطبيق..."
+            }
+          }
+        ]
+      },
+      {
+        "id": "open_url",
+        "title": {
+          "en": "Open web page or link",
+          "nl": "Webpagina of link openen",
+          "de": "Webseite oder Link öffnen",
+          "fr": "Ouvrir une page web ou un lien",
+          "it": "Apri pagina web o link",
+          "sv": "Öppna webbsida eller länk",
+          "no": "Åpne nettside eller lenke",
+          "es": "Abrir página web o enlace",
+          "da": "Åbn webside eller link",
+          "ru": "Открыть веб-страницу или ссылку",
+          "pl": "Otwórz stronę lub link",
+          "ko": "웹페이지 또는 링크 열기",
+          "ar": "فتح صفحة ويب أو رابط"
+        },
+        "titleFormatted": {
+          "en": "Open [[url]]",
+          "nl": "[[url]] openen",
+          "de": "[[url]] öffnen",
+          "fr": "Ouvrir [[url]]",
+          "it": "Apri [[url]]",
+          "sv": "Öppna [[url]]",
+          "no": "Åpne [[url]]",
+          "es": "Abrir [[url]]",
+          "da": "Åbn [[url]]",
+          "ru": "Открыть [[url]]",
+          "pl": "Otwórz [[url]]",
+          "ko": "[[url]] 열기",
+          "ar": "فتح [[url]]"
+        },
+        "hint": {
+          "en": "Opens the link in the default app, for example a dashboard in the browser.",
+          "nl": "Opent de link in de standaardapp, bijvoorbeeld een dashboard in de browser.",
+          "de": "Öffnet den Link in der Standard-App, zum Beispiel ein Dashboard im Browser.",
+          "fr": "Ouvre le lien dans l'app par défaut, par exemple un tableau de bord dans le navigateur.",
+          "it": "Apre il link nell'app predefinita, ad esempio una dashboard nel browser.",
+          "sv": "Öppnar länken i standardappen, till exempel en kontrollpanel i webbläsaren.",
+          "no": "Åpner lenken i standardappen, for eksempel et dashbord i nettleseren.",
+          "es": "Abre el enlace en la app predeterminada, por ejemplo un panel en el navegador.",
+          "da": "Åbner linket i standardappen, for eksempel et dashboard i browseren.",
+          "ru": "Открывает ссылку в приложении по умолчанию, например панель управления в браузере.",
+          "pl": "Otwiera link w domyślnej aplikacji, na przykład panel w przeglądarce.",
+          "ko": "기본 앱에서 링크를 열어요. 예: 브라우저에서 대시보드 열기",
+          "ar": "يفتح الرابط في التطبيق التلقائي، مثل لوحة معلومات في المتصفح."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          },
+          {
+            "type": "text",
+            "name": "url",
+            "title": {
+              "en": "Link",
+              "nl": "Link",
+              "de": "Link",
+              "fr": "Lien",
+              "it": "Link",
+              "sv": "Länk",
+              "no": "Lenke",
+              "es": "Enlace",
+              "da": "Link",
+              "ru": "Ссылка",
+              "pl": "Link",
+              "ko": "링크",
+              "ar": "الرابط"
+            },
+            "placeholder": {
+              "en": "https://my.homey.app",
+              "nl": "https://my.homey.app",
+              "de": "https://my.homey.app",
+              "fr": "https://my.homey.app",
+              "it": "https://my.homey.app",
+              "sv": "https://my.homey.app",
+              "no": "https://my.homey.app",
+              "es": "https://my.homey.app",
+              "da": "https://my.homey.app",
+              "ru": "https://my.homey.app",
+              "pl": "https://my.homey.app",
+              "ko": "https://my.homey.app",
+              "ar": "https://my.homey.app"
+            }
+          }
+        ]
+      },
+      {
+        "id": "press_key",
+        "title": {
+          "en": "Press button",
+          "nl": "Knop indrukken",
+          "de": "Taste drücken",
+          "fr": "Appuyer sur un bouton",
+          "it": "Premi pulsante",
+          "sv": "Tryck på knapp",
+          "no": "Trykk på knapp",
+          "es": "Pulsar botón",
+          "da": "Tryk på knap",
+          "ru": "Нажать кнопку",
+          "pl": "Naciśnij przycisk",
+          "ko": "버튼 누르기",
+          "ar": "الضغط على زر"
+        },
+        "titleFormatted": {
+          "en": "Press [[key]]",
+          "nl": "[[key]] indrukken",
+          "de": "[[key]] drücken",
+          "fr": "Appuyer sur [[key]]",
+          "it": "Premi [[key]]",
+          "sv": "Tryck på [[key]]",
+          "no": "Trykk på [[key]]",
+          "es": "Pulsar [[key]]",
+          "da": "Tryk på [[key]]",
+          "ru": "Нажать [[key]]",
+          "pl": "Naciśnij [[key]]",
+          "ko": "[[key]] 누르기",
+          "ar": "الضغط على [[key]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          },
+          {
+            "type": "dropdown",
+            "name": "key",
+            "title": {
+              "en": "Button",
+              "nl": "Knop",
+              "de": "Taste",
+              "fr": "Bouton",
+              "it": "Pulsante",
+              "sv": "Knapp",
+              "no": "Knapp",
+              "es": "Botón",
+              "da": "Knap",
+              "ru": "Кнопка",
+              "pl": "Przycisk",
+              "ko": "버튼",
+              "ar": "الزر"
+            },
+            "values": [
+              {
+                "id": "KEYCODE_HOME",
+                "title": {
+                  "en": "Home",
+                  "nl": "Home",
+                  "de": "Startbildschirm",
+                  "fr": "Accueil",
+                  "it": "Home",
+                  "sv": "Hem",
+                  "no": "Hjem",
+                  "es": "Inicio",
+                  "da": "Startskærm",
+                  "ru": "Главный экран",
+                  "pl": "Ekran główny",
+                  "ko": "홈",
+                  "ar": "الشاشة الرئيسية"
+                }
+              },
+              {
+                "id": "KEYCODE_BACK",
+                "title": {
+                  "en": "Back",
+                  "nl": "Terug",
+                  "de": "Zurück",
+                  "fr": "Retour",
+                  "it": "Indietro",
+                  "sv": "Tillbaka",
+                  "no": "Tilbake",
+                  "es": "Atrás",
+                  "da": "Tilbage",
+                  "ru": "Назад",
+                  "pl": "Wstecz",
+                  "ko": "뒤로",
+                  "ar": "رجوع"
+                }
+              },
+              {
+                "id": "KEYCODE_APP_SWITCH",
+                "title": {
+                  "en": "Recent apps",
+                  "nl": "Recente apps",
+                  "de": "Letzte Apps",
+                  "fr": "Applis récentes",
+                  "it": "App recenti",
+                  "sv": "Senaste appar",
+                  "no": "Nylige apper",
+                  "es": "Apps recientes",
+                  "da": "Seneste apps",
+                  "ru": "Недавние приложения",
+                  "pl": "Ostatnie aplikacje",
+                  "ko": "최근 앱",
+                  "ar": "التطبيقات الحديثة"
+                }
+              },
+              {
+                "id": "KEYCODE_MEDIA_PLAY_PAUSE",
+                "title": {
+                  "en": "Play / pause",
+                  "nl": "Afspelen / pauzeren",
+                  "de": "Wiedergabe / Pause",
+                  "fr": "Lecture / pause",
+                  "it": "Riproduci / pausa",
+                  "sv": "Spela upp / pausa",
+                  "no": "Spill av / pause",
+                  "es": "Reproducir / pausar",
+                  "da": "Afspil / pause",
+                  "ru": "Воспроизведение / пауза",
+                  "pl": "Odtwórz / wstrzymaj",
+                  "ko": "재생 / 일시중지",
+                  "ar": "تشغيل / إيقاف مؤقت"
+                }
+              },
+              {
+                "id": "KEYCODE_MEDIA_NEXT",
+                "title": {
+                  "en": "Next track",
+                  "nl": "Volgende nummer",
+                  "de": "Nächster Titel",
+                  "fr": "Piste suivante",
+                  "it": "Brano successivo",
+                  "sv": "Nästa spår",
+                  "no": "Neste spor",
+                  "es": "Pista siguiente",
+                  "da": "Næste nummer",
+                  "ru": "Следующий трек",
+                  "pl": "Następny utwór",
+                  "ko": "다음 트랙",
+                  "ar": "المقطع التالي"
+                }
+              },
+              {
+                "id": "KEYCODE_MEDIA_PREVIOUS",
+                "title": {
+                  "en": "Previous track",
+                  "nl": "Vorige nummer",
+                  "de": "Vorheriger Titel",
+                  "fr": "Piste précédente",
+                  "it": "Brano precedente",
+                  "sv": "Föregående spår",
+                  "no": "Forrige spor",
+                  "es": "Pista anterior",
+                  "da": "Forrige nummer",
+                  "ru": "Предыдущий трек",
+                  "pl": "Poprzedni utwór",
+                  "ko": "이전 트랙",
+                  "ar": "المقطع السابق"
+                }
+              },
+              {
+                "id": "KEYCODE_VOLUME_UP",
+                "title": {
+                  "en": "Volume up",
+                  "nl": "Volume omhoog",
+                  "de": "Lauter",
+                  "fr": "Volume +",
+                  "it": "Volume su",
+                  "sv": "Volym upp",
+                  "no": "Volum opp",
+                  "es": "Subir volumen",
+                  "da": "Lydstyrke op",
+                  "ru": "Громкость +",
+                  "pl": "Głośniej",
+                  "ko": "볼륨 높이기",
+                  "ar": "رفع مستوى الصوت"
+                }
+              },
+              {
+                "id": "KEYCODE_VOLUME_DOWN",
+                "title": {
+                  "en": "Volume down",
+                  "nl": "Volume omlaag",
+                  "de": "Leiser",
+                  "fr": "Volume -",
+                  "it": "Volume giù",
+                  "sv": "Volym ned",
+                  "no": "Volum ned",
+                  "es": "Bajar volumen",
+                  "da": "Lydstyrke ned",
+                  "ru": "Громкость −",
+                  "pl": "Ciszej",
+                  "ko": "볼륨 낮추기",
+                  "ar": "خفض مستوى الصوت"
+                }
+              },
+              {
+                "id": "KEYCODE_VOLUME_MUTE",
+                "title": {
+                  "en": "Mute",
+                  "nl": "Dempen",
+                  "de": "Stummschalten",
+                  "fr": "Couper le son",
+                  "it": "Silenzia",
+                  "sv": "Ljud av",
+                  "no": "Demp",
+                  "es": "Silenciar",
+                  "da": "Slå lyden fra",
+                  "ru": "Без звука",
+                  "pl": "Wycisz",
+                  "ko": "음소거",
+                  "ar": "كتم الصوت"
+                }
+              },
+              {
+                "id": "KEYCODE_ENTER",
+                "title": {
+                  "en": "Enter",
+                  "nl": "Enter",
+                  "de": "Eingabe",
+                  "fr": "Entrée",
+                  "it": "Invio",
+                  "sv": "Enter",
+                  "no": "Enter",
+                  "es": "Intro",
+                  "da": "Enter",
+                  "ru": "Ввод",
+                  "pl": "Enter",
+                  "ko": "Enter",
+                  "ar": "إدخال"
+                }
+              },
+              {
+                "id": "KEYCODE_POWER",
+                "title": {
+                  "en": "Power (toggle screen)",
+                  "nl": "Aan/uit (scherm wisselen)",
+                  "de": "Ein/Aus (Bildschirm umschalten)",
+                  "fr": "Marche/arrêt (allumer/éteindre l'écran)",
+                  "it": "Accensione (accendi/spegni schermo)",
+                  "sv": "Av/på (växla skärm)",
+                  "no": "Av/på (veksle skjerm)",
+                  "es": "Encendido (encender/apagar pantalla)",
+                  "da": "Tænd/sluk (skift skærm)",
+                  "ru": "Питание (вкл./выкл. экран)",
+                  "pl": "Zasilanie (przełącz ekran)",
+                  "ko": "전원(화면 켜기/끄기)",
+                  "ar": "التشغيل (تبديل الشاشة)"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "type_text",
+        "title": {
+          "en": "Type text",
+          "nl": "Tekst typen",
+          "de": "Text eingeben",
+          "fr": "Saisir du texte",
+          "it": "Digita testo",
+          "sv": "Skriv text",
+          "no": "Skriv tekst",
+          "es": "Escribir texto",
+          "da": "Skriv tekst",
+          "ru": "Ввести текст",
+          "pl": "Wpisz tekst",
+          "ko": "텍스트 입력",
+          "ar": "كتابة نص"
+        },
+        "titleFormatted": {
+          "en": "Type [[text]]",
+          "nl": "[[text]] typen",
+          "de": "[[text]] eingeben",
+          "fr": "Saisir [[text]]",
+          "it": "Digita [[text]]",
+          "sv": "Skriv [[text]]",
+          "no": "Skriv [[text]]",
+          "es": "Escribir [[text]]",
+          "da": "Skriv [[text]]",
+          "ru": "Ввести [[text]]",
+          "pl": "Wpisz [[text]]",
+          "ko": "[[text]] 입력",
+          "ar": "كتابة [[text]]"
+        },
+        "hint": {
+          "en": "Types into the text field that has focus on the device.",
+          "nl": "Typt in het tekstveld dat op het apparaat geselecteerd is.",
+          "de": "Tippt in das Textfeld, das auf dem Gerät gerade ausgewählt ist.",
+          "fr": "Saisit le texte dans le champ actif de l'appareil.",
+          "it": "Digita nel campo di testo attivo sul dispositivo.",
+          "sv": "Skriver i det textfält som är markerat på enheten.",
+          "no": "Skriver i tekstfeltet som er valgt på enheten.",
+          "es": "Escribe en el campo de texto activo del dispositivo.",
+          "da": "Skriver i det tekstfelt, der er valgt på enheden.",
+          "ru": "Вводит текст в активное текстовое поле на устройстве.",
+          "pl": "Wpisuje tekst w aktywne pole tekstowe na urządzeniu.",
+          "ko": "기기에서 현재 선택된 텍스트 입력란에 입력해요.",
+          "ar": "يكتب في حقل النص المحدّد حاليًا على الجهاز."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          },
+          {
+            "type": "text",
+            "name": "text",
+            "title": {
+              "en": "Text",
+              "nl": "Tekst",
+              "de": "Text",
+              "fr": "Texte",
+              "it": "Testo",
+              "sv": "Text",
+              "no": "Tekst",
+              "es": "Texto",
+              "da": "Tekst",
+              "ru": "Текст",
+              "pl": "Tekst",
+              "ko": "텍스트",
+              "ar": "النص"
+            },
+            "placeholder": {
+              "en": "Hello",
+              "nl": "Hallo",
+              "de": "Hallo",
+              "fr": "Bonjour",
+              "it": "Ciao",
+              "sv": "Hej",
+              "no": "Hei",
+              "es": "Hola",
+              "da": "Hej",
+              "ru": "Привет",
+              "pl": "Cześć",
+              "ko": "안녕하세요",
+              "ar": "مرحبًا"
+            }
+          }
+        ]
+      },
+      {
+        "id": "set_stay_awake",
+        "title": {
+          "en": "Keep screen on while charging",
+          "nl": "Scherm aan houden tijdens opladen",
+          "de": "Bildschirm beim Laden eingeschaltet lassen",
+          "fr": "Garder l'écran allumé pendant la charge",
+          "it": "Schermo sempre acceso durante la ricarica",
+          "sv": "Håll skärmen på vid laddning",
+          "no": "Hold skjermen på under lading",
+          "es": "Mantener la pantalla encendida al cargar",
+          "da": "Hold skærmen tændt under opladning",
+          "ru": "Не выключать экран во время зарядки",
+          "pl": "Nie wyłączaj ekranu podczas ładowania",
+          "ko": "충전 중 화면 켜짐 유지",
+          "ar": "إبقاء الشاشة قيد التشغيل أثناء الشحن"
+        },
+        "titleFormatted": {
+          "en": "Keep screen on while charging: [[enabled]]",
+          "nl": "Scherm aan houden tijdens opladen: [[enabled]]",
+          "de": "Bildschirm beim Laden eingeschaltet lassen: [[enabled]]",
+          "fr": "Garder l'écran allumé pendant la charge : [[enabled]]",
+          "it": "Schermo sempre acceso durante la ricarica: [[enabled]]",
+          "sv": "Håll skärmen på vid laddning: [[enabled]]",
+          "no": "Hold skjermen på under lading: [[enabled]]",
+          "es": "Mantener la pantalla encendida al cargar: [[enabled]]",
+          "da": "Hold skærmen tændt under opladning: [[enabled]]",
+          "ru": "Не выключать экран во время зарядки: [[enabled]]",
+          "pl": "Nie wyłączaj ekranu podczas ładowania: [[enabled]]",
+          "ko": "충전 중 화면 켜짐 유지: [[enabled]]",
+          "ar": "إبقاء الشاشة قيد التشغيل أثناء الشحن: [[enabled]]"
+        },
+        "hint": {
+          "en": "Same as 'Stay awake' in the developer options. Handy for wall-mounted displays.",
+          "nl": "Hetzelfde als 'Actief blijven' in de ontwikkelaarsopties. Handig voor schermen aan de muur.",
+          "de": "Wie 'Aktiv lassen' in den Entwickleroptionen. Praktisch für Displays an der Wand.",
+          "fr": "Identique à « Rester activé » dans les options pour les développeurs. Pratique pour les écrans muraux.",
+          "it": "Come 'Rimani attivo' nelle opzioni sviluppatore. Utile per i display a parete.",
+          "sv": "Samma som 'Håll aktiverad' i utvecklaralternativen. Praktiskt för väggmonterade skärmar.",
+          "no": "Samme som 'Forbli våken' i utvikleralternativene. Nyttig for veggmonterte skjermer.",
+          "es": "Igual que 'Pantalla activa' en las opciones para desarrolladores. Útil para pantallas de pared.",
+          "da": "Det samme som 'Lad være aktiv' i indstillinger for udviklere. Praktisk til skærme på væggen.",
+          "ru": "То же, что «Не выключать экран» в параметрах для разработчиков. Удобно для настенных дисплеев.",
+          "pl": "To samo co 'Pozostaw włączony ekran' w opcjach programistycznych. Przydatne dla ekranów na ścianie.",
+          "ko": "개발자 옵션의 '화면 켜짐 상태 유지'와 같아요. 벽걸이 디스플레이에 유용해요.",
+          "ar": "مثل خيار «البقاء في الوضع النشط» في خيارات المطورين. مفيد للشاشات المثبّتة على الحائط."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          },
+          {
+            "type": "dropdown",
+            "name": "enabled",
+            "title": {
+              "en": "Stay awake",
+              "nl": "Actief blijven",
+              "de": "Aktiv lassen",
+              "fr": "Rester activé",
+              "it": "Rimani attivo",
+              "sv": "Håll aktiverad",
+              "no": "Forbli våken",
+              "es": "Pantalla activa",
+              "da": "Lad være aktiv",
+              "ru": "Не выключать экран",
+              "pl": "Pozostaw włączony ekran",
+              "ko": "화면 켜짐 상태 유지",
+              "ar": "البقاء في الوضع النشط"
+            },
+            "values": [
+              {
+                "id": "true",
+                "title": {
+                  "en": "On",
+                  "nl": "Aan",
+                  "de": "Ein",
+                  "fr": "Activé",
+                  "it": "Attivo",
+                  "sv": "På",
+                  "no": "På",
+                  "es": "Activado",
+                  "da": "Til",
+                  "ru": "Вкл.",
+                  "pl": "Wł.",
+                  "ko": "사용",
+                  "ar": "تشغيل"
+                }
+              },
+              {
+                "id": "false",
+                "title": {
+                  "en": "Off",
+                  "nl": "Uit",
+                  "de": "Aus",
+                  "fr": "Désactivé",
+                  "it": "Disattivo",
+                  "sv": "Av",
+                  "no": "Av",
+                  "es": "Desactivado",
+                  "da": "Fra",
+                  "ru": "Выкл.",
+                  "pl": "Wył.",
+                  "ko": "사용 안함",
+                  "ar": "إيقاف"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "set_screen_timeout",
+        "title": {
+          "en": "Set screen timeout",
+          "nl": "Time-out scherm instellen",
+          "de": "Bildschirm-Timeout einstellen",
+          "fr": "Définir la mise en veille de l'écran",
+          "it": "Imposta spegnimento schermo",
+          "sv": "Ställ in skärmens tidsgräns",
+          "no": "Angi tidsavbrudd for skjermen",
+          "es": "Ajustar tiempo de espera de pantalla",
+          "da": "Indstil timeout for skærm",
+          "ru": "Задать время отключения экрана",
+          "pl": "Ustaw wygaszanie ekranu",
+          "ko": "화면 자동 꺼짐 시간 설정",
+          "ar": "ضبط مهلة الشاشة"
+        },
+        "titleFormatted": {
+          "en": "Turn screen off after [[seconds]] seconds without use",
+          "nl": "Scherm uitzetten na [[seconds]] seconden zonder gebruik",
+          "de": "Bildschirm nach [[seconds]] Sekunden ohne Nutzung ausschalten",
+          "fr": "Éteindre l'écran après [[seconds]] secondes d'inactivité",
+          "it": "Spegni lo schermo dopo [[seconds]] secondi di inattività",
+          "sv": "Stäng av skärmen efter [[seconds]] sekunder utan användning",
+          "no": "Slå av skjermen etter [[seconds]] sekunder uten bruk",
+          "es": "Apagar la pantalla tras [[seconds]] segundos sin uso",
+          "da": "Sluk skærmen efter [[seconds]] sekunder uden brug",
+          "ru": "Выключать экран после [[seconds]] с бездействия",
+          "pl": "Wyłącz ekran po [[seconds]] s bezczynności",
+          "ko": "[[seconds]]초 동안 사용하지 않으면 화면 끄기",
+          "ar": "إيقاف الشاشة بعد [[seconds]] ثانية من عدم الاستخدام"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          },
+          {
+            "type": "number",
+            "name": "seconds",
+            "title": {
+              "en": "Seconds",
+              "nl": "Seconden",
+              "de": "Sekunden",
+              "fr": "Secondes",
+              "it": "Secondi",
+              "sv": "Sekunder",
+              "no": "Sekunder",
+              "es": "Segundos",
+              "da": "Sekunder",
+              "ru": "Секунды",
+              "pl": "Sekundy",
+              "ko": "초",
+              "ar": "الثواني"
+            },
+            "min": 5,
+            "max": 86400,
+            "step": 1,
+            "placeholder": {
+              "en": "60",
+              "nl": "60",
+              "de": "60",
+              "fr": "60",
+              "it": "60",
+              "sv": "60",
+              "no": "60",
+              "es": "60",
+              "da": "60",
+              "ru": "60",
+              "pl": "60",
+              "ko": "60",
+              "ar": "60"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Android device",
+        "nl": "Android-apparaat",
+        "de": "Android-Gerät",
+        "fr": "Appareil Android",
+        "it": "Dispositivo Android",
+        "sv": "Android-enhet",
+        "no": "Android-enhet",
+        "es": "Dispositivo Android",
+        "da": "Android-enhed",
+        "ru": "Устройство Android",
+        "pl": "Urządzenie z Androidem",
+        "ko": "Android 기기",
+        "ar": "جهاز Android"
+      },
+      "class": "other",
+      "capabilities": [
+        "onoff",
+        "dim",
+        "volume_set",
+        "measure_battery",
+        "battery_charging_state"
+      ],
+      "capabilitiesOptions": {
+        "onoff": {
+          "title": {
+            "en": "Screen",
+            "nl": "Scherm",
+            "de": "Bildschirm",
+            "fr": "Écran",
+            "it": "Schermo",
+            "sv": "Skärm",
+            "no": "Skjerm",
+            "es": "Pantalla",
+            "da": "Skærm",
+            "ru": "Экран",
+            "pl": "Ekran",
+            "ko": "화면",
+            "ar": "الشاشة"
+          },
+          "insightsTitleTrue": {
+            "en": "Screen turned on",
+            "nl": "Scherm aangezet",
+            "de": "Bildschirm eingeschaltet",
+            "fr": "Écran allumé",
+            "it": "Schermo acceso",
+            "sv": "Skärmen slogs på",
+            "no": "Skjermen ble slått på",
+            "es": "Pantalla encendida",
+            "da": "Skærm tændt",
+            "ru": "Экран включён",
+            "pl": "Ekran włączony",
+            "ko": "화면 켜짐",
+            "ar": "تم تشغيل الشاشة"
+          },
+          "insightsTitleFalse": {
+            "en": "Screen turned off",
+            "nl": "Scherm uitgezet",
+            "de": "Bildschirm ausgeschaltet",
+            "fr": "Écran éteint",
+            "it": "Schermo spento",
+            "sv": "Skärmen stängdes av",
+            "no": "Skjermen ble slått av",
+            "es": "Pantalla apagada",
+            "da": "Skærm slukket",
+            "ru": "Экран выключен",
+            "pl": "Ekran wyłączony",
+            "ko": "화면 꺼짐",
+            "ar": "تم إيقاف الشاشة"
+          }
+        },
+        "dim": {
+          "title": {
+            "en": "Brightness",
+            "nl": "Helderheid",
+            "de": "Helligkeit",
+            "fr": "Luminosité",
+            "it": "Luminosità",
+            "sv": "Ljusstyrka",
+            "no": "Lysstyrke",
+            "es": "Brillo",
+            "da": "Lysstyrke",
+            "ru": "Яркость",
+            "pl": "Jasność",
+            "ko": "밝기",
+            "ar": "السطوع"
+          }
+        },
+        "volume_set": {
+          "title": {
+            "en": "Media volume",
+            "nl": "Mediavolume",
+            "de": "Medienlautstärke",
+            "fr": "Volume multimédia",
+            "it": "Volume contenuti multimediali",
+            "sv": "Medievolym",
+            "no": "Medievolum",
+            "es": "Volumen multimedia",
+            "da": "Medielydstyrke",
+            "ru": "Громкость мультимедиа",
+            "pl": "Głośność multimediów",
+            "ko": "미디어 볼륨",
+            "ar": "مستوى صوت الوسائط"
+          }
+        }
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/tablet/assets/images/small.png",
+        "large": "/drivers/tablet/assets/images/large.png",
+        "xlarge": "/drivers/tablet/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "connect"
+        },
+        {
+          "id": "instructions",
+          "navigation": {
+            "prev": "connect"
+          }
+        }
+      ],
+      "discovery": "adb-tls",
+      "repair": [
+        {
+          "id": "connect"
+        },
+        {
+          "id": "instructions",
+          "navigation": {
+            "prev": "connect"
+          }
+        }
+      ],
+      "energy": {
+        "batteries": [
+          "INTERNAL"
+        ]
+      },
+      "id": "tablet",
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Connection",
+            "nl": "Verbinding",
+            "de": "Verbindung",
+            "fr": "Connexion",
+            "it": "Connessione",
+            "sv": "Anslutning",
+            "no": "Tilkobling",
+            "es": "Conexión",
+            "da": "Forbindelse",
+            "ru": "Подключение",
+            "pl": "Połączenie",
+            "ko": "연결",
+            "ar": "الاتصال"
+          },
+          "children": [
+            {
+              "id": "host",
+              "type": "text",
+              "label": {
+                "en": "IP address",
+                "nl": "IP-adres",
+                "de": "IP-Adresse",
+                "fr": "Adresse IP",
+                "it": "Indirizzo IP",
+                "sv": "IP-adress",
+                "no": "IP-adresse",
+                "es": "Dirección IP",
+                "da": "IP-adresse",
+                "ru": "IP-адрес",
+                "pl": "Adres IP",
+                "ko": "IP 주소",
+                "ar": "عنوان IP"
+              },
+              "value": "",
+              "hint": {
+                "en": "Give the device a fixed IP address (DHCP reservation) in your router.",
+                "nl": "Geef het apparaat een vast IP-adres (DHCP-reservering) in je router.",
+                "de": "Gib dem Gerät in deinem Router eine feste IP-Adresse (DHCP-Reservierung).",
+                "fr": "Attribuez une adresse IP fixe à l'appareil (réservation DHCP) dans votre routeur.",
+                "it": "Assegna al dispositivo un indirizzo IP fisso (prenotazione DHCP) nel tuo router.",
+                "sv": "Ge enheten en fast IP-adress (DHCP-reservation) i din router.",
+                "no": "Gi enheten en fast IP-adresse (DHCP-reservasjon) i ruteren din.",
+                "es": "Asigna al dispositivo una dirección IP fija (reserva DHCP) en tu router.",
+                "da": "Giv enheden en fast IP-adresse (DHCP-reservation) i din router.",
+                "ru": "Назначьте устройству постоянный IP-адрес (резервирование DHCP) в настройках роутера.",
+                "pl": "Przypisz urządzeniu stały adres IP (rezerwacja DHCP) w routerze.",
+                "ko": "공유기에서 기기에 고정 IP 주소(DHCP 예약)를 지정하세요.",
+                "ar": "خصّص للجهاز عنوان IP ثابتًا (حجز DHCP) في جهاز التوجيه."
+              }
+            },
+            {
+              "id": "port",
+              "type": "number",
+              "label": {
+                "en": "ADB port",
+                "nl": "ADB-poort",
+                "de": "ADB-Port",
+                "fr": "Port ADB",
+                "it": "Porta ADB",
+                "sv": "ADB-port",
+                "no": "ADB-port",
+                "es": "Puerto ADB",
+                "da": "ADB-port",
+                "ru": "Порт ADB",
+                "pl": "Port ADB",
+                "ko": "ADB 포트",
+                "ar": "منفذ ADB"
+              },
+              "value": 5555,
+              "min": 1,
+              "max": 65535,
+              "hint": {
+                "en": "5555 for classic network ADB. With Wireless debugging (Android 11+) the port is random and is kept up to date automatically when the device announces it on the network.",
+                "nl": "5555 voor klassieke ADB via het netwerk. Met Draadloze foutopsporing (Android 11+) is de poort willekeurig en wordt hij automatisch bijgewerkt zodra het apparaat hem op het netwerk bekendmaakt.",
+                "de": "5555 für klassisches Netzwerk-ADB. Mit Debugging über WLAN (Android 11+) ist der Port zufällig und wird automatisch aktualisiert, wenn das Gerät ihn im Netzwerk bekannt gibt.",
+                "fr": "5555 pour l'ADB réseau classique. Avec le débogage sans fil (Android 11+), le port est aléatoire et il est mis à jour automatiquement quand l'appareil l'annonce sur le réseau.",
+                "it": "5555 per l'ADB di rete classico. Con il debug wireless (Android 11+) la porta è casuale e viene aggiornata automaticamente quando il dispositivo la annuncia sulla rete.",
+                "sv": "5555 för klassisk nätverks-ADB. Med Trådlös felsökning (Android 11+) är porten slumpmässig och hålls uppdaterad automatiskt när enheten annonserar den i nätverket.",
+                "no": "5555 for klassisk nettverks-ADB. Med Trådløs feilsøking (Android 11+) er porten tilfeldig, og den holdes oppdatert automatisk når enheten annonserer den på nettverket.",
+                "es": "5555 para ADB de red clásico. Con la depuración inalámbrica (Android 11+) el puerto es aleatorio y se actualiza automáticamente cuando el dispositivo lo anuncia en la red.",
+                "da": "5555 for klassisk netværks-ADB. Med Trådløs fejlretning (Android 11+) er porten tilfældig og opdateres automatisk, når enheden annoncerer den på netværket.",
+                "ru": "5555 для классического ADB по сети. При отладке по Wi-Fi (Android 11+) порт выбирается случайно и обновляется автоматически, когда устройство сообщает его в сети.",
+                "pl": "5555 dla klasycznego ADB przez sieć. Przy debugowaniu bezprzewodowym (Android 11+) port jest losowy i jest automatycznie aktualizowany, gdy urządzenie ogłasza go w sieci.",
+                "ko": "기존 네트워크 ADB는 5555예요. 무선 디버깅(Android 11 이상)에서는 포트가 무작위로 정해지며, 기기가 네트워크에 포트를 알리면 자동으로 업데이트돼요.",
+                "ar": "5555 لـ ADB التقليدي عبر الشبكة. مع تصحيح الأخطاء اللاسلكي (Android 11 والإصدارات الأحدث) يكون المنفذ عشوائيًا ويتم تحديثه تلقائيًا عندما يعلن الجهاز عنه على الشبكة."
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Battery saving",
+            "nl": "Batterij besparen",
+            "de": "Akku sparen",
+            "fr": "Économie de batterie",
+            "it": "Risparmio batteria",
+            "sv": "Batterisparande",
+            "no": "Batterisparing",
+            "es": "Ahorro de batería",
+            "da": "Batterisparing",
+            "ru": "Экономия батареи",
+            "pl": "Oszczędzanie baterii",
+            "ko": "배터리 절약",
+            "ar": "توفير البطارية"
+          },
+          "children": [
+            {
+              "id": "poll_interval",
+              "type": "number",
+              "label": {
+                "en": "Check state while in use, every",
+                "nl": "Status controleren tijdens gebruik, elke",
+                "de": "Status bei Nutzung prüfen, alle",
+                "fr": "Vérifier l'état pendant l'utilisation, toutes les",
+                "it": "Controlla lo stato durante l'uso, ogni",
+                "sv": "Kontrollera status vid användning, var",
+                "no": "Sjekk status under bruk, hvert",
+                "es": "Comprobar el estado durante el uso, cada",
+                "da": "Tjek status under brug, hvert",
+                "ru": "Проверять состояние при использовании каждые",
+                "pl": "Sprawdzaj stan podczas używania co",
+                "ko": "사용 중 상태 확인 주기",
+                "ar": "التحقق من الحالة أثناء الاستخدام كل"
+              },
+              "units": {
+                "en": "seconds",
+                "nl": "seconden",
+                "de": "Sekunden",
+                "fr": "secondes",
+                "it": "secondi",
+                "sv": "sekunder",
+                "no": "sekunder",
+                "es": "segundos",
+                "da": "sekunder",
+                "ru": "с",
+                "pl": "sekund",
+                "ko": "초",
+                "ar": "ثانية"
+              },
+              "value": 15,
+              "min": 5,
+              "max": 3600,
+              "hint": {
+                "en": "Only when \"Keep the connection open\" is on. Used while the screen is on or the device is charging. Checking keeps Homey up to date when someone uses the device by hand.",
+                "nl": "Alleen als \"Verbinding open houden\" aan staat. Gebruikt als het scherm aan is of het apparaat oplaadt. Door te controleren blijft Homey up-to-date als iemand het apparaat met de hand bedient.",
+                "de": "Nur wenn „Verbindung offen halten“ an ist. Wird verwendet, wenn der Bildschirm an ist oder das Gerät lädt. So bleibt Homey auf dem neuesten Stand, wenn jemand das Gerät von Hand bedient.",
+                "fr": "Uniquement si « Garder la connexion ouverte » est activé. Utilisé quand l'écran est allumé ou que l'appareil est en charge. Les vérifications tiennent Homey à jour quand quelqu'un utilise l'appareil à la main.",
+                "it": "Solo se \"Mantieni la connessione aperta\" è attivo. Usato quando lo schermo è acceso o il dispositivo è in carica. I controlli mantengono Homey aggiornato quando qualcuno usa il dispositivo a mano.",
+                "sv": "Bara när ”Håll anslutningen öppen” är på. Används när skärmen är på eller enheten laddas. Kontrollerna håller Homey uppdaterad när någon använder enheten för hand.",
+                "no": "Bare når «Hold tilkoblingen åpen» er på. Brukes når skjermen er på eller enheten lader. Sjekkene holder Homey oppdatert når noen bruker enheten for hånd.",
+                "es": "Solo si «Mantener la conexión abierta» está activado. Se usa mientras la pantalla está encendida o el dispositivo se está cargando. Las comprobaciones mantienen Homey al día cuando alguien usa el dispositivo a mano.",
+                "da": "Kun når \"Hold forbindelsen åben\" er slået til. Bruges, når skærmen er tændt, eller enheden oplader. Tjekket holder Homey opdateret, når nogen bruger enheden i hånden.",
+                "ru": "Только если включено «Не разрывать соединение». Используется, когда экран включён или устройство заряжается. Проверки позволяют Homey знать о том, что кто-то пользуется устройством вручную.",
+                "pl": "Tylko gdy włączone jest „Utrzymuj połączenie”. Używane, gdy ekran jest włączony lub urządzenie się ładuje. Sprawdzanie aktualizuje Homey, gdy ktoś obsługuje urządzenie ręcznie.",
+                "ko": "'연결 계속 유지'가 켜져 있을 때만 적용됩니다. 화면이 켜져 있거나 기기가 충전 중일 때 사용돼요. 누군가 기기를 직접 사용할 때 Homey가 최신 상태를 유지할 수 있어요.",
+                "ar": "فقط عند تفعيل «إبقاء الاتصال مفتوحًا». يُستخدم عندما تكون الشاشة قيد التشغيل أو الجهاز قيد الشحن. يُبقي التحقق Homey على اطلاع عندما يستخدم أحدٌ الجهاز يدويًا."
+              }
+            },
+            {
+              "id": "poll_interval_idle",
+              "type": "number",
+              "label": {
+                "en": "Check state while screen is off on battery, every",
+                "nl": "Status controleren als het scherm uit is op batterij, elke",
+                "de": "Status bei ausgeschaltetem Bildschirm im Akkubetrieb prüfen, alle",
+                "fr": "Vérifier l'état écran éteint sur batterie, toutes les",
+                "it": "Controlla lo stato a schermo spento e a batteria, ogni",
+                "sv": "Kontrollera status när skärmen är av och på batteri, var",
+                "no": "Sjekk status når skjermen er av og på batteri, hvert",
+                "es": "Comprobar el estado con la pantalla apagada y en batería, cada",
+                "da": "Tjek status, når skærmen er slukket på batteri, hvert",
+                "ru": "Проверять состояние при выключенном экране от батареи каждые",
+                "pl": "Sprawdzaj stan przy wyłączonym ekranie i zasilaniu z baterii co",
+                "ko": "배터리 사용 중 화면이 꺼져 있을 때 상태 확인 주기",
+                "ar": "التحقق من الحالة عندما تكون الشاشة مطفأة على البطارية كل"
+              },
+              "units": {
+                "en": "seconds",
+                "nl": "seconden",
+                "de": "Sekunden",
+                "fr": "secondes",
+                "it": "secondi",
+                "sv": "sekunder",
+                "no": "sekunder",
+                "es": "segundos",
+                "da": "sekunder",
+                "ru": "с",
+                "pl": "sekund",
+                "ko": "초",
+                "ar": "ثانية"
+              },
+              "value": 300,
+              "min": 0,
+              "max": 86400,
+              "hint": {
+                "en": "Only when \"Keep the connection open\" is on. Every check wakes the device briefly, so a higher value saves battery. 0 = never check; Homey then only updates after it sends a command itself.",
+                "nl": "Alleen als \"Verbinding open houden\" aan staat. Elke controle maakt het apparaat even wakker, dus een hogere waarde spaart de batterij. 0 = nooit controleren; Homey werkt dan alleen bij nadat het zelf een opdracht heeft gestuurd.",
+                "de": "Nur wenn „Verbindung offen halten“ an ist. Jede Prüfung weckt das Gerät kurz auf, ein höherer Wert spart also Akku. 0 = nie prüfen; Homey aktualisiert dann nur, nachdem es selbst einen Befehl gesendet hat.",
+                "fr": "Uniquement si « Garder la connexion ouverte » est activé. Chaque vérification réveille brièvement l'appareil : une valeur plus élevée économise la batterie. 0 = ne jamais vérifier ; Homey ne se met alors à jour qu'après avoir envoyé lui-même une commande.",
+                "it": "Solo se \"Mantieni la connessione aperta\" è attivo. Ogni controllo riattiva brevemente il dispositivo, quindi un valore più alto fa risparmiare batteria. 0 = non controllare mai; Homey si aggiorna solo dopo aver inviato un comando.",
+                "sv": "Bara när ”Håll anslutningen öppen” är på. Varje kontroll väcker enheten kort, så ett högre värde sparar batteri. 0 = kontrollera aldrig; Homey uppdaterar då bara efter att den själv har skickat ett kommando.",
+                "no": "Bare når «Hold tilkoblingen åpen» er på. Hver sjekk vekker enheten kort, så en høyere verdi sparer batteri. 0 = sjekk aldri; Homey oppdaterer da bare etter at den selv har sendt en kommando.",
+                "es": "Solo si «Mantener la conexión abierta» está activado. Cada comprobación activa el dispositivo brevemente, así que un valor más alto ahorra batería. 0 = no comprobar nunca; entonces Homey solo se actualiza después de enviar él mismo un comando.",
+                "da": "Kun når \"Hold forbindelsen åben\" er slået til. Hvert tjek vækker enheden kort, så en højere værdi sparer batteri. 0 = tjek aldrig; Homey opdaterer så kun, efter at den selv har sendt en kommando.",
+                "ru": "Только если включено «Не разрывать соединение». Каждая проверка ненадолго пробуждает устройство, поэтому большее значение экономит батарею. 0 = не проверять; тогда Homey обновляет состояние только после отправки собственной команды.",
+                "pl": "Tylko gdy włączone jest „Utrzymuj połączenie”. Każde sprawdzenie na chwilę wybudza urządzenie, więc wyższa wartość oszczędza baterię. 0 = nigdy nie sprawdzaj; Homey aktualizuje stan tylko po wysłaniu własnego polecenia.",
+                "ko": "'연결 계속 유지'가 켜져 있을 때만 적용됩니다. 확인할 때마다 기기가 잠시 깨어나므로 값이 클수록 배터리가 절약돼요. 0 = 확인 안 함. 이 경우 Homey는 직접 명령을 보낸 후에만 상태를 업데이트해요.",
+                "ar": "فقط عند تفعيل «إبقاء الاتصال مفتوحًا». كل عملية تحقق تنبّه الجهاز لفترة قصيرة، لذا توفّر القيمة الأعلى البطارية. 0 = عدم التحقق أبدًا؛ عندها لا يحدّث Homey الحالة إلا بعد أن يرسل أمرًا بنفسه."
+              }
+            },
+            {
+              "id": "keep_alive",
+              "type": "checkbox",
+              "label": {
+                "en": "Keep the connection open",
+                "nl": "Verbinding open houden",
+                "de": "Verbindung offen halten",
+                "fr": "Garder la connexion ouverte",
+                "it": "Mantieni la connessione aperta",
+                "sv": "Håll anslutningen öppen",
+                "no": "Hold tilkoblingen åpen",
+                "es": "Mantener la conexión abierta",
+                "da": "Hold forbindelsen åben",
+                "ru": "Не разрывать соединение",
+                "pl": "Utrzymuj połączenie",
+                "ko": "연결 계속 유지",
+                "ar": "إبقاء الاتصال مفتوحًا"
+              },
+              "value": true,
+              "hint": {
+                "en": "On: Homey checks the device regularly (see the two settings above) and commands are instant. Off: no checks at all. Homey only connects to send a command, reads the values right after it and disconnects. Changes made on the device itself only show up after the next command. Saves the most battery; every command takes about a second longer.",
+                "nl": "Aan: Homey controleert het apparaat regelmatig (zie de twee instellingen hierboven) en opdrachten zijn direct. Uit: helemaal geen controles. Homey maakt alleen verbinding om een opdracht te sturen, leest direct daarna de waarden uit en verbreekt de verbinding. Wijzigingen op het apparaat zelf zie je pas na de volgende opdracht. Bespaart de meeste batterij; elke opdracht duurt ongeveer een seconde langer.",
+                "de": "An: Homey prüft das Gerät regelmäßig (siehe die beiden Einstellungen oben) und Befehle werden sofort ausgeführt. Aus: überhaupt keine Prüfungen. Homey verbindet sich nur, um einen Befehl zu senden, liest direkt danach die Werte aus und trennt die Verbindung. Änderungen am Gerät selbst erscheinen erst nach dem nächsten Befehl. Spart am meisten Akku; jeder Befehl dauert etwa eine Sekunde länger.",
+                "fr": "Activé : Homey vérifie l'appareil régulièrement (voir les deux réglages ci-dessus) et les commandes sont instantanées. Désactivé : aucune vérification. Homey se connecte uniquement pour envoyer une commande, lit les valeurs juste après puis se déconnecte. Les changements faits sur l'appareil lui-même n'apparaissent qu'après la commande suivante. Économise le plus de batterie ; chaque commande prend environ une seconde de plus.",
+                "it": "Attivo: Homey controlla regolarmente il dispositivo (vedi le due impostazioni sopra) e i comandi sono immediati. Disattivo: nessun controllo. Homey si collega solo per inviare un comando, legge subito dopo i valori e si scollega. Le modifiche fatte sul dispositivo stesso compaiono solo dopo il comando successivo. Risparmia più batteria; ogni comando richiede circa un secondo in più.",
+                "sv": "På: Homey kontrollerar enheten regelbundet (se de två inställningarna ovan) och kommandon går direkt. Av: inga kontroller alls. Homey ansluter bara för att skicka ett kommando, läser av värdena direkt efteråt och kopplar från. Ändringar som görs på själva enheten syns först efter nästa kommando. Sparar mest batteri; varje kommando tar ungefär en sekund längre.",
+                "no": "På: Homey sjekker enheten jevnlig (se de to innstillingene over), og kommandoer går umiddelbart. Av: ingen sjekker i det hele tatt. Homey kobler bare til for å sende en kommando, leser verdiene rett etterpå og kobler fra. Endringer gjort på selve enheten vises først etter neste kommando. Sparer mest batteri; hver kommando tar omtrent ett sekund lenger.",
+                "es": "Activado: Homey comprueba el dispositivo con regularidad (consulta los dos ajustes de arriba) y los comandos son instantáneos. Desactivado: ninguna comprobación. Homey solo se conecta para enviar un comando, lee los valores justo después y se desconecta. Los cambios hechos en el propio dispositivo solo aparecen tras el siguiente comando. Ahorra más batería; cada comando tarda aproximadamente un segundo más.",
+                "da": "Til: Homey tjekker enheden jævnligt (se de to indstillinger ovenfor), og kommandoer udføres med det samme. Fra: ingen tjek overhovedet. Homey forbinder kun for at sende en kommando, læser værdierne lige bagefter og afbryder. Ændringer foretaget på selve enheden vises først efter næste kommando. Sparer mest batteri; hver kommando tager cirka et sekund længere.",
+                "ru": "Вкл.: Homey регулярно проверяет устройство (см. две настройки выше), команды выполняются мгновенно. Выкл.: никаких проверок. Homey подключается только для отправки команды, сразу после неё считывает значения и отключается. Изменения, сделанные на самом устройстве, появятся только после следующей команды. Максимальная экономия батареи; каждая команда выполняется примерно на секунду дольше.",
+                "pl": "Włączone: Homey regularnie sprawdza urządzenie (zobacz dwa ustawienia powyżej), a polecenia działają od razu. Wyłączone: żadnych sprawdzeń. Homey łączy się tylko, aby wysłać polecenie, zaraz potem odczytuje wartości i się rozłącza. Zmiany wprowadzone na samym urządzeniu pojawią się dopiero po następnym poleceniu. Najbardziej oszczędza baterię; każde polecenie trwa około sekundy dłużej.",
+                "ko": "켜짐: Homey가 기기를 주기적으로 확인하며(위의 두 설정 참조) 명령이 즉시 실행됩니다. 꺼짐: 확인을 전혀 하지 않습니다. Homey는 명령을 보낼 때만 연결하고, 바로 뒤에 값을 읽은 후 연결을 끊습니다. 기기에서 직접 바꾼 내용은 다음 명령 후에야 표시됩니다. 배터리를 가장 많이 절약하며, 명령마다 약 1초가 더 걸립니다.",
+                "ar": "مفعّل: يتحقق Homey من الجهاز بانتظام (راجع الإعدادين أعلاه) وتُنفَّذ الأوامر فورًا. غير مفعّل: لا توجد أي عمليات تحقق. يتصل Homey فقط لإرسال أمر، ويقرأ القيم مباشرة بعده ثم يقطع الاتصال. لن تظهر التغييرات التي تُجرى على الجهاز نفسه إلا بعد الأمر التالي. يوفّر أكبر قدر من البطارية؛ ويستغرق كل أمر نحو ثانية إضافية."
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Screen",
+            "nl": "Scherm",
+            "de": "Bildschirm",
+            "fr": "Écran",
+            "it": "Schermo",
+            "sv": "Skärm",
+            "no": "Skjerm",
+            "es": "Pantalla",
+            "da": "Skærm",
+            "ru": "Экран",
+            "pl": "Ekran",
+            "ko": "화면",
+            "ar": "الشاشة"
+          },
+          "children": [
+            {
+              "id": "dismiss_keyguard",
+              "type": "checkbox",
+              "label": {
+                "en": "Dismiss lock screen when turning on",
+                "nl": "Vergrendelscherm overslaan bij aanzetten",
+                "de": "Sperrbildschirm beim Einschalten überspringen",
+                "fr": "Ignorer l'écran de verrouillage à l'allumage",
+                "it": "Ignora la schermata di blocco all'accensione",
+                "sv": "Stäng låsskärmen när skärmen slås på",
+                "no": "Lukk låseskjermen når skjermen slås på",
+                "es": "Omitir la pantalla de bloqueo al encender",
+                "da": "Spring låseskærmen over ved tænding",
+                "ru": "Снимать блокировку экрана при включении",
+                "pl": "Pomiń ekran blokady przy włączaniu",
+                "ko": "화면을 켤 때 잠금 화면 해제",
+                "ar": "إلغاء شاشة القفل عند التشغيل"
+              },
+              "value": false,
+              "hint": {
+                "en": "Only works when the device uses swipe to unlock (no PIN, pattern or password).",
+                "nl": "Werkt alleen als het apparaat ontgrendelt met vegen (geen pincode, patroon of wachtwoord).",
+                "de": "Funktioniert nur, wenn das Gerät per Wischen entsperrt wird (keine PIN, kein Muster, kein Passwort).",
+                "fr": "Fonctionne uniquement si l'appareil se déverrouille en balayant l'écran (sans PIN, schéma ni mot de passe).",
+                "it": "Funziona solo se il dispositivo si sblocca con uno scorrimento (senza PIN, sequenza o password).",
+                "sv": "Fungerar bara när enheten låses upp genom att svepa (ingen PIN, inget mönster eller lösenord).",
+                "no": "Fungerer bare når enheten låses opp med sveip (ingen PIN, mønster eller passord).",
+                "es": "Solo funciona si el dispositivo se desbloquea deslizando (sin PIN, patrón ni contraseña).",
+                "da": "Virker kun, når enheden låses op ved at stryge (ingen PIN, mønster eller adgangskode).",
+                "ru": "Работает, только если устройство разблокируется свайпом (без PIN-кода, графического ключа или пароля).",
+                "pl": "Działa tylko, gdy urządzenie odblokowuje się przesunięciem palca (bez PIN, wzoru ani hasła).",
+                "ko": "기기가 밀어서 잠금 해제를 사용할 때만 작동해요(PIN, 패턴, 비밀번호 없음).",
+                "ar": "يعمل فقط إذا كان الجهاز يستخدم التمرير لفتح القفل (بدون PIN أو نقش أو كلمة مرور)."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "discovery": {
+    "adb-tls": {
+      "type": "mdns-sd",
+      "mdns-sd": {
+        "name": "adb-tls-connect",
+        "protocol": "tcp"
+      },
+      "id": "{{name}}"
+    }
+  }
+}

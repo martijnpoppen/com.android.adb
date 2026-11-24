@@ -1,0 +1,513 @@
+'use strict';
+
+const Homey = require('homey');
+const AdbClient = require('../../lib/AdbClient');
+const { localizeError } = require('../../lib/errors');
+
+const CAPABILITIES = ['onoff', 'dim', 'volume_set', 'measure_battery', 'battery_charging_state'];
+
+const CMD_SCREEN_ON = 'input keyevent KEYCODE_WAKEUP';
+const CMD_SCREEN_OFF = 'input keyevent KEYCODE_SLEEP';
+const CMD_DISMISS_KEYGUARD = 'wm dismiss-keyguard';
+// With "Keep the connection open" off: hang up this long after the last command.
+const IDLE_DISCONNECT_MS = 5000;
+const DISCONNECT_REASONS = {
+  idle: `idle for ${IDLE_DISCONNECT_MS / 1000} s ("Keep the connection open" is off)`,
+  error: 'a command failed',
+  device: 'closed by the device',
+  requested: 'closed by Homey',
+};
+// While the device can't be reached, try again at most this often.
+const RETRY_SECONDS = 30;
+
+const CMD_VOLUME = '(cmd media_session volume --stream 3 --get 2>/dev/null || media volume --stream 3 --get 2>/dev/null)';
+const CMD_BRIGHTNESS = 'echo mode=$(settings get system screen_brightness_mode); '
+  + 'echo float=$(settings get system screen_brightness_float); echo raw=$(settings get system screen_brightness)';
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Everything Homey shows is read in one go, to keep polling light.
+const CMD_STATE = [
+  'dumpsys power | grep mWakefulness=',
+  "dumpsys battery | grep -E 'level:|status:|powered:'",
+  'echo brightness_float=$(settings get system screen_brightness_float 2>/dev/null)',
+  'echo brightness_raw=$(settings get system screen_brightness)',
+  CMD_VOLUME,
+].join('; ');
+
+/** Quotes a value for use as a single shell argument on the device. */
+function quote(value) {
+  return `'${String(value).replace(/'/g, "'\\''")}'`;
+}
+
+class TabletDevice extends Homey.Device {
+
+  async onInit() {
+    this.config = { ...this.getSettings() };
+    const { host, port } = this.config;
+    this.log(`Init, using ${host}:${port}`);
+
+    // Devices added with an older version of the app get the new capabilities.
+    for (const capability of CAPABILITIES) {
+      if (!this.hasCapability(capability)) await this.addCapability(capability);
+    }
+
+    this.volumeMax = 15;
+    this.createClient({ host, port });
+
+    const translated = (set) => (value) => set(value).catch((err) => { throw this.localizeError(err); });
+    this.registerCapabilityListener('onoff', translated((value) => this.setScreen(value)));
+    this.registerCapabilityListener('dim', translated((value) => this.setBrightness(value)));
+    this.registerCapabilityListener('volume_set', translated((value) => this.setVolume(value)));
+
+    this.poll().catch(this.error);
+  }
+
+  createClient({ host, port }) {
+    if (this.client) {
+      const old = this.client;
+      old.disconnect().catch(this.error).finally(() => old.removeAllListeners());
+    }
+    this.client = new AdbClient({
+      host,
+      port,
+      credentialStore: this.driver.credentialStore,
+      idleTimeout: this.config.keep_alive === false ? IDLE_DISCONNECT_MS : 0,
+    });
+    this.client.on('connect', ({ secure, purpose }) => {
+      const why = purpose && purpose.length > 80 ? `${purpose.slice(0, 80)}...` : purpose;
+      this.log(`ADB connected to ${host}:${port} (${secure ? 'Wireless debugging' : 'classic ADB'}) for: ${why || '?'}`);
+    });
+    this.client.on('disconnect', ({ reason }) => this.log(`ADB disconnected: ${DISCONNECT_REASONS[reason] || reason}`));
+  }
+
+  /**
+   * Seconds until the next state check, or 0 for "don't check".
+   * Checking wakes the device, so it backs off when nobody is using it.
+   */
+  nextPollDelay() {
+    const active = Math.max(5, Number(this.config.poll_interval) || 15);
+    // Unreachable: keep retrying, or the device would stay unavailable for good.
+    // A failed attempt doesn't wake the device.
+    if (this.lastError) return Math.max(active, RETRY_SECONDS);
+    // Keep-alive off = no checks at all: only read the state right after a command.
+    if (this.config.keep_alive === false) return 0;
+    const inUse = this.getCapabilityValue('onoff') !== false || this.pluggedIn !== false;
+    if (inUse) return active;
+    const idle = Number(this.config.poll_interval_idle);
+    if (Number.isNaN(idle)) return 300;
+    return idle <= 0 ? 0 : Math.max(active, idle);
+  }
+
+  scheduleNextPoll() {
+    this.homey.clearTimeout(this.pollTimer);
+    const seconds = this.nextPollDelay();
+    if (this.pollDelay !== seconds) {
+      this.log(seconds ? `Checking state every ${seconds} s` : 'State checks paused until the next command');
+      this.pollDelay = seconds;
+    }
+    if (!seconds) return;
+    this.pollTimer = this.homey.setTimeout(() => {
+      this.poll().catch(this.error);
+    }, seconds * 1000);
+  }
+
+  pollSoon() {
+    this.homey.clearTimeout(this.pollTimer);
+    this.pollTimer = this.homey.setTimeout(() => this.poll().catch(this.error), 1500);
+  }
+
+  /* ----- Controls ----- */
+
+  async setScreen(on) {
+    this.log(`Turning screen ${on ? 'on' : 'off'}`);
+    await this.client.shell(on ? CMD_SCREEN_ON : CMD_SCREEN_OFF);
+    if (on && this.config.dismiss_keyguard) {
+      await this.client.shell(CMD_DISMISS_KEYGUARD);
+    }
+    this.pollSoon();
+  }
+
+  /**
+   * Runs apply(value) for the newest value only: while a slider is dragged,
+   * values that arrive during a run are collapsed into one more run.
+   */
+  async latest(name, value, apply) {
+    this.latestRuns = this.latestRuns || {};
+    const run = this.latestRuns[name] || (this.latestRuns[name] = { target: null, running: null });
+    run.target = value;
+    if (!run.running) {
+      run.running = (async () => {
+        try {
+          let done;
+          do {
+            done = run.target;
+            await apply(done);
+          } while (run.target !== done);
+        } finally {
+          run.running = null;
+        }
+      })();
+    }
+    return run.running;
+  }
+
+  /** @returns {Promise<{ mode: number|null, float: number|null, raw: number|null }>} */
+  async readBrightness() {
+    const output = await this.client.shell(CMD_BRIGHTNESS, { purpose: 'brightness' });
+    const get = (key) => {
+      const match = output.match(new RegExp(`^${key}=([\\d.]+)\\s*$`, 'm'));
+      return match ? Number(match[1]) : null;
+    };
+    return { mode: get('mode'), float: get('float'), raw: get('raw') };
+  }
+
+  /**
+   * Top of the raw screen_brightness scale: 8191 on the OnePlus 9, 255 on stock
+   * Android. Starts at 8191: guessing from the current raw value got stuck at 255
+   * after a dark setting. Too high is corrected (the float setting saturates);
+   * the learned value is stored. ('brightnessRawMax' from an older build is ignored.)
+   */
+  rawBrightnessMax() {
+    return this.getStoreValue('brightnessScale') || 8191;
+  }
+
+  /**
+   * Writes the raw screen_brightness setting: the one method that changes the
+   * screen on the OnePlus 9 ('cmd display set-brightness' and the float setting
+   * are accepted and ignored there). Works on stock Android too.
+   * @param {number} value 0..1
+   */
+  async setBrightness(value) {
+    const target = Math.round(Math.min(1, Math.max(0.01, value)) * 1000) / 1000;
+    return this.latest('brightness', target, async (level) => {
+      const before = await this.readBrightness();
+      if (before.mode === 1) {
+        // Adaptive brightness overrides any value we set.
+        await this.client.shell('settings put system screen_brightness_mode 0');
+        this.log('Adaptive brightness turned off, so the brightness set from Homey stays');
+      }
+      let max = this.rawBrightnessMax();
+      let lastFloat = before.float;
+      let saturated = false;
+      // Whether this phone mirrors raw into the float setting; only then can a float
+      // stuck at 1.0 mean "saturated" instead of "stale".
+      let mirrors = this.getStoreValue('brightnessMirrors') === true;
+      // Up to 8 rounds: from 8191 down to a 255 scale takes 5 halvings (only once, then stored).
+      for (let attempt = 0; attempt < 8; attempt++) {
+        const raw = Math.max(1, Math.round(level * max));
+        await this.client.shell(`settings put system screen_brightness ${raw}`);
+        await delay(400);
+        const after = await this.readBrightness();
+        this.log(`Brightness ${Math.round(level * 100)}%: raw ${raw} of ${max} -> float now ${after.float}`);
+        // When Android mirrors the raw value into the float setting, that shows the
+        // real scale. On a phone that doesn't, the float is stale: learn nothing.
+        if (after.float !== null && lastFloat !== null && after.float !== lastFloat && !mirrors) {
+          mirrors = true;
+          await this.setStoreValue('brightnessMirrors', true);
+        }
+        if (!mirrors || after.float === null || after.float < 0.05) break;
+        lastFloat = after.float;
+        saturated = after.float >= 0.99 && level < 0.97;
+        if (after.float >= 0.99 && !saturated) break; // asked for (nearly) full: nothing to learn
+        // Saturated: the scale ends below raw. Otherwise raw / float is the scale.
+        const measured = saturated ? raw : Math.round(raw / after.float);
+        if (Math.abs(measured - max) / max < 0.03 || measured < 100 || measured > 65535) break;
+        this.log(`Brightness scale is ${after.float >= 0.99 ? 'at most ' : ''}${measured}, not ${max}: correcting`);
+        max = measured;
+        await this.setStoreValue('brightnessScale', max);
+      }
+      await this.setValue('dim', level);
+    });
+  }
+
+  /** @returns {Promise<{ index: number, max: number } | null>} */
+  async readVolume() {
+    const match = (await this.client.shell(CMD_VOLUME, { purpose: 'volume' })).match(/volume is (\d+) in range \[(\d+)\.\.(\d+)\]/);
+    return match ? { index: Number(match[1]), max: Number(match[3]) } : null;
+  }
+
+  /**
+   * Like brightness: 'cmd media_session volume --set' is accepted and ignored on
+   * the OnePlus 9, while the volume keys work. Try each method and verify.
+   * @param {number} value 0..1
+   */
+  async setVolume(value) {
+    const target = Math.round(Math.min(1, Math.max(0, value)) * this.volumeMax);
+    return this.latest('volume', target, async (index) => {
+      const pressKeys = async () => {
+        // A key press moves one step; correct a second time if a phone steps differently.
+        for (let round = 0; round < 3; round++) {
+          const now = await this.readVolume();
+          if (!now || now.index === index) return;
+          const key = now.index < index ? 'KEYCODE_VOLUME_UP' : 'KEYCODE_VOLUME_DOWN';
+          await this.client.shell(`input keyevent ${Array(Math.abs(index - now.index)).fill(key).join(' ')}`);
+          await delay(300);
+        }
+      };
+      const methods = {
+        'media_session': () => this.client.shell(`cmd media_session volume --stream 3 --set ${index} 2>&1`),
+        'cmd audio': () => this.client.shell(`cmd audio set-volume 3 ${index} 2>&1`),
+        'volume keys': pressKeys,
+      };
+      const order = Object.keys(methods).sort((a, b) => (b === this.volumeMethod) - (a === this.volumeMethod));
+      for (const method of order) {
+        const output = await methods[method]();
+        await delay(300);
+        const after = await this.readVolume();
+        const ok = after !== null && after.index === index;
+        this.log(`Volume ${index}/${this.volumeMax} via ${method}: ${JSON.stringify(output ?? '')} -> now ${after ? after.index : '?'}${ok ? '' : ' (did not stick)'}`);
+        if (ok) {
+          if (this.volumeMethod !== method) this.log(`Volume: using ${method} from now on`);
+          this.volumeMethod = method;
+          await this.setValue('volume_set', Math.round((index / this.volumeMax) * 100) / 100);
+          return;
+        }
+      }
+      this.error(`Volume: no method worked on this device (wanted ${index})`);
+    });
+  }
+
+  /** A library error (not paired, unreachable, ...) in the user's language. */
+  localizeError(err) {
+    return localizeError(this.homey, err, `${this.config.host}:${this.config.port}`);
+  }
+
+  async launchApp(packageName) {
+    if (!/^[\w.]+$/.test(packageName)) throw new Error(this.homey.__('errors.invalid_app'));
+    const output = await this.client.shell(`monkey -p ${packageName} -c android.intent.category.LAUNCHER 1`);
+    if (/No activities found/i.test(output)) throw new Error(this.homey.__('errors.app_not_launchable', { app: packageName }));
+  }
+
+  async openUrl(url) {
+    url = String(url || '').trim();
+    if (!url) throw new Error(this.homey.__('errors.enter_link'));
+    if (!/^[a-z][a-z0-9+.-]*:/i.test(url)) url = `https://${url}`;
+    const output = await this.client.shell(`am start -a android.intent.action.VIEW -d ${quote(url)}`);
+    if (/Error:/i.test(output)) throw new Error(this.homey.__('errors.cannot_open_link', { url }));
+  }
+
+  async pressKey(key) {
+    if (!/^KEYCODE_[A-Z0-9_]+$/.test(key)) throw new Error(this.homey.__('errors.invalid_button'));
+    await this.client.shell(`input keyevent ${key}`);
+    this.pollSoon();
+  }
+
+  async typeText(text) {
+    // 'input text' wants %s for a space.
+    await this.client.shell(`input text ${quote(String(text).replace(/ /g, '%s'))}`);
+  }
+
+  async setStayAwake(enabled) {
+    await this.client.shell(`svc power stayon ${enabled ? 'true' : 'false'}`);
+  }
+
+  async setScreenTimeout(seconds) {
+    const ms = Math.round(Number(seconds) * 1000);
+    if (!(ms >= 1000)) throw new Error(this.homey.__('errors.invalid_timeout'));
+    await this.client.shell(`settings put system screen_off_timeout ${ms}`);
+  }
+
+  /** Package names on the device matching the search text. Cached for a minute. */
+  async listApps(query = '') {
+    if (!this.appsCache || Date.now() - this.appsCacheTime > 60000) {
+      const all = (await this.client.shell('pm list packages'))
+        .split('\n').map((line) => line.replace(/^package:/, '').trim()).filter(Boolean);
+      const user = new Set((await this.client.shell('pm list packages -3').catch(() => ''))
+        .split('\n').map((line) => line.replace(/^package:/, '').trim()));
+      // Apps the user installed first, system apps after that.
+      this.appsCache = all.sort((a, b) => (user.has(b) - user.has(a)) || a.localeCompare(b));
+      this.appsCacheTime = Date.now();
+    }
+    const needle = query.toLowerCase();
+    return this.appsCache
+      .filter((name) => name.toLowerCase().includes(needle))
+      .slice(0, 40)
+      .map((name) => ({ id: name, name }));
+  }
+
+  async getForegroundApp() {
+    const output = await this.client.shell("dumpsys window | grep -E 'mCurrentFocus|mFocusedApp'");
+    const match = output.match(/mCurrentFocus=.*?\s([\w.]+)\/[^\s}]*/) || output.match(/mFocusedApp=.*?\s([\w.]+)\/[^\s}]*/);
+    return match ? match[1] : null;
+  }
+
+  async runShell(command) {
+    const output = await this.client.shell(command);
+    this.log(`Shell: ${command} -> ${JSON.stringify(output.length > 2000 ? `${output.slice(0, 2000)}...` : output)}`);
+    return output;
+  }
+
+  /** Logs state lines that could not be parsed, once per distinct output. */
+  logUnparsed(what, lines) {
+    this.unparsedLogged = this.unparsedLogged || {};
+    if (this.unparsedLogged[what] === lines) return;
+    this.unparsedLogged[what] = lines;
+    this.log(`Could not read ${what} from: ${JSON.stringify(lines)}`);
+  }
+
+  /* ----- Wireless debugging: follow the device when its random port changes ----- */
+
+  onDiscoveryResult(discoveryResult) {
+    const serial = this.getData().id;
+    return (discoveryResult.name || '').includes(serial)
+      || discoveryResult.address === this.config.host;
+  }
+
+  async onDiscoveryAvailable(discoveryResult) {
+    await this.applyDiscovery(discoveryResult);
+  }
+
+  onDiscoveryAddressChanged(discoveryResult) {
+    this.applyDiscovery(discoveryResult).catch(this.error);
+  }
+
+  onDiscoveryLastSeenChanged(discoveryResult) {
+    this.applyDiscovery(discoveryResult).catch(this.error);
+  }
+
+  async applyDiscovery({ address, port }, { recheck = true } = {}) {
+    const settings = this.config;
+    // Classic network ADB on 5555 is a fixed port: leave it alone.
+    if (Number(settings.port) === 5555 || !address || !port) return;
+    if (settings.host === address && Number(settings.port) === Number(port)) {
+      // Same address, but the device just showed up again (Wireless debugging
+      // was turned back on): don't wait for the next retry.
+      if (recheck && this.lastError && Date.now() - (this.lastDiscoveryPoll || 0) > 10000) {
+        this.lastDiscoveryPoll = Date.now();
+        this.poll().catch(this.error);
+      }
+      return;
+    }
+    this.log(`Device announced a new address: ${address}:${port}`);
+    await this.useAddress(address, Number(port));
+  }
+
+  /** Fallback for when the announcement was missed: ask the discovery cache. */
+  async refreshFromDiscovery() {
+    const results = Object.values(this.driver.getDiscoveryStrategy().getDiscoveryResults());
+    const match = results.find((result) => this.onDiscoveryResult(result));
+    if (match) await this.applyDiscovery(match, { recheck: false });
+  }
+
+  async useAddress(host, port) {
+    await this.setSettings({ host, port });
+    this.config = { ...this.config, host, port };
+    this.createClient({ host, port });
+    // Not awaited: this can be called from inside a running check.
+    this.poll().catch(this.error);
+  }
+
+  /* ----- State ----- */
+
+  async setValue(capability, value) {
+    if (value === null || value === undefined || Number.isNaN(value)) return;
+    if (this.getCapabilityValue(capability) !== value) {
+      await this.setCapabilityValue(capability, value);
+    }
+  }
+
+  /** Reads the real state, so manual use of the device shows up in Homey too. */
+  poll() {
+    // One check at a time. A request that arrives while one is running makes
+    // it run once more afterwards (the address may have changed meanwhile).
+    if (this.pollPromise) {
+      this.pollAgain = true;
+      return this.pollPromise;
+    }
+    this.pollPromise = (async () => {
+      do {
+        this.pollAgain = false;
+        await this.pollNow();
+      } while (this.pollAgain);
+    })().finally(() => {
+      this.pollPromise = null;
+      this.scheduleNextPoll();
+    });
+    return this.pollPromise;
+  }
+
+  async pollNow() {
+    try {
+      const output = await this.client.shell(CMD_STATE, { purpose: 'state check' });
+      await this.applyState(output);
+      if (this.lastError || !this.getAvailable()) {
+        this.log('Connected');
+        this.lastError = null;
+        await this.setAvailable();
+      }
+    } catch (err) {
+      // Log each distinct problem once instead of on every poll.
+      if (this.lastError !== err.message) this.error('ADB error:', err.message);
+      const firstFailure = !this.lastError;
+      this.lastError = err.message;
+      await this.setUnavailable(this.localizeError(err).message);
+      // Maybe the Wireless debugging port changed (it does whenever it is toggled).
+      if (firstFailure) await this.refreshFromDiscovery().catch(this.error);
+    }
+  }
+
+  async applyState(output) {
+    // Screen: Awake = on. Asleep / Dozing / Dreaming count as off.
+    const wake = output.match(/mWakefulness=(\w+)/);
+    if (wake) {
+      const on = wake[1] === 'Awake';
+      if (this.getCapabilityValue('onoff') !== on) this.log(`Screen is ${wake[1]}`);
+      await this.setValue('onoff', on);
+    } else {
+      this.error('Unexpected state output:', output);
+    }
+
+    // Battery. status: 2 = charging, 3 = discharging, 4 = not charging, 5 = full
+    const level = output.match(/^\s*level:\s*(\d+)/m);
+    if (level) await this.setValue('measure_battery', Math.min(100, Number(level[1])));
+    const status = output.match(/^\s*status:\s*(\d+)/m);
+    this.pluggedIn = /powered:\s*true/.test(output);
+    if (status) {
+      let state = 'discharging';
+      if (status[1] === '2') state = 'charging';
+      else if (this.pluggedIn) state = 'idle';
+      await this.setValue('battery_charging_state', state);
+    }
+
+    // Brightness 0..1 from the raw setting, the one that really drives the screen
+    // (see setBrightness). Scale per phone; the float setting only as a fallback.
+    const raw = output.match(/^brightness_raw=(\d+)\s*$/m);
+    const float = output.match(/^brightness_float=([\d.]+)\s*$/m);
+    if (raw) await this.setValue('dim', Math.min(1, Math.round((Number(raw[1]) / this.rawBrightnessMax()) * 100) / 100));
+    else if (float) await this.setValue('dim', Math.min(1, Number(float[1])));
+    else this.logUnparsed('brightness', output.split('\n').filter((l) => /^brightness/.test(l)).join('\n'));
+
+    // Media volume, e.g. "volume is 7 in range [0..15]"
+    const volume = output.match(/volume is (\d+) in range \[(\d+)\.\.(\d+)\]/);
+    if (volume && Number(volume[3]) > 0) {
+      this.volumeMax = Number(volume[3]);
+      await this.setValue('volume_set', Math.round((Number(volume[1]) / this.volumeMax) * 100) / 100);
+    } else {
+      const known = /mWakefulness=|^\s*(level|status|powered|AC powered|USB powered|Wireless powered|Dock powered):|^brightness/;
+      this.logUnparsed('volume', output.split('\n').filter((l) => !known.test(l)).join('\n'));
+    }
+  }
+
+  async onSettings({ newSettings, changedKeys }) {
+    this.config = { ...newSettings };
+    if (changedKeys.includes('host') || changedKeys.includes('port')) {
+      this.createClient(this.config);
+    } else {
+      this.client.setIdleTimeout(this.config.keep_alive === false ? IDLE_DISCONNECT_MS : 0);
+    }
+    this.pollSoon();
+  }
+
+  async onUninit() {
+    this.homey.clearTimeout(this.pollTimer);
+    if (this.client) await this.client.disconnect();
+  }
+
+  async onDeleted() {
+    await this.onUninit();
+  }
+
+}
+
+module.exports = TabletDevice;

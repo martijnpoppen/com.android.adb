@@ -1,0 +1,308 @@
+[
+  {
+    "type": "group",
+    "label": {
+      "en": "Connection",
+      "nl": "Verbinding",
+      "de": "Verbindung",
+      "fr": "Connexion",
+      "it": "Connessione",
+      "sv": "Anslutning",
+      "no": "Tilkobling",
+      "es": "Conexión",
+      "da": "Forbindelse",
+      "ru": "Подключение",
+      "pl": "Połączenie",
+      "ko": "연결",
+      "ar": "الاتصال"
+    },
+    "children": [
+      {
+        "id": "host",
+        "type": "text",
+        "label": {
+          "en": "IP address",
+          "nl": "IP-adres",
+          "de": "IP-Adresse",
+          "fr": "Adresse IP",
+          "it": "Indirizzo IP",
+          "sv": "IP-adress",
+          "no": "IP-adresse",
+          "es": "Dirección IP",
+          "da": "IP-adresse",
+          "ru": "IP-адрес",
+          "pl": "Adres IP",
+          "ko": "IP 주소",
+          "ar": "عنوان IP"
+        },
+        "value": "",
+        "hint": {
+          "en": "Give the device a fixed IP address (DHCP reservation) in your router.",
+          "nl": "Geef het apparaat een vast IP-adres (DHCP-reservering) in je router.",
+          "de": "Gib dem Gerät in deinem Router eine feste IP-Adresse (DHCP-Reservierung).",
+          "fr": "Attribuez une adresse IP fixe à l'appareil (réservation DHCP) dans votre routeur.",
+          "it": "Assegna al dispositivo un indirizzo IP fisso (prenotazione DHCP) nel tuo router.",
+          "sv": "Ge enheten en fast IP-adress (DHCP-reservation) i din router.",
+          "no": "Gi enheten en fast IP-adresse (DHCP-reservasjon) i ruteren din.",
+          "es": "Asigna al dispositivo una dirección IP fija (reserva DHCP) en tu router.",
+          "da": "Giv enheden en fast IP-adresse (DHCP-reservation) i din router.",
+          "ru": "Назначьте устройству постоянный IP-адрес (резервирование DHCP) в настройках роутера.",
+          "pl": "Przypisz urządzeniu stały adres IP (rezerwacja DHCP) w routerze.",
+          "ko": "공유기에서 기기에 고정 IP 주소(DHCP 예약)를 지정하세요.",
+          "ar": "خصّص للجهاز عنوان IP ثابتًا (حجز DHCP) في جهاز التوجيه."
+        }
+      },
+      {
+        "id": "port",
+        "type": "number",
+        "label": {
+          "en": "ADB port",
+          "nl": "ADB-poort",
+          "de": "ADB-Port",
+          "fr": "Port ADB",
+          "it": "Porta ADB",
+          "sv": "ADB-port",
+          "no": "ADB-port",
+          "es": "Puerto ADB",
+          "da": "ADB-port",
+          "ru": "Порт ADB",
+          "pl": "Port ADB",
+          "ko": "ADB 포트",
+          "ar": "منفذ ADB"
+        },
+        "value": 5555,
+        "min": 1,
+        "max": 65535,
+        "hint": {
+          "en": "5555 for classic network ADB. With Wireless debugging (Android 11+) the port is random and is kept up to date automatically when the device announces it on the network.",
+          "nl": "5555 voor klassieke ADB via het netwerk. Met Draadloze foutopsporing (Android 11+) is de poort willekeurig en wordt hij automatisch bijgewerkt zodra het apparaat hem op het netwerk bekendmaakt.",
+          "de": "5555 für klassisches Netzwerk-ADB. Mit Debugging über WLAN (Android 11+) ist der Port zufällig und wird automatisch aktualisiert, wenn das Gerät ihn im Netzwerk bekannt gibt.",
+          "fr": "5555 pour l'ADB réseau classique. Avec le débogage sans fil (Android 11+), le port est aléatoire et il est mis à jour automatiquement quand l'appareil l'annonce sur le réseau.",
+          "it": "5555 per l'ADB di rete classico. Con il debug wireless (Android 11+) la porta è casuale e viene aggiornata automaticamente quando il dispositivo la annuncia sulla rete.",
+          "sv": "5555 för klassisk nätverks-ADB. Med Trådlös felsökning (Android 11+) är porten slumpmässig och hålls uppdaterad automatiskt när enheten annonserar den i nätverket.",
+          "no": "5555 for klassisk nettverks-ADB. Med Trådløs feilsøking (Android 11+) er porten tilfeldig, og den holdes oppdatert automatisk når enheten annonserer den på nettverket.",
+          "es": "5555 para ADB de red clásico. Con la depuración inalámbrica (Android 11+) el puerto es aleatorio y se actualiza automáticamente cuando el dispositivo lo anuncia en la red.",
+          "da": "5555 for klassisk netværks-ADB. Med Trådløs fejlretning (Android 11+) er porten tilfældig og opdateres automatisk, når enheden annoncerer den på netværket.",
+          "ru": "5555 для классического ADB по сети. При отладке по Wi-Fi (Android 11+) порт выбирается случайно и обновляется автоматически, когда устройство сообщает его в сети.",
+          "pl": "5555 dla klasycznego ADB przez sieć. Przy debugowaniu bezprzewodowym (Android 11+) port jest losowy i jest automatycznie aktualizowany, gdy urządzenie ogłasza go w sieci.",
+          "ko": "기존 네트워크 ADB는 5555예요. 무선 디버깅(Android 11 이상)에서는 포트가 무작위로 정해지며, 기기가 네트워크에 포트를 알리면 자동으로 업데이트돼요.",
+          "ar": "5555 لـ ADB التقليدي عبر الشبكة. مع تصحيح الأخطاء اللاسلكي (Android 11 والإصدارات الأحدث) يكون المنفذ عشوائيًا ويتم تحديثه تلقائيًا عندما يعلن الجهاز عنه على الشبكة."
+        }
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Battery saving",
+      "nl": "Batterij besparen",
+      "de": "Akku sparen",
+      "fr": "Économie de batterie",
+      "it": "Risparmio batteria",
+      "sv": "Batterisparande",
+      "no": "Batterisparing",
+      "es": "Ahorro de batería",
+      "da": "Batterisparing",
+      "ru": "Экономия батареи",
+      "pl": "Oszczędzanie baterii",
+      "ko": "배터리 절약",
+      "ar": "توفير البطارية"
+    },
+    "children": [
+      {
+        "id": "poll_interval",
+        "type": "number",
+        "label": {
+          "en": "Check state while in use, every",
+          "nl": "Status controleren tijdens gebruik, elke",
+          "de": "Status bei Nutzung prüfen, alle",
+          "fr": "Vérifier l'état pendant l'utilisation, toutes les",
+          "it": "Controlla lo stato durante l'uso, ogni",
+          "sv": "Kontrollera status vid användning, var",
+          "no": "Sjekk status under bruk, hvert",
+          "es": "Comprobar el estado durante el uso, cada",
+          "da": "Tjek status under brug, hvert",
+          "ru": "Проверять состояние при использовании каждые",
+          "pl": "Sprawdzaj stan podczas używania co",
+          "ko": "사용 중 상태 확인 주기",
+          "ar": "التحقق من الحالة أثناء الاستخدام كل"
+        },
+        "units": {
+          "en": "seconds",
+          "nl": "seconden",
+          "de": "Sekunden",
+          "fr": "secondes",
+          "it": "secondi",
+          "sv": "sekunder",
+          "no": "sekunder",
+          "es": "segundos",
+          "da": "sekunder",
+          "ru": "с",
+          "pl": "sekund",
+          "ko": "초",
+          "ar": "ثانية"
+        },
+        "value": 15,
+        "min": 5,
+        "max": 3600,
+        "hint": {
+          "en": "Only when \"Keep the connection open\" is on. Used while the screen is on or the device is charging. Checking keeps Homey up to date when someone uses the device by hand.",
+          "nl": "Alleen als \"Verbinding open houden\" aan staat. Gebruikt als het scherm aan is of het apparaat oplaadt. Door te controleren blijft Homey up-to-date als iemand het apparaat met de hand bedient.",
+          "de": "Nur wenn „Verbindung offen halten“ an ist. Wird verwendet, wenn der Bildschirm an ist oder das Gerät lädt. So bleibt Homey auf dem neuesten Stand, wenn jemand das Gerät von Hand bedient.",
+          "fr": "Uniquement si « Garder la connexion ouverte » est activé. Utilisé quand l'écran est allumé ou que l'appareil est en charge. Les vérifications tiennent Homey à jour quand quelqu'un utilise l'appareil à la main.",
+          "it": "Solo se \"Mantieni la connessione aperta\" è attivo. Usato quando lo schermo è acceso o il dispositivo è in carica. I controlli mantengono Homey aggiornato quando qualcuno usa il dispositivo a mano.",
+          "sv": "Bara när ”Håll anslutningen öppen” är på. Används när skärmen är på eller enheten laddas. Kontrollerna håller Homey uppdaterad när någon använder enheten för hand.",
+          "no": "Bare når «Hold tilkoblingen åpen» er på. Brukes når skjermen er på eller enheten lader. Sjekkene holder Homey oppdatert når noen bruker enheten for hånd.",
+          "es": "Solo si «Mantener la conexión abierta» está activado. Se usa mientras la pantalla está encendida o el dispositivo se está cargando. Las comprobaciones mantienen Homey al día cuando alguien usa el dispositivo a mano.",
+          "da": "Kun når \"Hold forbindelsen åben\" er slået til. Bruges, når skærmen er tændt, eller enheden oplader. Tjekket holder Homey opdateret, når nogen bruger enheden i hånden.",
+          "ru": "Только если включено «Не разрывать соединение». Используется, когда экран включён или устройство заряжается. Проверки позволяют Homey знать о том, что кто-то пользуется устройством вручную.",
+          "pl": "Tylko gdy włączone jest „Utrzymuj połączenie”. Używane, gdy ekran jest włączony lub urządzenie się ładuje. Sprawdzanie aktualizuje Homey, gdy ktoś obsługuje urządzenie ręcznie.",
+          "ko": "'연결 계속 유지'가 켜져 있을 때만 적용됩니다. 화면이 켜져 있거나 기기가 충전 중일 때 사용돼요. 누군가 기기를 직접 사용할 때 Homey가 최신 상태를 유지할 수 있어요.",
+          "ar": "فقط عند تفعيل «إبقاء الاتصال مفتوحًا». يُستخدم عندما تكون الشاشة قيد التشغيل أو الجهاز قيد الشحن. يُبقي التحقق Homey على اطلاع عندما يستخدم أحدٌ الجهاز يدويًا."
+        }
+      },
+      {
+        "id": "poll_interval_idle",
+        "type": "number",
+        "label": {
+          "en": "Check state while screen is off on battery, every",
+          "nl": "Status controleren als het scherm uit is op batterij, elke",
+          "de": "Status bei ausgeschaltetem Bildschirm im Akkubetrieb prüfen, alle",
+          "fr": "Vérifier l'état écran éteint sur batterie, toutes les",
+          "it": "Controlla lo stato a schermo spento e a batteria, ogni",
+          "sv": "Kontrollera status när skärmen är av och på batteri, var",
+          "no": "Sjekk status når skjermen er av og på batteri, hvert",
+          "es": "Comprobar el estado con la pantalla apagada y en batería, cada",
+          "da": "Tjek status, når skærmen er slukket på batteri, hvert",
+          "ru": "Проверять состояние при выключенном экране от батареи каждые",
+          "pl": "Sprawdzaj stan przy wyłączonym ekranie i zasilaniu z baterii co",
+          "ko": "배터리 사용 중 화면이 꺼져 있을 때 상태 확인 주기",
+          "ar": "التحقق من الحالة عندما تكون الشاشة مطفأة على البطارية كل"
+        },
+        "units": {
+          "en": "seconds",
+          "nl": "seconden",
+          "de": "Sekunden",
+          "fr": "secondes",
+          "it": "secondi",
+          "sv": "sekunder",
+          "no": "sekunder",
+          "es": "segundos",
+          "da": "sekunder",
+          "ru": "с",
+          "pl": "sekund",
+          "ko": "초",
+          "ar": "ثانية"
+        },
+        "value": 300,
+        "min": 0,
+        "max": 86400,
+        "hint": {
+          "en": "Only when \"Keep the connection open\" is on. Every check wakes the device briefly, so a higher value saves battery. 0 = never check; Homey then only updates after it sends a command itself.",
+          "nl": "Alleen als \"Verbinding open houden\" aan staat. Elke controle maakt het apparaat even wakker, dus een hogere waarde spaart de batterij. 0 = nooit controleren; Homey werkt dan alleen bij nadat het zelf een opdracht heeft gestuurd.",
+          "de": "Nur wenn „Verbindung offen halten“ an ist. Jede Prüfung weckt das Gerät kurz auf, ein höherer Wert spart also Akku. 0 = nie prüfen; Homey aktualisiert dann nur, nachdem es selbst einen Befehl gesendet hat.",
+          "fr": "Uniquement si « Garder la connexion ouverte » est activé. Chaque vérification réveille brièvement l'appareil : une valeur plus élevée économise la batterie. 0 = ne jamais vérifier ; Homey ne se met alors à jour qu'après avoir envoyé lui-même une commande.",
+          "it": "Solo se \"Mantieni la connessione aperta\" è attivo. Ogni controllo riattiva brevemente il dispositivo, quindi un valore più alto fa risparmiare batteria. 0 = non controllare mai; Homey si aggiorna solo dopo aver inviato un comando.",
+          "sv": "Bara när ”Håll anslutningen öppen” är på. Varje kontroll väcker enheten kort, så ett högre värde sparar batteri. 0 = kontrollera aldrig; Homey uppdaterar då bara efter att den själv har skickat ett kommando.",
+          "no": "Bare når «Hold tilkoblingen åpen» er på. Hver sjekk vekker enheten kort, så en høyere verdi sparer batteri. 0 = sjekk aldri; Homey oppdaterer da bare etter at den selv har sendt en kommando.",
+          "es": "Solo si «Mantener la conexión abierta» está activado. Cada comprobación activa el dispositivo brevemente, así que un valor más alto ahorra batería. 0 = no comprobar nunca; entonces Homey solo se actualiza después de enviar él mismo un comando.",
+          "da": "Kun når \"Hold forbindelsen åben\" er slået til. Hvert tjek vækker enheden kort, så en højere værdi sparer batteri. 0 = tjek aldrig; Homey opdaterer så kun, efter at den selv har sendt en kommando.",
+          "ru": "Только если включено «Не разрывать соединение». Каждая проверка ненадолго пробуждает устройство, поэтому большее значение экономит батарею. 0 = не проверять; тогда Homey обновляет состояние только после отправки собственной команды.",
+          "pl": "Tylko gdy włączone jest „Utrzymuj połączenie”. Każde sprawdzenie na chwilę wybudza urządzenie, więc wyższa wartość oszczędza baterię. 0 = nigdy nie sprawdzaj; Homey aktualizuje stan tylko po wysłaniu własnego polecenia.",
+          "ko": "'연결 계속 유지'가 켜져 있을 때만 적용됩니다. 확인할 때마다 기기가 잠시 깨어나므로 값이 클수록 배터리가 절약돼요. 0 = 확인 안 함. 이 경우 Homey는 직접 명령을 보낸 후에만 상태를 업데이트해요.",
+          "ar": "فقط عند تفعيل «إبقاء الاتصال مفتوحًا». كل عملية تحقق تنبّه الجهاز لفترة قصيرة، لذا توفّر القيمة الأعلى البطارية. 0 = عدم التحقق أبدًا؛ عندها لا يحدّث Homey الحالة إلا بعد أن يرسل أمرًا بنفسه."
+        }
+      },
+      {
+        "id": "keep_alive",
+        "type": "checkbox",
+        "label": {
+          "en": "Keep the connection open",
+          "nl": "Verbinding open houden",
+          "de": "Verbindung offen halten",
+          "fr": "Garder la connexion ouverte",
+          "it": "Mantieni la connessione aperta",
+          "sv": "Håll anslutningen öppen",
+          "no": "Hold tilkoblingen åpen",
+          "es": "Mantener la conexión abierta",
+          "da": "Hold forbindelsen åben",
+          "ru": "Не разрывать соединение",
+          "pl": "Utrzymuj połączenie",
+          "ko": "연결 계속 유지",
+          "ar": "إبقاء الاتصال مفتوحًا"
+        },
+        "value": true,
+        "hint": {
+          "en": "On: Homey checks the device regularly (see the two settings above) and commands are instant. Off: no checks at all. Homey only connects to send a command, reads the values right after it and disconnects. Changes made on the device itself only show up after the next command. Saves the most battery; every command takes about a second longer.",
+          "nl": "Aan: Homey controleert het apparaat regelmatig (zie de twee instellingen hierboven) en opdrachten zijn direct. Uit: helemaal geen controles. Homey maakt alleen verbinding om een opdracht te sturen, leest direct daarna de waarden uit en verbreekt de verbinding. Wijzigingen op het apparaat zelf zie je pas na de volgende opdracht. Bespaart de meeste batterij; elke opdracht duurt ongeveer een seconde langer.",
+          "de": "An: Homey prüft das Gerät regelmäßig (siehe die beiden Einstellungen oben) und Befehle werden sofort ausgeführt. Aus: überhaupt keine Prüfungen. Homey verbindet sich nur, um einen Befehl zu senden, liest direkt danach die Werte aus und trennt die Verbindung. Änderungen am Gerät selbst erscheinen erst nach dem nächsten Befehl. Spart am meisten Akku; jeder Befehl dauert etwa eine Sekunde länger.",
+          "fr": "Activé : Homey vérifie l'appareil régulièrement (voir les deux réglages ci-dessus) et les commandes sont instantanées. Désactivé : aucune vérification. Homey se connecte uniquement pour envoyer une commande, lit les valeurs juste après puis se déconnecte. Les changements faits sur l'appareil lui-même n'apparaissent qu'après la commande suivante. Économise le plus de batterie ; chaque commande prend environ une seconde de plus.",
+          "it": "Attivo: Homey controlla regolarmente il dispositivo (vedi le due impostazioni sopra) e i comandi sono immediati. Disattivo: nessun controllo. Homey si collega solo per inviare un comando, legge subito dopo i valori e si scollega. Le modifiche fatte sul dispositivo stesso compaiono solo dopo il comando successivo. Risparmia più batteria; ogni comando richiede circa un secondo in più.",
+          "sv": "På: Homey kontrollerar enheten regelbundet (se de två inställningarna ovan) och kommandon går direkt. Av: inga kontroller alls. Homey ansluter bara för att skicka ett kommando, läser av värdena direkt efteråt och kopplar från. Ändringar som görs på själva enheten syns först efter nästa kommando. Sparar mest batteri; varje kommando tar ungefär en sekund längre.",
+          "no": "På: Homey sjekker enheten jevnlig (se de to innstillingene over), og kommandoer går umiddelbart. Av: ingen sjekker i det hele tatt. Homey kobler bare til for å sende en kommando, leser verdiene rett etterpå og kobler fra. Endringer gjort på selve enheten vises først etter neste kommando. Sparer mest batteri; hver kommando tar omtrent ett sekund lenger.",
+          "es": "Activado: Homey comprueba el dispositivo con regularidad (consulta los dos ajustes de arriba) y los comandos son instantáneos. Desactivado: ninguna comprobación. Homey solo se conecta para enviar un comando, lee los valores justo después y se desconecta. Los cambios hechos en el propio dispositivo solo aparecen tras el siguiente comando. Ahorra más batería; cada comando tarda aproximadamente un segundo más.",
+          "da": "Til: Homey tjekker enheden jævnligt (se de to indstillinger ovenfor), og kommandoer udføres med det samme. Fra: ingen tjek overhovedet. Homey forbinder kun for at sende en kommando, læser værdierne lige bagefter og afbryder. Ændringer foretaget på selve enheden vises først efter næste kommando. Sparer mest batteri; hver kommando tager cirka et sekund længere.",
+          "ru": "Вкл.: Homey регулярно проверяет устройство (см. две настройки выше), команды выполняются мгновенно. Выкл.: никаких проверок. Homey подключается только для отправки команды, сразу после неё считывает значения и отключается. Изменения, сделанные на самом устройстве, появятся только после следующей команды. Максимальная экономия батареи; каждая команда выполняется примерно на секунду дольше.",
+          "pl": "Włączone: Homey regularnie sprawdza urządzenie (zobacz dwa ustawienia powyżej), a polecenia działają od razu. Wyłączone: żadnych sprawdzeń. Homey łączy się tylko, aby wysłać polecenie, zaraz potem odczytuje wartości i się rozłącza. Zmiany wprowadzone na samym urządzeniu pojawią się dopiero po następnym poleceniu. Najbardziej oszczędza baterię; każde polecenie trwa około sekundy dłużej.",
+          "ko": "켜짐: Homey가 기기를 주기적으로 확인하며(위의 두 설정 참조) 명령이 즉시 실행됩니다. 꺼짐: 확인을 전혀 하지 않습니다. Homey는 명령을 보낼 때만 연결하고, 바로 뒤에 값을 읽은 후 연결을 끊습니다. 기기에서 직접 바꾼 내용은 다음 명령 후에야 표시됩니다. 배터리를 가장 많이 절약하며, 명령마다 약 1초가 더 걸립니다.",
+          "ar": "مفعّل: يتحقق Homey من الجهاز بانتظام (راجع الإعدادين أعلاه) وتُنفَّذ الأوامر فورًا. غير مفعّل: لا توجد أي عمليات تحقق. يتصل Homey فقط لإرسال أمر، ويقرأ القيم مباشرة بعده ثم يقطع الاتصال. لن تظهر التغييرات التي تُجرى على الجهاز نفسه إلا بعد الأمر التالي. يوفّر أكبر قدر من البطارية؛ ويستغرق كل أمر نحو ثانية إضافية."
+        }
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Screen",
+      "nl": "Scherm",
+      "de": "Bildschirm",
+      "fr": "Écran",
+      "it": "Schermo",
+      "sv": "Skärm",
+      "no": "Skjerm",
+      "es": "Pantalla",
+      "da": "Skærm",
+      "ru": "Экран",
+      "pl": "Ekran",
+      "ko": "화면",
+      "ar": "الشاشة"
+    },
+    "children": [
+      {
+        "id": "dismiss_keyguard",
+        "type": "checkbox",
+        "label": {
+          "en": "Dismiss lock screen when turning on",
+          "nl": "Vergrendelscherm overslaan bij aanzetten",
+          "de": "Sperrbildschirm beim Einschalten überspringen",
+          "fr": "Ignorer l'écran de verrouillage à l'allumage",
+          "it": "Ignora la schermata di blocco all'accensione",
+          "sv": "Stäng låsskärmen när skärmen slås på",
+          "no": "Lukk låseskjermen når skjermen slås på",
+          "es": "Omitir la pantalla de bloqueo al encender",
+          "da": "Spring låseskærmen over ved tænding",
+          "ru": "Снимать блокировку экрана при включении",
+          "pl": "Pomiń ekran blokady przy włączaniu",
+          "ko": "화면을 켤 때 잠금 화면 해제",
+          "ar": "إلغاء شاشة القفل عند التشغيل"
+        },
+        "value": false,
+        "hint": {
+          "en": "Only works when the device uses swipe to unlock (no PIN, pattern or password).",
+          "nl": "Werkt alleen als het apparaat ontgrendelt met vegen (geen pincode, patroon of wachtwoord).",
+          "de": "Funktioniert nur, wenn das Gerät per Wischen entsperrt wird (keine PIN, kein Muster, kein Passwort).",
+          "fr": "Fonctionne uniquement si l'appareil se déverrouille en balayant l'écran (sans PIN, schéma ni mot de passe).",
+          "it": "Funziona solo se il dispositivo si sblocca con uno scorrimento (senza PIN, sequenza o password).",
+          "sv": "Fungerar bara när enheten låses upp genom att svepa (ingen PIN, inget mönster eller lösenord).",
+          "no": "Fungerer bare når enheten låses opp med sveip (ingen PIN, mønster eller passord).",
+          "es": "Solo funciona si el dispositivo se desbloquea deslizando (sin PIN, patrón ni contraseña).",
+          "da": "Virker kun, når enheden låses op ved at stryge (ingen PIN, mønster eller adgangskode).",
+          "ru": "Работает, только если устройство разблокируется свайпом (без PIN-кода, графического ключа или пароля).",
+          "pl": "Działa tylko, gdy urządzenie odblokowuje się przesunięciem palca (bez PIN, wzoru ani hasła).",
+          "ko": "기기가 밀어서 잠금 해제를 사용할 때만 작동해요(PIN, 패턴, 비밀번호 없음).",
+          "ar": "يعمل فقط إذا كان الجهاز يستخدم التمرير لفتح القفل (بدون PIN أو نقش أو كلمة مرور)."
+        }
+      }
+    ]
+  }
+]

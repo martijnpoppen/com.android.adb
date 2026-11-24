@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960" fill="none" stroke="#000" stroke-width="56" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Android Control: a phone, its screen being switched on remotely -->
+  <rect x="150" y="100" width="420" height="760" rx="84"/>
+  <path d="M300 800h120"/>
+  <path d="M291 404a110 110 0 1 0 138 0"/>
+  <path d="M360 340v130"/>
+  <path d="M712 312a140 140 0 0 1 0 198"/>
+  <path d="M800 224a264 264 0 0 1 0 374"/>
+</svg>
