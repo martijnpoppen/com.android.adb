@@ -81,7 +81,8 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
 - Confirmed on a real OnePlus 9 (Android 14, OxygenOS) by the user: pairing with code and
   connecting over Wireless debugging, the two-page pairing view, keep-alive off (connect /
   idle-disconnect logged), state check slowing to 300 s with the screen off on battery,
-  pressing the volume keys, reading brightness (via `screen_brightness_float`) and volume.
+  pressing the volume keys, reading and setting volume, and setting brightness with the
+  slider (raw setting, scale 8191; confirmed after the "start at 8191" change).
 - Real OnePlus 9 replies (the mock copies them): `cmd display get-brightness` → "Unknown
   command"; raw `screen_brightness` goes up to 8191; media volume range 0..30.
   `cmd display set-brightness`, `settings put system screen_brightness_float` and

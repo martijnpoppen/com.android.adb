@@ -265,6 +265,10 @@ function checkTranslations() {
       }
     });
   }
+  const { tags } = JSON.parse(fs.readFileSync(path.join(root, '.homeycompose/app.json')));
+  for (const lang of LANGUAGES) {
+    if (!tags || !Array.isArray(tags[lang]) || !tags[lang].length) problems.push(`app.json tags: no ${lang}`);
+  }
   const en = require('../locales/en.json');
   for (const lang of LANGUAGES.filter((l) => l !== 'en')) {
     const file = path.join(root, 'locales', `${lang}.json`);
