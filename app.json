@@ -47,9 +47,13 @@
     "large": "/assets/images/large.png",
     "xlarge": "/assets/images/xlarge.png"
   },
+  "source": "https://github.com/martijnpoppen/com.android.adb",
+  "bugs": {
+    "url": "https://github.com/martijnpoppen/com.android.adb/issues"
+  },
   "author": {
-    "name": "Your Name",
-    "email": "you@example.com"
+    "name": "Martijn Poppen",
+    "email": "adb@martijnpoppen.nl"
   },
   "flow": {
     "conditions": [

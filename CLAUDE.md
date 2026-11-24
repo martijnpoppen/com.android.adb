@@ -117,7 +117,7 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
   device | requested }) per connection; the device logs both. `disconnect()` clears `this.adb`
   before Tango's `disconnected` fires, so that handler must not be the one to emit for it.
 - Android turns Wireless debugging off on reboot; the pairing itself survives.
-- App id is `com.android.adb` (changed from `com.example.adbtablet`: devices paired under the old id must be paired again). Author is still a placeholder.
+- App id is `com.android.adb` (changed from `com.example.adbtablet`: devices paired under the old id must be paired again). Author: Martijn Poppen <adb@martijnpoppen.nl>.
 
 ## Ideas not built yet
 
