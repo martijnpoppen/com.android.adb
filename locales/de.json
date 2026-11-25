@@ -1,6 +1,7 @@
 {
   "device": {
-    "default_name": "Android-Gerät"
+    "default_name": "Android-Gerät",
+    "screenshot": "Screenshot"
   },
   "errors": {
     "enter_host": "Gib die IP-Adresse des Geräts ein",
@@ -17,7 +18,10 @@
     "invalid_timeout": "Ungültiges Timeout",
     "enter_text": "Gib einen Text ein",
     "bluetooth_failed": "Bluetooth konnte auf diesem Gerät nicht umgeschaltet werden",
-    "dnd_failed": "Bitte nicht stören konnte auf diesem Gerät nicht geändert werden"
+    "dnd_failed": "Bitte nicht stören konnte auf diesem Gerät nicht geändert werden",
+    "screenshot_failed": "Screenshot konnte nicht aufgenommen werden",
+    "volume_failed": "Diese Lautstärke kann auf diesem Gerät nicht geändert werden",
+    "invalid_position": "Ungültige Position"
   },
   "pair": {
     "title": "Verbinde dein Android-Gerät",

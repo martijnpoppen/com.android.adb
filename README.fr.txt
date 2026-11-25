@@ -1,6 +1,6 @@
 Contrôlez un téléphone ou une tablette Android depuis Homey : allumez et éteignez l'écran, réglez la luminosité et le volume multimédia, consultez le niveau de batterie, et ouvrez des apps ou des pages web depuis un Flow.
 
-Depuis un Flow, vous pouvez aussi activer ou désactiver le Bluetooth, régler Ne pas déranger et la rotation automatique, afficher une notification sur l'appareil ou le redémarrer. Les changements d'écran, de charge, de niveau de batterie, de température de la batterie et de Bluetooth peuvent démarrer vos Flows.
+Depuis un Flow, vous pouvez aussi activer ou désactiver le Bluetooth, régler Ne pas déranger et la rotation automatique, afficher une notification, faire une capture d'écran, appuyer sur l'écran ou le balayer, fermer une application ou redémarrer l'appareil. La musique lue sur l'appareil apparaît dans Homey avec lecture, pause, suivant et précédent. Les changements de l'écran, de l'application à l'écran, de la charge, de la batterie, du Bluetooth et du réseau Wi-Fi peuvent démarrer vos Flows.
 
 L'app communique directement avec l'appareil via votre réseau local grâce au protocole Android Debug Bridge (ADB). Rien à installer sur l'appareil et aucun ordinateur nécessaire.
 

@@ -1,0 +1,38 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Screen timeout",
+    "nl": "Time-out voor scherm",
+    "de": "Display-Timeout",
+    "fr": "Délai de mise en veille de l'écran",
+    "it": "Spegnimento schermo",
+    "sv": "Skärmens tidsgräns",
+    "no": "Tidsavbrudd for skjerm",
+    "es": "Tiempo de espera de la pantalla",
+    "da": "Timeout for skærm",
+    "ru": "Время отключения экрана",
+    "pl": "Wygaszanie ekranu",
+    "ko": "화면 자동 꺼짐 시간",
+    "ar": "مهلة غلق الشاشة"
+  },
+  "units": {
+    "en": "s",
+    "nl": "s",
+    "de": "s",
+    "fr": "s",
+    "it": "s",
+    "sv": "s",
+    "no": "s",
+    "es": "s",
+    "da": "s",
+    "ru": "s",
+    "pl": "s",
+    "ko": "s",
+    "ar": "s"
+  },
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/screen_timeout.svg"
+}

@@ -1,6 +1,7 @@
 {
   "device": {
-    "default_name": "Android-enhet"
+    "default_name": "Android-enhet",
+    "screenshot": "Skärmbild"
   },
   "errors": {
     "enter_host": "Ange enhetens IP-adress",
@@ -17,7 +18,10 @@
     "invalid_timeout": "Ogiltig tidsgräns",
     "enter_text": "Ange en text",
     "bluetooth_failed": "Det gick inte att ändra Bluetooth på den här enheten",
-    "dnd_failed": "Det gick inte att ändra Stör ej på den här enheten"
+    "dnd_failed": "Det gick inte att ändra Stör ej på den här enheten",
+    "screenshot_failed": "Det gick inte att ta en skärmbild",
+    "volume_failed": "Den här volymen kan inte ändras på den här enheten",
+    "invalid_position": "Ogiltig position"
   },
   "pair": {
     "title": "Anslut din Android-enhet",

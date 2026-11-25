@@ -1,0 +1,38 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Free storage",
+    "nl": "Vrije opslag",
+    "de": "Freier Speicher",
+    "fr": "Stockage disponible",
+    "it": "Spazio libero",
+    "sv": "Ledigt lagringsutrymme",
+    "no": "Ledig lagringsplass",
+    "es": "Almacenamiento libre",
+    "da": "Ledig lagerplads",
+    "ru": "Свободная память",
+    "pl": "Wolne miejsce",
+    "ko": "사용 가능한 저장공간",
+    "ar": "مساحة التخزين المتاحة"
+  },
+  "units": {
+    "en": "GB",
+    "nl": "GB",
+    "de": "GB",
+    "fr": "GB",
+    "it": "GB",
+    "sv": "GB",
+    "no": "GB",
+    "es": "GB",
+    "da": "GB",
+    "ru": "GB",
+    "pl": "GB",
+    "ko": "GB",
+    "ar": "GB"
+  },
+  "decimals": 1,
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/storage_free.svg"
+}

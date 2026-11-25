@@ -1,0 +1,22 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Stay awake",
+    "nl": "Actief blijven",
+    "de": "Aktiv lassen",
+    "fr": "Rester activé",
+    "it": "Rimani attivo",
+    "sv": "Håll aktiverad",
+    "no": "Forbli våken",
+    "es": "Pantalla activa",
+    "da": "Lad være aktiv",
+    "ru": "Не выключать экран",
+    "pl": "Pozostaw włączony ekran",
+    "ko": "화면 켜짐 상태 유지",
+    "ar": "البقاء في الوضع النشط"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/stay_awake.svg"
+}

@@ -1,6 +1,7 @@
 {
   "device": {
-    "default_name": "Dispositivo Android"
+    "default_name": "Dispositivo Android",
+    "screenshot": "Screenshot"
   },
   "errors": {
     "enter_host": "Inserisci l'indirizzo IP del dispositivo",
@@ -17,7 +18,10 @@
     "invalid_timeout": "Tempo non valido",
     "enter_text": "Inserisci un testo",
     "bluetooth_failed": "Impossibile cambiare lo stato del Bluetooth su questo dispositivo",
-    "dnd_failed": "Impossibile modificare Non disturbare su questo dispositivo"
+    "dnd_failed": "Impossibile modificare Non disturbare su questo dispositivo",
+    "screenshot_failed": "Impossibile acquisire uno screenshot",
+    "volume_failed": "Questo volume non può essere modificato su questo dispositivo",
+    "invalid_position": "Posizione non valida"
   },
   "pair": {
     "title": "Collega il tuo dispositivo Android",

@@ -102,8 +102,25 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
 - User reported OK on the OnePlus 9 ("rest is ok"): battery level and charging state, and the
   Flow cards open app, open link, press button, type text, keep screen on while charging,
   screen timeout, is charging, app is open on screen.
-- Only tested against the mock, NOT on a real device: mDNS port following, repair flow,
-  state checks with keep-alive on.
+- Also confirmed by the user on the OnePlus 9: regular state checks with keep-alive on, and
+  following the Wireless debugging port after toggling it (mDNS).
+- Only tested against the mock, NOT on a real device: repair flow, and the batch below.
+- Batch added (mock only, real output formats unconfirmed):
+  - Triggers `foreground_app_changed` (tokens name, package) and `wifi_network_changed`; not
+    fired on the first state reading (`stateSeen` / `foregroundPackage`).
+  - `take_screenshot`: `screencap -p` through `AdbClient.exec()` (raw bytes), one Homey Image
+    per device (`setCameraImage`, also the card's image token). Screen must be on.
+  - `show_url` / `show_app`: wake, `wm dismiss-keyguard`, then open. `close_app` = `am
+    force-stop`. `tap_screen` / `swipe_screen` = `input tap|swipe`.
+  - `set_stream_volume` (ring 2, alarm 4, notification 5): media_session then `cmd audio
+    set-volume`, verified; errors if neither sticks (likely on the OnePlus, where
+    media_session --set is ignored for media).
+  - Sensors `screen_timeout` (s), `stay_awake`, `storage_free` (GB, `df -k /data`).
+  - Media: system capabilities `speaker_playing/next/prev/track/artist/album`; state from
+    `dumpsys media_session | grep -E 'state=PlaybackState|metadata:'` (`parseMedia`), control
+    with KEYCODE_MEDIA_* key events.
+  - `lib/AppNames.js`: readable app names = list of well-known packages + a guess from the
+    package name. Android has no cheap way to read real app labels over ADB.
 - Added (user: "works" on the OnePlus 9, no per-card detail given): Bluetooth on/off (`cmd bluetooth_manager enable|disable`, fallback
   `svc bluetooth`; verified via `settings get global bluetooth_on`), condition + triggers
   "Bluetooth turned on/off" (not fired on the first reading after start); restart via adbd's
@@ -148,7 +165,7 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
 
 ## Ideas not built yet
 
-- Flow trigger when the foreground app changes
-- Screenshot into a Homey image token
-- "Screen on with dashboard" button
-- Friendly app names instead of package names
+- Real app labels (would need a helper app on the device or pulling APKs)
+- Flashlight, Wi-Fi off / airplane mode (the latter two cut Homey's own connection)
+- A card that opens a Homey dashboard directly (dashboards only exist in the Homey mobile app;
+  needs a deep link, unknown)

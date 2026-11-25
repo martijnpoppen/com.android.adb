@@ -1,6 +1,6 @@
 Steuere ein Android-Smartphone oder -Tablet mit Homey: Schalte den Bildschirm ein und aus, stelle Helligkeit und Medienlautstärke ein, sieh dir den Akkustand an und öffne Apps oder Webseiten aus einem Flow.
 
-Per Flow kannst du außerdem Bluetooth ein- oder ausschalten, Bitte nicht stören und automatisches Drehen einstellen, eine Benachrichtigung auf dem Gerät anzeigen oder es neu starten. Änderungen an Bildschirm, Laden, Akkustand, Akkutemperatur und Bluetooth können deine Flows starten.
+Aus einem Flow kannst du außerdem Bluetooth ein- oder ausschalten, „Bitte nicht stören“ und automatisches Drehen einstellen, eine Benachrichtigung anzeigen, einen Screenshot aufnehmen, auf den Bildschirm tippen oder wischen, eine App schließen oder das Gerät neu starten. Musik, die auf dem Gerät läuft, erscheint in Homey mit Wiedergabe, Pause, Weiter und Zurück. Änderungen am Bildschirm, an der App auf dem Bildschirm, am Ladevorgang, am Akku, an Bluetooth und am WLAN-Netzwerk können deine Flows starten.
 
 Die App kommuniziert direkt über dein lokales Netzwerk mit dem Gerät, über das Protokoll Android Debug Bridge (ADB). Auf dem Gerät muss nichts installiert werden und du brauchst keinen Computer.
 

@@ -1,6 +1,7 @@
 {
   "device": {
-    "default_name": "Android-enhed"
+    "default_name": "Android-enhed",
+    "screenshot": "Screenshot"
   },
   "errors": {
     "enter_host": "Angiv enhedens IP-adresse",
@@ -17,7 +18,10 @@
     "invalid_timeout": "Ugyldig timeout",
     "enter_text": "Indtast en tekst",
     "bluetooth_failed": "Bluetooth kunne ikke ændres på denne enhed",
-    "dnd_failed": "Forstyr ikke kunne ikke ændres på denne enhed"
+    "dnd_failed": "Forstyr ikke kunne ikke ændres på denne enhed",
+    "screenshot_failed": "Der kunne ikke tages et screenshot",
+    "volume_failed": "Denne lydstyrke kunne ikke ændres på denne enhed",
+    "invalid_position": "Ugyldig position"
   },
   "pair": {
     "title": "Forbind din Android-enhed",

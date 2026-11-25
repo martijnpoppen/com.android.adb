@@ -1,6 +1,7 @@
 {
   "device": {
-    "default_name": "Android-apparaat"
+    "default_name": "Android-apparaat",
+    "screenshot": "Screenshot"
   },
   "errors": {
     "enter_host": "Vul het IP-adres van het apparaat in",
@@ -17,7 +18,10 @@
     "invalid_timeout": "Ongeldige time-out",
     "enter_text": "Vul een tekst in",
     "bluetooth_failed": "Bluetooth kon op dit apparaat niet worden omgeschakeld",
-    "dnd_failed": "Niet storen kon op dit apparaat niet worden gewijzigd"
+    "dnd_failed": "Niet storen kon op dit apparaat niet worden gewijzigd",
+    "screenshot_failed": "Screenshot maken is mislukt",
+    "volume_failed": "Dit volume kan op dit apparaat niet worden aangepast",
+    "invalid_position": "Ongeldige positie"
   },
   "pair": {
     "title": "Verbind je Android-apparaat",

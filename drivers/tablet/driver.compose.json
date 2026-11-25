@@ -27,7 +27,16 @@
     "dnd_mode",
     "wifi_network",
     "measure_signal_strength",
-    "foreground_app"
+    "foreground_app",
+    "screen_timeout",
+    "stay_awake",
+    "storage_free",
+    "speaker_playing",
+    "speaker_prev",
+    "speaker_next",
+    "speaker_track",
+    "speaker_artist",
+    "speaker_album"
   ],
   "capabilitiesOptions": {
     "onoff": {

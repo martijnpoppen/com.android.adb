@@ -1,6 +1,7 @@
 {
   "device": {
-    "default_name": "Android-enhet"
+    "default_name": "Android-enhet",
+    "screenshot": "Skjermbilde"
   },
   "errors": {
     "enter_host": "Skriv inn IP-adressen til enheten",
@@ -17,7 +18,10 @@
     "invalid_timeout": "Ugyldig tidsavbrudd",
     "enter_text": "Skriv inn en tekst",
     "bluetooth_failed": "Kunne ikke endre Bluetooth på denne enheten",
-    "dnd_failed": "Kunne ikke endre Ikke forstyrr på denne enheten"
+    "dnd_failed": "Kunne ikke endre Ikke forstyrr på denne enheten",
+    "screenshot_failed": "Kunne ikke ta skjermbilde",
+    "volume_failed": "Dette volumet kan ikke endres på denne enheten",
+    "invalid_position": "Ugyldig posisjon"
   },
   "pair": {
     "title": "Koble til Android-enheten din",

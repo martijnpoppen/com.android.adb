@@ -1,6 +1,7 @@
 {
   "device": {
-    "default_name": "Android 기기"
+    "default_name": "Android 기기",
+    "screenshot": "스크린샷"
   },
   "errors": {
     "enter_host": "기기의 IP 주소를 입력하세요",
@@ -17,7 +18,10 @@
     "invalid_timeout": "잘못된 시간 제한",
     "enter_text": "내용을 입력하세요",
     "bluetooth_failed": "이 기기에서 블루투스를 전환할 수 없습니다",
-    "dnd_failed": "이 기기에서 방해 금지 모드를 변경할 수 없습니다"
+    "dnd_failed": "이 기기에서 방해 금지 모드를 변경할 수 없습니다",
+    "screenshot_failed": "스크린샷을 찍을 수 없습니다",
+    "volume_failed": "이 기기에서는 이 볼륨을 변경할 수 없습니다",
+    "invalid_position": "잘못된 위치입니다"
   },
   "pair": {
     "title": "Android 기기 연결",

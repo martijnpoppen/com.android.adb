@@ -1,6 +1,7 @@
 {
   "device": {
-    "default_name": "جهاز Android"
+    "default_name": "جهاز Android",
+    "screenshot": "لقطة الشاشة"
   },
   "errors": {
     "enter_host": "أدخِل عنوان IP للجهاز",
@@ -17,7 +18,10 @@
     "invalid_timeout": "مهلة غير صالحة",
     "enter_text": "أدخل نصًا",
     "bluetooth_failed": "تعذّر تبديل البلوتوث على هذا الجهاز",
-    "dnd_failed": "تعذّر تغيير وضع الرجاء عدم الإزعاج على هذا الجهاز"
+    "dnd_failed": "تعذّر تغيير وضع الرجاء عدم الإزعاج على هذا الجهاز",
+    "screenshot_failed": "تعذّر أخذ لقطة شاشة",
+    "volume_failed": "تعذّر تغيير مستوى هذا الصوت على هذا الجهاز",
+    "invalid_position": "موضع غير صالح"
   },
   "pair": {
     "title": "توصيل جهاز Android",

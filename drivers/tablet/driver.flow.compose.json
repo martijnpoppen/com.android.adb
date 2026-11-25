@@ -65,6 +65,178 @@
         "ko": "다음 확인 때 감지됩니다: '연결 계속 유지'가 켜져 있을 때나 명령을 보낸 후에만 해당됩니다.",
         "ar": "يُكتشف عند التحقق التالي: فقط عند تفعيل «إبقاء الاتصال مفتوحًا»، أو بعد أمر."
       }
+    },
+    {
+      "id": "foreground_app_changed",
+      "title": {
+        "en": "App on screen changed",
+        "nl": "App op het scherm is veranderd",
+        "de": "App auf dem Bildschirm hat sich geändert",
+        "fr": "L'application à l'écran a changé",
+        "it": "L'app sullo schermo è cambiata",
+        "sv": "Appen på skärmen ändrades",
+        "no": "Appen på skjermen ble endret",
+        "es": "La app en pantalla ha cambiado",
+        "da": "Appen på skærmen blev ændret",
+        "ru": "Приложение на экране изменилось",
+        "pl": "Aplikacja na ekranie zmieniła się",
+        "ko": "화면의 앱이 변경됨",
+        "ar": "تغيّر التطبيق المعروض على الشاشة"
+      },
+      "hint": {
+        "en": "Noticed at the next state check: only with \"Keep the connection open\" on, or after a command.",
+        "nl": "Wordt opgemerkt bij de volgende controle: alleen als \"Verbinding open houden\" aan staat, of na een opdracht.",
+        "de": "Wird bei der nächsten Prüfung bemerkt: nur wenn „Verbindung offen halten“ an ist, oder nach einem Befehl.",
+        "fr": "Détecté lors de la vérification suivante : uniquement si « Garder la connexion ouverte » est activé, ou après une commande.",
+        "it": "Rilevato al controllo successivo: solo se \"Mantieni la connessione aperta\" è attivo, o dopo un comando.",
+        "sv": "Upptäcks vid nästa kontroll: bara när ”Håll anslutningen öppen” är på, eller efter ett kommando.",
+        "no": "Oppdages ved neste sjekk: bare når «Hold tilkoblingen åpen» er på, eller etter en kommando.",
+        "es": "Se detecta en la siguiente comprobación: solo si «Mantener la conexión abierta» está activado, o tras un comando.",
+        "da": "Opdages ved næste tjek: kun når \"Hold forbindelsen åben\" er slået til, eller efter en kommando.",
+        "ru": "Обнаруживается при следующей проверке: только если включено «Не разрывать соединение», или после команды.",
+        "pl": "Wykrywane przy następnym sprawdzeniu: tylko gdy włączone jest „Utrzymuj połączenie”, lub po poleceniu.",
+        "ko": "다음 확인 때 감지됩니다: '연결 계속 유지'가 켜져 있을 때나 명령을 보낸 후에만 해당됩니다.",
+        "ar": "يُكتشف عند التحقق التالي: فقط عند تفعيل «إبقاء الاتصال مفتوحًا»، أو بعد أمر."
+      },
+      "tokens": [
+        {
+          "name": "name",
+          "type": "string",
+          "title": {
+            "en": "App",
+            "nl": "App",
+            "de": "App",
+            "fr": "Application",
+            "it": "App",
+            "sv": "App",
+            "no": "App",
+            "es": "App",
+            "da": "App",
+            "ru": "Приложение",
+            "pl": "Aplikacja",
+            "ko": "앱",
+            "ar": "التطبيق"
+          },
+          "example": {
+            "en": "Spotify",
+            "nl": "Spotify",
+            "de": "Spotify",
+            "fr": "Spotify",
+            "it": "Spotify",
+            "sv": "Spotify",
+            "no": "Spotify",
+            "es": "Spotify",
+            "da": "Spotify",
+            "ru": "Spotify",
+            "pl": "Spotify",
+            "ko": "Spotify",
+            "ar": "Spotify"
+          }
+        },
+        {
+          "name": "package",
+          "type": "string",
+          "title": {
+            "en": "Package name",
+            "nl": "Pakketnaam",
+            "de": "Paketname",
+            "fr": "Nom du package",
+            "it": "Nome del pacchetto",
+            "sv": "Paketnamn",
+            "no": "Pakkenavn",
+            "es": "Nombre del paquete",
+            "da": "Pakkenavn",
+            "ru": "Имя пакета",
+            "pl": "Nazwa pakietu",
+            "ko": "패키지 이름",
+            "ar": "اسم الحزمة"
+          },
+          "example": {
+            "en": "com.spotify.music",
+            "nl": "com.spotify.music",
+            "de": "com.spotify.music",
+            "fr": "com.spotify.music",
+            "it": "com.spotify.music",
+            "sv": "com.spotify.music",
+            "no": "com.spotify.music",
+            "es": "com.spotify.music",
+            "da": "com.spotify.music",
+            "ru": "com.spotify.music",
+            "pl": "com.spotify.music",
+            "ko": "com.spotify.music",
+            "ar": "com.spotify.music"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wifi_network_changed",
+      "title": {
+        "en": "Wi-Fi network changed",
+        "nl": "Wifi-netwerk is veranderd",
+        "de": "WLAN-Netzwerk hat sich geändert",
+        "fr": "Le réseau Wi-Fi a changé",
+        "it": "La rete Wi-Fi è cambiata",
+        "sv": "Wi-Fi-nätverket ändrades",
+        "no": "Wi-Fi-nettverket ble endret",
+        "es": "La red Wi-Fi ha cambiado",
+        "da": "Wi-Fi-netværket blev ændret",
+        "ru": "Сеть Wi-Fi изменилась",
+        "pl": "Sieć Wi-Fi zmieniła się",
+        "ko": "Wi-Fi 네트워크가 변경됨",
+        "ar": "تغيّرت شبكة Wi-Fi"
+      },
+      "hint": {
+        "en": "Noticed at the next state check: only with \"Keep the connection open\" on, or after a command.",
+        "nl": "Wordt opgemerkt bij de volgende controle: alleen als \"Verbinding open houden\" aan staat, of na een opdracht.",
+        "de": "Wird bei der nächsten Prüfung bemerkt: nur wenn „Verbindung offen halten“ an ist, oder nach einem Befehl.",
+        "fr": "Détecté lors de la vérification suivante : uniquement si « Garder la connexion ouverte » est activé, ou après une commande.",
+        "it": "Rilevato al controllo successivo: solo se \"Mantieni la connessione aperta\" è attivo, o dopo un comando.",
+        "sv": "Upptäcks vid nästa kontroll: bara när ”Håll anslutningen öppen” är på, eller efter ett kommando.",
+        "no": "Oppdages ved neste sjekk: bare når «Hold tilkoblingen åpen» er på, eller etter en kommando.",
+        "es": "Se detecta en la siguiente comprobación: solo si «Mantener la conexión abierta» está activado, o tras un comando.",
+        "da": "Opdages ved næste tjek: kun når \"Hold forbindelsen åben\" er slået til, eller efter en kommando.",
+        "ru": "Обнаруживается при следующей проверке: только если включено «Не разрывать соединение», или после команды.",
+        "pl": "Wykrywane przy następnym sprawdzeniu: tylko gdy włączone jest „Utrzymuj połączenie”, lub po poleceniu.",
+        "ko": "다음 확인 때 감지됩니다: '연결 계속 유지'가 켜져 있을 때나 명령을 보낸 후에만 해당됩니다.",
+        "ar": "يُكتشف عند التحقق التالي: فقط عند تفعيل «إبقاء الاتصال مفتوحًا»، أو بعد أمر."
+      },
+      "tokens": [
+        {
+          "name": "network",
+          "type": "string",
+          "title": {
+            "en": "Wi-Fi network",
+            "nl": "Wifi-netwerk",
+            "de": "WLAN-Netzwerk",
+            "fr": "Réseau Wi-Fi",
+            "it": "Rete Wi-Fi",
+            "sv": "Wi-Fi-nätverk",
+            "no": "Wi-Fi-nettverk",
+            "es": "Red Wi-Fi",
+            "da": "Wi-Fi-netværk",
+            "ru": "Сеть Wi-Fi",
+            "pl": "Sieć Wi-Fi",
+            "ko": "Wi-Fi 네트워크",
+            "ar": "شبكة Wi-Fi"
+          },
+          "example": {
+            "en": "Home Wi-Fi",
+            "nl": "Home Wi-Fi",
+            "de": "Home Wi-Fi",
+            "fr": "Home Wi-Fi",
+            "it": "Home Wi-Fi",
+            "sv": "Home Wi-Fi",
+            "no": "Home Wi-Fi",
+            "es": "Home Wi-Fi",
+            "da": "Home Wi-Fi",
+            "ru": "Home Wi-Fi",
+            "pl": "Home Wi-Fi",
+            "ko": "Home Wi-Fi",
+            "ar": "Home Wi-Fi"
+          }
+        }
+      ]
     }
   ],
   "conditions": [
@@ -1440,6 +1612,781 @@
             "pl": "Ktoś stoi przy drzwiach",
             "ko": "누군가 문 앞에 있습니다",
             "ar": "يوجد شخص عند الباب"
+          }
+        }
+      ]
+    },
+    {
+      "id": "take_screenshot",
+      "title": {
+        "en": "Take screenshot",
+        "nl": "Maak een screenshot",
+        "de": "Screenshot aufnehmen",
+        "fr": "Faire une capture d'écran",
+        "it": "Acquisisci screenshot",
+        "sv": "Ta en skärmbild",
+        "no": "Ta skjermbilde",
+        "es": "Hacer captura de pantalla",
+        "da": "Tag screenshot",
+        "ru": "Сделать скриншот",
+        "pl": "Zrób zrzut ekranu",
+        "ko": "스크린샷 찍기",
+        "ar": "أخذ لقطة شاشة"
+      },
+      "hint": {
+        "en": "The screen must be on, otherwise the picture is black. Apps that block screenshots (banking, some video apps) show up black too.",
+        "nl": "Het scherm moet aan staan, anders is de afbeelding zwart. Apps die screenshots blokkeren (bankieren, sommige video-apps) blijven ook zwart.",
+        "de": "Der Bildschirm muss an sein, sonst ist das Bild schwarz. Apps, die Screenshots blockieren (Banking, manche Video-Apps), bleiben ebenfalls schwarz.",
+        "fr": "L'écran doit être allumé, sinon l'image est noire. Les applications qui bloquent les captures d'écran (banque, certaines applications vidéo) apparaissent aussi en noir.",
+        "it": "Lo schermo deve essere acceso, altrimenti l'immagine è nera. Anche le app che bloccano gli screenshot (app bancarie, alcune app video) risultano nere.",
+        "sv": "Skärmen måste vara på, annars blir bilden svart. Appar som blockerar skärmbilder (bankappar, vissa videoappar) blir också svarta.",
+        "no": "Skjermen må være på, ellers blir bildet svart. Apper som blokkerer skjermbilder (bankapper, noen videoapper) blir også svarte.",
+        "es": "La pantalla debe estar encendida; si no, la imagen sale en negro. Las apps que bloquean las capturas de pantalla (bancos, algunas apps de vídeo) también salen en negro.",
+        "da": "Skærmen skal være tændt, ellers bliver billedet sort. Apps, der blokerer screenshots (bankapps, nogle videoapps), bliver også sorte.",
+        "ru": "Экран должен быть включён, иначе снимок будет чёрным. Приложения, которые запрещают скриншоты (банковские, некоторые видеоприложения), тоже будут чёрными.",
+        "pl": "Ekran musi być włączony, inaczej obraz będzie czarny. Aplikacje blokujące zrzuty ekranu (bankowe, niektóre aplikacje wideo) też będą czarne.",
+        "ko": "화면이 켜져 있어야 합니다. 그렇지 않으면 사진이 검게 나옵니다. 스크린샷을 차단하는 앱(은행 앱, 일부 동영상 앱)도 검게 나옵니다.",
+        "ar": "يجب أن تكون الشاشة مضاءة، وإلا ستظهر الصورة سوداء. التطبيقات التي تمنع لقطات الشاشة (التطبيقات المصرفية وبعض تطبيقات الفيديو) تظهر سوداء أيضًا."
+      },
+      "tokens": [
+        {
+          "name": "screenshot",
+          "type": "image",
+          "title": {
+            "en": "Screenshot",
+            "nl": "Screenshot",
+            "de": "Screenshot",
+            "fr": "Capture d'écran",
+            "it": "Screenshot",
+            "sv": "Skärmbild",
+            "no": "Skjermbilde",
+            "es": "Captura de pantalla",
+            "da": "Screenshot",
+            "ru": "Скриншот",
+            "pl": "Zrzut ekranu",
+            "ko": "스크린샷",
+            "ar": "لقطة الشاشة"
+          }
+        }
+      ]
+    },
+    {
+      "id": "show_url",
+      "title": {
+        "en": "Turn screen on and open link",
+        "nl": "Zet het scherm aan en open een link",
+        "de": "Bildschirm einschalten und Link öffnen",
+        "fr": "Allumer l'écran et ouvrir un lien",
+        "it": "Accendi lo schermo e apri un link",
+        "sv": "Slå på skärmen och öppna en länk",
+        "no": "Slå på skjermen og åpne en lenke",
+        "es": "Encender la pantalla y abrir un enlace",
+        "da": "Tænd skærmen, og åbn link",
+        "ru": "Включить экран и открыть ссылку",
+        "pl": "Włącz ekran i otwórz link",
+        "ko": "화면 켜고 링크 열기",
+        "ar": "تشغيل الشاشة وفتح رابط"
+      },
+      "titleFormatted": {
+        "en": "Turn screen on and open [[url]]",
+        "nl": "Zet het scherm aan en open [[url]]",
+        "de": "Bildschirm einschalten und [[url]] öffnen",
+        "fr": "Allumer l'écran et ouvrir [[url]]",
+        "it": "Accendi lo schermo e apri [[url]]",
+        "sv": "Slå på skärmen och öppna [[url]]",
+        "no": "Slå på skjermen og åpne [[url]]",
+        "es": "Encender la pantalla y abrir [[url]]",
+        "da": "Tænd skærmen, og åbn [[url]]",
+        "ru": "Включить экран и открыть [[url]]",
+        "pl": "Włącz ekran i otwórz [[url]]",
+        "ko": "화면 켜고 [[url]] 열기",
+        "ar": "تشغيل الشاشة وفتح [[url]]"
+      },
+      "hint": {
+        "en": "Wakes the screen, dismisses a swipe lock screen and opens it. Handy for a wall display or dashboard.",
+        "nl": "Zet het scherm aan, sluit een vergrendelscherm met vegen en opent het. Handig voor een wandscherm of dashboard.",
+        "de": "Weckt den Bildschirm, schließt einen Sperrbildschirm mit Wischen und öffnet es. Praktisch für ein Wanddisplay oder Dashboard.",
+        "fr": "Allume l'écran, ferme un écran de verrouillage par balayage et l'ouvre. Pratique pour un écran mural ou un tableau de bord.",
+        "it": "Riattiva lo schermo, chiude una schermata di blocco a scorrimento e lo apre. Comodo per un display a parete o una dashboard.",
+        "sv": "Väcker skärmen, stänger en låsskärm med svep och öppnar det. Praktiskt för en väggskärm eller en dashboard.",
+        "no": "Vekker skjermen, lukker en låseskjerm med sveip og åpner det. Praktisk for en veggskjerm eller et dashbord.",
+        "es": "Activa la pantalla, descarta la pantalla de bloqueo por deslizamiento y lo abre. Práctico para una pantalla de pared o un panel de control.",
+        "da": "Vækker skærmen, fjerner en låseskærm med strygning og åbner det. Praktisk til en vægskærm eller et dashboard.",
+        "ru": "Включает экран, убирает экран блокировки со свайпом и открывает выбранное. Удобно для настенного дисплея или панели управления.",
+        "pl": "Wybudza ekran, zamyka ekran blokady odblokowywany przesunięciem i otwiera wybraną pozycję. Przydatne przy ekranie ściennym lub panelu sterowania.",
+        "ko": "화면을 깨우고 스와이프 잠금 화면을 해제한 다음 엽니다. 벽면 디스플레이나 대시보드에 유용합니다.",
+        "ar": "يوقظ الشاشة ويتجاوز شاشة القفل التي تُفتح بالتمرير ثم يفتح العنصر المطلوب. مفيد لشاشة حائط أو لوحة تحكم."
+      },
+      "args": [
+        {
+          "type": "text",
+          "name": "url",
+          "title": {
+            "en": "Link",
+            "nl": "Link",
+            "de": "Link",
+            "fr": "Lien",
+            "it": "Link",
+            "sv": "Länk",
+            "no": "Lenke",
+            "es": "Enlace",
+            "da": "Link",
+            "ru": "Ссылка",
+            "pl": "Link",
+            "ko": "링크",
+            "ar": "الرابط"
+          },
+          "placeholder": {
+            "en": "https://my.homey.app",
+            "nl": "https://my.homey.app",
+            "de": "https://my.homey.app",
+            "fr": "https://my.homey.app",
+            "it": "https://my.homey.app",
+            "sv": "https://my.homey.app",
+            "no": "https://my.homey.app",
+            "es": "https://my.homey.app",
+            "da": "https://my.homey.app",
+            "ru": "https://my.homey.app",
+            "pl": "https://my.homey.app",
+            "ko": "https://my.homey.app",
+            "ar": "https://my.homey.app"
+          }
+        }
+      ]
+    },
+    {
+      "id": "show_app",
+      "title": {
+        "en": "Turn screen on and open app",
+        "nl": "Zet het scherm aan en open een app",
+        "de": "Bildschirm einschalten und App öffnen",
+        "fr": "Allumer l'écran et ouvrir une application",
+        "it": "Accendi lo schermo e apri un'app",
+        "sv": "Slå på skärmen och öppna en app",
+        "no": "Slå på skjermen og åpne en app",
+        "es": "Encender la pantalla y abrir una app",
+        "da": "Tænd skærmen, og åbn app",
+        "ru": "Включить экран и открыть приложение",
+        "pl": "Włącz ekran i otwórz aplikację",
+        "ko": "화면 켜고 앱 열기",
+        "ar": "تشغيل الشاشة وفتح تطبيق"
+      },
+      "titleFormatted": {
+        "en": "Turn screen on and open app [[app]]",
+        "nl": "Zet het scherm aan en open app [[app]]",
+        "de": "Bildschirm einschalten und App [[app]] öffnen",
+        "fr": "Allumer l'écran et ouvrir l'application [[app]]",
+        "it": "Accendi lo schermo e apri l'app [[app]]",
+        "sv": "Slå på skärmen och öppna appen [[app]]",
+        "no": "Slå på skjermen og åpne appen [[app]]",
+        "es": "Encender la pantalla y abrir la app [[app]]",
+        "da": "Tænd skærmen, og åbn appen [[app]]",
+        "ru": "Включить экран и открыть приложение [[app]]",
+        "pl": "Włącz ekran i otwórz aplikację [[app]]",
+        "ko": "화면 켜고 [[app]] 앱 열기",
+        "ar": "تشغيل الشاشة وفتح التطبيق [[app]]"
+      },
+      "hint": {
+        "en": "Wakes the screen, dismisses a swipe lock screen and opens it. Handy for a wall display or dashboard.",
+        "nl": "Zet het scherm aan, sluit een vergrendelscherm met vegen en opent het. Handig voor een wandscherm of dashboard.",
+        "de": "Weckt den Bildschirm, schließt einen Sperrbildschirm mit Wischen und öffnet es. Praktisch für ein Wanddisplay oder Dashboard.",
+        "fr": "Allume l'écran, ferme un écran de verrouillage par balayage et l'ouvre. Pratique pour un écran mural ou un tableau de bord.",
+        "it": "Riattiva lo schermo, chiude una schermata di blocco a scorrimento e lo apre. Comodo per un display a parete o una dashboard.",
+        "sv": "Väcker skärmen, stänger en låsskärm med svep och öppnar det. Praktiskt för en väggskärm eller en dashboard.",
+        "no": "Vekker skjermen, lukker en låseskjerm med sveip og åpner det. Praktisk for en veggskjerm eller et dashbord.",
+        "es": "Activa la pantalla, descarta la pantalla de bloqueo por deslizamiento y lo abre. Práctico para una pantalla de pared o un panel de control.",
+        "da": "Vækker skærmen, fjerner en låseskærm med strygning og åbner det. Praktisk til en vægskærm eller et dashboard.",
+        "ru": "Включает экран, убирает экран блокировки со свайпом и открывает выбранное. Удобно для настенного дисплея или панели управления.",
+        "pl": "Wybudza ekran, zamyka ekran blokady odblokowywany przesunięciem i otwiera wybraną pozycję. Przydatne przy ekranie ściennym lub panelu sterowania.",
+        "ko": "화면을 깨우고 스와이프 잠금 화면을 해제한 다음 엽니다. 벽면 디스플레이나 대시보드에 유용합니다.",
+        "ar": "يوقظ الشاشة ويتجاوز شاشة القفل التي تُفتح بالتمرير ثم يفتح العنصر المطلوب. مفيد لشاشة حائط أو لوحة تحكم."
+      },
+      "args": [
+        {
+          "type": "autocomplete",
+          "name": "app",
+          "title": {
+            "en": "App",
+            "nl": "App",
+            "de": "App",
+            "fr": "App",
+            "it": "App",
+            "sv": "App",
+            "no": "App",
+            "es": "App",
+            "da": "App",
+            "ru": "Приложение",
+            "pl": "Aplikacja",
+            "ko": "앱",
+            "ar": "التطبيق"
+          },
+          "placeholder": {
+            "en": "Search app...",
+            "nl": "Zoek app...",
+            "de": "App suchen...",
+            "fr": "Rechercher une app...",
+            "it": "Cerca app...",
+            "sv": "Sök app...",
+            "no": "Søk etter app...",
+            "es": "Buscar app...",
+            "da": "Søg efter app...",
+            "ru": "Найти приложение...",
+            "pl": "Szukaj aplikacji...",
+            "ko": "앱 검색...",
+            "ar": "البحث عن تطبيق..."
+          }
+        }
+      ]
+    },
+    {
+      "id": "close_app",
+      "title": {
+        "en": "Close app",
+        "nl": "Sluit app",
+        "de": "App schließen",
+        "fr": "Fermer une application",
+        "it": "Chiudi app",
+        "sv": "Stäng app",
+        "no": "Lukk app",
+        "es": "Cerrar app",
+        "da": "Luk app",
+        "ru": "Закрыть приложение",
+        "pl": "Zamknij aplikację",
+        "ko": "앱 닫기",
+        "ar": "إغلاق تطبيق"
+      },
+      "titleFormatted": {
+        "en": "Close app [[app]]",
+        "nl": "Sluit app [[app]]",
+        "de": "App [[app]] schließen",
+        "fr": "Fermer l'application [[app]]",
+        "it": "Chiudi l'app [[app]]",
+        "sv": "Stäng appen [[app]]",
+        "no": "Lukk appen [[app]]",
+        "es": "Cerrar la app [[app]]",
+        "da": "Luk appen [[app]]",
+        "ru": "Закрыть приложение [[app]]",
+        "pl": "Zamknij aplikację [[app]]",
+        "ko": "[[app]] 앱 닫기",
+        "ar": "إغلاق التطبيق [[app]]"
+      },
+      "hint": {
+        "en": "Stops the app completely, also in the background.",
+        "nl": "Stopt de app helemaal, ook op de achtergrond.",
+        "de": "Beendet die App vollständig, auch im Hintergrund.",
+        "fr": "Arrête complètement l'application, y compris en arrière-plan.",
+        "it": "Arresta completamente l'app, anche in background.",
+        "sv": "Stoppar appen helt, även i bakgrunden.",
+        "no": "Stopper appen helt, også i bakgrunnen.",
+        "es": "Detiene la app por completo, también en segundo plano.",
+        "da": "Stopper appen helt, også i baggrunden.",
+        "ru": "Полностью останавливает приложение, в том числе в фоновом режиме.",
+        "pl": "Całkowicie zatrzymuje aplikację, także w tle.",
+        "ko": "백그라운드를 포함해 앱을 완전히 중지합니다.",
+        "ar": "يوقف التطبيق تمامًا، وفي الخلفية أيضًا."
+      },
+      "args": [
+        {
+          "type": "autocomplete",
+          "name": "app",
+          "title": {
+            "en": "App",
+            "nl": "App",
+            "de": "App",
+            "fr": "App",
+            "it": "App",
+            "sv": "App",
+            "no": "App",
+            "es": "App",
+            "da": "App",
+            "ru": "Приложение",
+            "pl": "Aplikacja",
+            "ko": "앱",
+            "ar": "التطبيق"
+          },
+          "placeholder": {
+            "en": "Search app...",
+            "nl": "Zoek app...",
+            "de": "App suchen...",
+            "fr": "Rechercher une app...",
+            "it": "Cerca app...",
+            "sv": "Sök app...",
+            "no": "Søk etter app...",
+            "es": "Buscar app...",
+            "da": "Søg efter app...",
+            "ru": "Найти приложение...",
+            "pl": "Szukaj aplikacji...",
+            "ko": "앱 검색...",
+            "ar": "البحث عن تطبيق..."
+          }
+        }
+      ]
+    },
+    {
+      "id": "tap_screen",
+      "title": {
+        "en": "Tap on screen",
+        "nl": "Tik op het scherm",
+        "de": "Auf den Bildschirm tippen",
+        "fr": "Appuyer sur l'écran",
+        "it": "Tocca lo schermo",
+        "sv": "Tryck på skärmen",
+        "no": "Trykk på skjermen",
+        "es": "Tocar la pantalla",
+        "da": "Tryk på skærmen",
+        "ru": "Нажать на экран",
+        "pl": "Dotknij ekranu",
+        "ko": "화면 탭하기",
+        "ar": "النقر على الشاشة"
+      },
+      "titleFormatted": {
+        "en": "Tap on screen at [[x]], [[y]]",
+        "nl": "Tik op het scherm op [[x]], [[y]]",
+        "de": "Auf den Bildschirm tippen bei [[x]], [[y]]",
+        "fr": "Appuyer sur l'écran en [[x]], [[y]]",
+        "it": "Tocca lo schermo in [[x]], [[y]]",
+        "sv": "Tryck på skärmen vid [[x]], [[y]]",
+        "no": "Trykk på skjermen ved [[x]], [[y]]",
+        "es": "Tocar la pantalla en [[x]], [[y]]",
+        "da": "Tryk på skærmen ved [[x]], [[y]]",
+        "ru": "Нажать на экран в точке [[x]], [[y]]",
+        "pl": "Dotknij ekranu w punkcie [[x]], [[y]]",
+        "ko": "화면의 [[x]], [[y]] 위치 탭하기",
+        "ar": "النقر على الشاشة عند [[x]]، [[y]]"
+      },
+      "hint": {
+        "en": "Position in pixels from the top left corner. Turn on 'Pointer location' in the developer options to find a position.",
+        "nl": "Positie in pixels vanaf de linkerbovenhoek. Zet 'Cursorlocatie' aan in de ontwikkelaarsopties om een positie te vinden.",
+        "de": "Position in Pixeln ab der linken oberen Ecke. Schalte in den Entwickleroptionen „Zeigerposition“ ein, um eine Position zu finden.",
+        "fr": "Position en pixels à partir du coin supérieur gauche. Activez « Emplacement du pointeur » dans les options pour les développeurs pour trouver une position.",
+        "it": "Posizione in pixel dall'angolo in alto a sinistra. Attiva \"Posizione puntatore\" nelle opzioni sviluppatore per trovare una posizione.",
+        "sv": "Position i pixlar från det övre vänstra hörnet. Slå på ”Pekarens plats” i utvecklaralternativen för att hitta en position.",
+        "no": "Posisjon i piksler fra øverste venstre hjørne. Slå på «Pekerplassering» i utvikleralternativene for å finne en posisjon.",
+        "es": "Posición en píxeles desde la esquina superior izquierda. Activa 'Ubicación del puntero' en las opciones para desarrolladores para encontrar una posición.",
+        "da": "Position i pixels fra øverste venstre hjørne. Slå 'Markørens placering' til i Indstillinger for udviklere for at finde en position.",
+        "ru": "Положение в пикселях от левого верхнего угла. Чтобы узнать положение, включите «Местоположение указателя» в разделе «Для разработчиков».",
+        "pl": "Pozycja w pikselach od lewego górnego rogu. Aby znaleźć pozycję, włącz „Lokalizacja wskaźnika” w opcjach programisty.",
+        "ko": "왼쪽 상단 모서리를 기준으로 한 픽셀 위치입니다. 위치를 찾으려면 개발자 옵션에서 '포인터 위치'를 켜세요.",
+        "ar": "الموضع بالبكسل من الزاوية العلوية اليسرى. فعّل \"موقع المؤشر\" في خيارات المطورين لمعرفة الموضع."
+      },
+      "args": [
+        {
+          "type": "number",
+          "name": "x",
+          "title": {
+            "en": "X",
+            "nl": "X",
+            "de": "X",
+            "fr": "X",
+            "it": "X",
+            "sv": "X",
+            "no": "X",
+            "es": "X",
+            "da": "X",
+            "ru": "X",
+            "pl": "X",
+            "ko": "X",
+            "ar": "X"
+          },
+          "min": 0,
+          "max": 20000,
+          "step": 1,
+          "placeholder": {
+            "en": "540",
+            "nl": "540",
+            "de": "540",
+            "fr": "540",
+            "it": "540",
+            "sv": "540",
+            "no": "540",
+            "es": "540",
+            "da": "540",
+            "ru": "540",
+            "pl": "540",
+            "ko": "540",
+            "ar": "540"
+          }
+        },
+        {
+          "type": "number",
+          "name": "y",
+          "title": {
+            "en": "Y",
+            "nl": "Y",
+            "de": "Y",
+            "fr": "Y",
+            "it": "Y",
+            "sv": "Y",
+            "no": "Y",
+            "es": "Y",
+            "da": "Y",
+            "ru": "Y",
+            "pl": "Y",
+            "ko": "Y",
+            "ar": "Y"
+          },
+          "min": 0,
+          "max": 20000,
+          "step": 1,
+          "placeholder": {
+            "en": "1200",
+            "nl": "1200",
+            "de": "1200",
+            "fr": "1200",
+            "it": "1200",
+            "sv": "1200",
+            "no": "1200",
+            "es": "1200",
+            "da": "1200",
+            "ru": "1200",
+            "pl": "1200",
+            "ko": "1200",
+            "ar": "1200"
+          }
+        }
+      ]
+    },
+    {
+      "id": "swipe_screen",
+      "title": {
+        "en": "Swipe on screen",
+        "nl": "Veeg over het scherm",
+        "de": "Über den Bildschirm wischen",
+        "fr": "Balayer l'écran",
+        "it": "Scorri sullo schermo",
+        "sv": "Svep på skärmen",
+        "no": "Sveip på skjermen",
+        "es": "Deslizar por la pantalla",
+        "da": "Stryg på skærmen",
+        "ru": "Провести по экрану",
+        "pl": "Przesuń po ekranie",
+        "ko": "화면 스와이프하기",
+        "ar": "التمرير على الشاشة"
+      },
+      "titleFormatted": {
+        "en": "Swipe from [[x1]], [[y1]] to [[x2]], [[y2]]",
+        "nl": "Veeg van [[x1]], [[y1]] naar [[x2]], [[y2]]",
+        "de": "Von [[x1]], [[y1]] nach [[x2]], [[y2]] wischen",
+        "fr": "Balayer de [[x1]], [[y1]] à [[x2]], [[y2]]",
+        "it": "Scorri da [[x1]], [[y1]] a [[x2]], [[y2]]",
+        "sv": "Svep från [[x1]], [[y1]] till [[x2]], [[y2]]",
+        "no": "Sveip fra [[x1]], [[y1]] til [[x2]], [[y2]]",
+        "es": "Deslizar de [[x1]], [[y1]] a [[x2]], [[y2]]",
+        "da": "Stryg fra [[x1]], [[y1]] til [[x2]], [[y2]]",
+        "ru": "Провести от [[x1]], [[y1]] до [[x2]], [[y2]]",
+        "pl": "Przesuń od [[x1]], [[y1]] do [[x2]], [[y2]]",
+        "ko": "[[x1]], [[y1]]에서 [[x2]], [[y2]](으)로 스와이프하기",
+        "ar": "التمرير من [[x1]]، [[y1]] إلى [[x2]]، [[y2]]"
+      },
+      "hint": {
+        "en": "Position in pixels from the top left corner. Turn on 'Pointer location' in the developer options to find a position.",
+        "nl": "Positie in pixels vanaf de linkerbovenhoek. Zet 'Cursorlocatie' aan in de ontwikkelaarsopties om een positie te vinden.",
+        "de": "Position in Pixeln ab der linken oberen Ecke. Schalte in den Entwickleroptionen „Zeigerposition“ ein, um eine Position zu finden.",
+        "fr": "Position en pixels à partir du coin supérieur gauche. Activez « Emplacement du pointeur » dans les options pour les développeurs pour trouver une position.",
+        "it": "Posizione in pixel dall'angolo in alto a sinistra. Attiva \"Posizione puntatore\" nelle opzioni sviluppatore per trovare una posizione.",
+        "sv": "Position i pixlar från det övre vänstra hörnet. Slå på ”Pekarens plats” i utvecklaralternativen för att hitta en position.",
+        "no": "Posisjon i piksler fra øverste venstre hjørne. Slå på «Pekerplassering» i utvikleralternativene for å finne en posisjon.",
+        "es": "Posición en píxeles desde la esquina superior izquierda. Activa 'Ubicación del puntero' en las opciones para desarrolladores para encontrar una posición.",
+        "da": "Position i pixels fra øverste venstre hjørne. Slå 'Markørens placering' til i Indstillinger for udviklere for at finde en position.",
+        "ru": "Положение в пикселях от левого верхнего угла. Чтобы узнать положение, включите «Местоположение указателя» в разделе «Для разработчиков».",
+        "pl": "Pozycja w pikselach od lewego górnego rogu. Aby znaleźć pozycję, włącz „Lokalizacja wskaźnika” w opcjach programisty.",
+        "ko": "왼쪽 상단 모서리를 기준으로 한 픽셀 위치입니다. 위치를 찾으려면 개발자 옵션에서 '포인터 위치'를 켜세요.",
+        "ar": "الموضع بالبكسل من الزاوية العلوية اليسرى. فعّل \"موقع المؤشر\" في خيارات المطورين لمعرفة الموضع."
+      },
+      "args": [
+        {
+          "type": "number",
+          "name": "x1",
+          "title": {
+            "en": "X1",
+            "nl": "X1",
+            "de": "X1",
+            "fr": "X1",
+            "it": "X1",
+            "sv": "X1",
+            "no": "X1",
+            "es": "X1",
+            "da": "X1",
+            "ru": "X1",
+            "pl": "X1",
+            "ko": "X1",
+            "ar": "X1"
+          },
+          "min": 0,
+          "max": 20000,
+          "step": 1,
+          "placeholder": {
+            "en": "540",
+            "nl": "540",
+            "de": "540",
+            "fr": "540",
+            "it": "540",
+            "sv": "540",
+            "no": "540",
+            "es": "540",
+            "da": "540",
+            "ru": "540",
+            "pl": "540",
+            "ko": "540",
+            "ar": "540"
+          }
+        },
+        {
+          "type": "number",
+          "name": "y1",
+          "title": {
+            "en": "Y1",
+            "nl": "Y1",
+            "de": "Y1",
+            "fr": "Y1",
+            "it": "Y1",
+            "sv": "Y1",
+            "no": "Y1",
+            "es": "Y1",
+            "da": "Y1",
+            "ru": "Y1",
+            "pl": "Y1",
+            "ko": "Y1",
+            "ar": "Y1"
+          },
+          "min": 0,
+          "max": 20000,
+          "step": 1,
+          "placeholder": {
+            "en": "1800",
+            "nl": "1800",
+            "de": "1800",
+            "fr": "1800",
+            "it": "1800",
+            "sv": "1800",
+            "no": "1800",
+            "es": "1800",
+            "da": "1800",
+            "ru": "1800",
+            "pl": "1800",
+            "ko": "1800",
+            "ar": "1800"
+          }
+        },
+        {
+          "type": "number",
+          "name": "x2",
+          "title": {
+            "en": "X2",
+            "nl": "X2",
+            "de": "X2",
+            "fr": "X2",
+            "it": "X2",
+            "sv": "X2",
+            "no": "X2",
+            "es": "X2",
+            "da": "X2",
+            "ru": "X2",
+            "pl": "X2",
+            "ko": "X2",
+            "ar": "X2"
+          },
+          "min": 0,
+          "max": 20000,
+          "step": 1,
+          "placeholder": {
+            "en": "540",
+            "nl": "540",
+            "de": "540",
+            "fr": "540",
+            "it": "540",
+            "sv": "540",
+            "no": "540",
+            "es": "540",
+            "da": "540",
+            "ru": "540",
+            "pl": "540",
+            "ko": "540",
+            "ar": "540"
+          }
+        },
+        {
+          "type": "number",
+          "name": "y2",
+          "title": {
+            "en": "Y2",
+            "nl": "Y2",
+            "de": "Y2",
+            "fr": "Y2",
+            "it": "Y2",
+            "sv": "Y2",
+            "no": "Y2",
+            "es": "Y2",
+            "da": "Y2",
+            "ru": "Y2",
+            "pl": "Y2",
+            "ko": "Y2",
+            "ar": "Y2"
+          },
+          "min": 0,
+          "max": 20000,
+          "step": 1,
+          "placeholder": {
+            "en": "600",
+            "nl": "600",
+            "de": "600",
+            "fr": "600",
+            "it": "600",
+            "sv": "600",
+            "no": "600",
+            "es": "600",
+            "da": "600",
+            "ru": "600",
+            "pl": "600",
+            "ko": "600",
+            "ar": "600"
+          }
+        }
+      ]
+    },
+    {
+      "id": "set_stream_volume",
+      "title": {
+        "en": "Set ringtone, notification or alarm volume",
+        "nl": "Stel het volume van beltoon, meldingen of wekker in",
+        "de": "Lautstärke für Klingelton, Benachrichtigungen oder Wecker einstellen",
+        "fr": "Régler le volume de la sonnerie, des notifications ou de l'alarme",
+        "it": "Imposta il volume di suoneria, notifiche o sveglia",
+        "sv": "Ställ in volym för ringsignal, aviseringar eller alarm",
+        "no": "Still inn volum for ringelyd, varsler eller alarm",
+        "es": "Ajustar el volumen del tono, las notificaciones o la alarma",
+        "da": "Indstil lydstyrke for ringetone, notifikationer eller alarm",
+        "ru": "Установить громкость рингтона, уведомлений или будильника",
+        "pl": "Ustaw głośność dzwonka, powiadomień lub alarmu",
+        "ko": "벨소리, 알림 또는 알람 볼륨 설정",
+        "ar": "ضبط مستوى صوت الرنين أو الإشعارات أو المنبّه"
+      },
+      "titleFormatted": {
+        "en": "Set [[stream]] volume to [[volume]]%",
+        "nl": "Zet het volume van [[stream]] op [[volume]]%",
+        "de": "Lautstärke für [[stream]] auf [[volume]] % setzen",
+        "fr": "Régler le volume [[stream]] sur [[volume]] %",
+        "it": "Imposta il volume [[stream]] su [[volume]]%",
+        "sv": "Ställ in volymen för [[stream]] på [[volume]] %",
+        "no": "Sett volumet for [[stream]] til [[volume]] %",
+        "es": "Ajustar el volumen de [[stream]] al [[volume]]%",
+        "da": "Indstil lydstyrken for [[stream]] til [[volume]]%",
+        "ru": "Установить громкость «[[stream]]» на [[volume]]%",
+        "pl": "Ustaw głośność ([[stream]]) na [[volume]]%",
+        "ko": "[[stream]] 볼륨을 [[volume]]%로 설정",
+        "ar": "ضبط مستوى صوت [[stream]] على [[volume]]%"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "stream",
+          "title": {
+            "en": "Volume type",
+            "nl": "Soort volume",
+            "de": "Lautstärketyp",
+            "fr": "Type de volume",
+            "it": "Tipo di volume",
+            "sv": "Volymtyp",
+            "no": "Volumtype",
+            "es": "Tipo de volumen",
+            "da": "Lydstyrketype",
+            "ru": "Тип громкости",
+            "pl": "Rodzaj głośności",
+            "ko": "볼륨 유형",
+            "ar": "نوع الصوت"
+          },
+          "values": [
+            {
+              "id": "ring",
+              "title": {
+                "en": "Ringtone",
+                "nl": "Beltoon",
+                "de": "Klingelton",
+                "fr": "Sonnerie",
+                "it": "Suoneria",
+                "sv": "Ringsignal",
+                "no": "Ringelyd",
+                "es": "Tono de llamada",
+                "da": "Ringetone",
+                "ru": "Рингтон",
+                "pl": "Dzwonek",
+                "ko": "벨소리",
+                "ar": "نغمة الرنين"
+              }
+            },
+            {
+              "id": "notification",
+              "title": {
+                "en": "Notifications",
+                "nl": "Meldingen",
+                "de": "Benachrichtigungen",
+                "fr": "Notifications",
+                "it": "Notifiche",
+                "sv": "Aviseringar",
+                "no": "Varsler",
+                "es": "Notificaciones",
+                "da": "Notifikationer",
+                "ru": "Уведомления",
+                "pl": "Powiadomienia",
+                "ko": "알림",
+                "ar": "الإشعارات"
+              }
+            },
+            {
+              "id": "alarm",
+              "title": {
+                "en": "Alarm",
+                "nl": "Wekker",
+                "de": "Wecker",
+                "fr": "Alarme",
+                "it": "Sveglia",
+                "sv": "Alarm",
+                "no": "Alarm",
+                "es": "Alarma",
+                "da": "Alarm",
+                "ru": "Будильник",
+                "pl": "Alarm",
+                "ko": "알람",
+                "ar": "المنبّه"
+              }
+            }
+          ]
+        },
+        {
+          "type": "number",
+          "name": "volume",
+          "title": {
+            "en": "Volume",
+            "nl": "Volume",
+            "de": "Lautstärke",
+            "fr": "Volume",
+            "it": "Volume",
+            "sv": "Volym",
+            "no": "Volum",
+            "es": "Volumen",
+            "da": "Lydstyrke",
+            "ru": "Громкость",
+            "pl": "Głośność",
+            "ko": "볼륨",
+            "ar": "مستوى الصوت"
+          },
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "placeholder": {
+            "en": "50",
+            "nl": "50",
+            "de": "50",
+            "fr": "50",
+            "it": "50",
+            "sv": "50",
+            "no": "50",
+            "es": "50",
+            "da": "50",
+            "ru": "50",
+            "pl": "50",
+            "ko": "50",
+            "ar": "50"
           }
         }
       ]

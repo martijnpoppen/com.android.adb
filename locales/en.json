@@ -1,6 +1,7 @@
 {
   "device": {
-    "default_name": "Android device"
+    "default_name": "Android device",
+    "screenshot": "Screenshot"
   },
   "errors": {
     "enter_host": "Enter the IP address of the device",
@@ -17,7 +18,10 @@
     "invalid_timeout": "Invalid timeout",
     "enter_text": "Enter a text",
     "bluetooth_failed": "Bluetooth could not be switched on this device",
-    "dnd_failed": "Do Not Disturb could not be changed on this device"
+    "dnd_failed": "Do Not Disturb could not be changed on this device",
+    "screenshot_failed": "Could not take a screenshot",
+    "volume_failed": "This volume could not be changed on this device",
+    "invalid_position": "Invalid position"
   },
   "pair": {
     "title": "Connect your Android device",

@@ -1,6 +1,6 @@
 Steruj telefonem lub tabletem z Androidem z poziomu Homey: włączaj i wyłączaj ekran, ustawiaj jasność i głośność multimediów, sprawdzaj poziom baterii oraz otwieraj aplikacje lub strony internetowe z Flow.
 
-Z poziomu Flow możesz też włączać i wyłączać Bluetooth, ustawiać tryb Nie przeszkadzać i autoobracanie, pokazywać powiadomienie na urządzeniu lub uruchamiać je ponownie. Zmiany ekranu, ładowania, poziomu i temperatury baterii oraz Bluetooth mogą uruchamiać Twoje Flow.
+Z poziomu Flow możesz też włączać i wyłączać Bluetooth, ustawiać tryb Nie przeszkadzać i autoobracanie, wyświetlać powiadomienie, robić zrzut ekranu, dotykać ekranu lub przesuwać po nim, zamykać aplikację albo uruchamiać urządzenie ponownie. Muzyka odtwarzana na urządzeniu pojawia się w Homey z przyciskami odtwarzania, pauzy, następnego i poprzedniego utworu. Zmiany ekranu, aplikacji na ekranie, ładowania, baterii, Bluetooth i sieci Wi-Fi mogą uruchamiać Twoje Flow.
 
 Aplikacja komunikuje się z urządzeniem bezpośrednio przez Twoją sieć lokalną za pomocą protokołu Android Debug Bridge (ADB). Na urządzeniu nie trzeba niczego instalować i nie potrzebujesz komputera.
 

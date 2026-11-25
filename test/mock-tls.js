@@ -59,6 +59,10 @@ const pairingServer = tls.createServer({ ...deviceTls, requestCert: true, reject
 
 let wake = 'Asleep'; let vol = 9;
 let bluetooth = 0; let zen = 0; let rotation = 1; let notifications = []; let rebooted = 0; const triggered = [];
+let front = 'com.spotify.music'; let playing = true; let wifiName = 'Home Wi-Fi'; const ran = []; const otherVolumes = { 2: 5, 4: 7, 5: 5 };
+const triggerTokens = {};
+// A 1x1 PNG, as 'screencap -p' output.
+const SCREEN_PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg' + 'A'.repeat(120) + '==', 'base64');
 let brightRaw = 2048; let BRIGHT_MAX = 8191; // raw brightness scale of the OnePlus 9
 let brightMode = '1'; // adaptive brightness on, like most phones
 const adbd = net.createServer((plain) => {
@@ -90,7 +94,14 @@ const adbd = net.createServer((plain) => {
         const svc = payload.toString().replace(/\0$/, ''); const id = lid++; let out = '';
         if (svc === 'reboot:') { rebooted++; s.destroy(); plain.destroy(); return; } // adbd's reboot service: the whole connection drops
         const single = !svc.includes('mWakefulness');
-        if (single && svc.includes('cmd bluetooth_manager ')) bluetooth = svc.includes('enable') ? 1 : 0;
+        const other = svc.match(/volume --stream ([245]) --(get|set)(?: (\d+))?/); // ring, alarm, notification
+        if (svc.includes('screencap -p')) out = SCREEN_PNG;
+        else if (other && svc.startsWith('exec:cmd media_session volume') && other[2] === 'set') otherVolumes[other[1]] = Number(other[3]); // assumed: works for these streams
+        else if (other) out = `[V] volume is ${otherVolumes[other[1]]} in range [0..7]\n`;
+        else if (svc.includes('am force-stop ') || svc.includes('input tap ') || svc.includes('input swipe ')) ran.push(svc.replace(/^exec:/, ''));
+        else if (svc.includes('KEYCODE_MEDIA_PLAY')) playing = true;
+        else if (svc.includes('KEYCODE_MEDIA_PAUSE')) playing = false;
+        else if (single && svc.includes('cmd bluetooth_manager ')) bluetooth = svc.includes('enable') ? 1 : 0;
         else if (single && svc.includes('settings get global bluetooth_on')) out = `${bluetooth}\n`;
         else if (single && svc.includes('cmd notification set_dnd ')) zen = { off: 0, priority: 1, none: 2, alarms: 3 }[svc.match(/set_dnd (\w+)/)[1]];
         else if (single && svc.includes('settings get global zen_mode')) out = `${zen}\n`;
@@ -111,10 +122,10 @@ const adbd = net.createServer((plain) => {
           vol += (svc.match(/KEYCODE_VOLUME_UP/g) || []).length - (svc.match(/KEYCODE_VOLUME_DOWN/g) || []).length;
           vol = Math.max(0, Math.min(30, vol));
         } else if (svc.includes('media_session volume --stream 3 --get') && !svc.includes('mWakefulness')) out = `[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
-        else if (svc.includes('mWakefulness')) out = `  mWakefulness=${wake}\n  AC powered: true\n  USB powered: false\n  status: 2\n  level: 87\n  temperature: 312\nbluetooth=${bluetooth}\nrotation=${rotation}\nzen=${zen}\nwifi=WifiInfo: SSID: "Home Wi-Fi", BSSID: 02:00:00:00:00:00, MAC: 02:00:00:00:00:00, RSSI: -55, Link speed: 866Mbps\n  mCurrentFocus=Window{a1b2 u0 com.spotify.music/com.spotify.music.MainActivity}\nbrightness_float=${Math.min(1, brightRaw / BRIGHT_MAX).toFixed(4)}\nbrightness_raw=${brightRaw}\n[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
+        else if (svc.includes('mWakefulness')) out = `  mWakefulness=${wake}\n  AC powered: true\n  USB powered: false\n  status: 2\n  level: 87\n  temperature: 312\nbluetooth=${bluetooth}\nrotation=${rotation}\nzen=${zen}\nwifi=WifiInfo: SSID: "${wifiName}", BSSID: 02:00:00:00:00:00, MAC: 02:00:00:00:00:00, RSSI: -55, Link speed: 866Mbps\n  mCurrentFocus=Window{a1b2 u0 ${front}/${front}.MainActivity}\ntimeout=30000\nstayon=3\nstorage=/dev/block/dm-48 111762240 61762240 50000000 56% /data\n      state=PlaybackState {state=${playing ? 'PLAYING(3)' : 'PAUSED(2)'}, position=1000, buffered position=0, speed=1.0}\n      metadata: size=12, description=Hello, Goodbye, The Beatles, Magical Mystery Tour\nbrightness_float=${Math.min(1, brightRaw / BRIGHT_MAX).toFixed(4)}\nbrightness_raw=${brightRaw}\n[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
         else if (svc.includes('pm list packages -3')) out = 'package:com.spotify.music\n';
         else if (svc.includes('pm list packages')) out = 'package:com.android.chrome\npackage:com.spotify.music\npackage:com.android.settings\n';
-        else if (svc.includes('dumpsys window')) out = '  mCurrentFocus=Window{a1b2 u0 com.spotify.music/com.spotify.music.MainActivity}\n';
+        else if (svc.includes('dumpsys window')) out = `  mCurrentFocus=Window{a1b2 u0 ${front}/${front}.MainActivity}\n`;
         if (!svc.includes('dumpsys') && !svc.includes('getprop')) console.log('   [device ran]', svc.replace(/^exec:/, ''));
         else if (svc.includes('big')) out = 'x'.repeat(200000);
         s.write(pkt(CMD.OKAY, id, a0));
@@ -168,13 +179,14 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
     getCapabilityValue(k) { return this.caps[k]; } hasCapability(k) { return k === 'onoff'; } async addCapability(k) { this.added = (this.added || []).concat(k); } async setCapabilityValue(k, v) { this.caps[k] = v; }
     getAvailable() { return this.available; } async setAvailable() { this.available = true; }
     async setUnavailable(m) { this.available = false; this.reason = m; }
+    async setCameraImage(id, title, image) { this.camera = { id, title, image }; }
   }
   Module._load = (req, ...rest) => (req === 'homey' ? { Driver: Base, Device, App: Base } : origLoad(req, ...rest));
   const timers = { setInterval: () => 0, clearInterval() {}, setTimeout: () => 0, clearTimeout() {} };
   // Like homey.__(): key path into /locales/en.json, __token__ replaced.
   const en = require('../locales/en.json');
   const __ = (key, tokens = {}) => key.split('.').reduce((o, k) => o[k], en).replace(/__(\w+)__/g, (m, k) => tokens[k]);
-  const homey2 = { ...homey, ...timers, __, flow: { getActionCard: () => card(), getConditionCard: () => card(), getDeviceTriggerCard: (id) => ({ trigger: async () => triggered.push(id) }) } };
+  const homey2 = { ...homey, ...timers, __, images: { createImage: async () => ({ setStream(fn) { this.fn = fn; }, async update() { this.updated = (this.updated || 0) + 1; } }) }, flow: { getActionCard: () => card(), getConditionCard: () => card(), getDeviceTriggerCard: (id) => ({ trigger: async (dev, tokens) => { triggered.push(id); triggerTokens[id] = tokens; } }) } };
   function card() { const c = { registerRunListener() { return c; }, registerArgumentAutocompleteListener() { return c; } }; return c; }
   settings.clear(); pairedModuli.clear();
   const driver = new (require('../drivers/tablet/driver.js'))(); driver.homey = homey2;
@@ -264,7 +276,28 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   await device.poll();
   const sensors = ['bluetooth_enabled', 'auto_rotate', 'dnd_mode', 'wifi_network', 'measure_signal_strength', 'foreground_app'].map((k) => `${k}=${device.caps[k]}`).join(' ');
   console.log('    sensors:', sensors);
-  if (sensors !== 'bluetooth_enabled=false auto_rotate=false dnd_mode=Off wifi_network=Home Wi-Fi measure_signal_strength=-55 foreground_app=com.spotify.music') throw new Error('sensor values');
+  if (sensors !== 'bluetooth_enabled=false auto_rotate=false dnd_mode=Off wifi_network=Home Wi-Fi measure_signal_strength=-55 foreground_app=Spotify') throw new Error('sensor values');
+
+  const more = ['screen_timeout', 'stay_awake', 'storage_free', 'speaker_playing', 'speaker_track', 'speaker_artist', 'speaker_album'].map((k) => `${k}=${device.caps[k]}`).join(' | ');
+  console.log('21. status + media:', more);
+  if (more !== 'screen_timeout=30 | stay_awake=true | storage_free=47.7 | speaker_playing=true | speaker_track=Hello, Goodbye | speaker_artist=The Beatles | speaker_album=Magical Mystery Tour') throw new Error('status / media values');
+  await device.listeners.speaker_playing(false); await device.poll();
+  console.log('    pause from Homey -> device playing =', playing, '| speaker_playing =', device.caps.speaker_playing);
+  if (playing !== false || device.caps.speaker_playing !== false) throw new Error('media pause');
+  triggered.length = 0; front = 'com.netflix.mediaclient'; wifiName = 'Guest'; await device.poll();
+  console.log('22. app + Wi-Fi changed -> triggers:', triggered.join(', '), JSON.stringify(triggerTokens.foreground_app_changed), JSON.stringify(triggerTokens.wifi_network_changed));
+  if (triggered.sort().join() !== 'foreground_app_changed,wifi_network_changed' || triggerTokens.foreground_app_changed.name !== 'Netflix' || triggerTokens.foreground_app_changed.package !== 'com.netflix.mediaclient' || triggerTokens.wifi_network_changed.network !== 'Guest') throw new Error('change triggers');
+  const image = await device.takeScreenshot(); const chunks = []; await image.fn({ end: (b) => chunks.push(b) });
+  console.log('23. screenshot: PNG', chunks[0].subarray(1, 4).toString(), chunks[0].length, 'bytes | image updated', image.updated, '| shown on device as', device.camera.title);
+  if (chunks[0].subarray(1, 4).toString() !== 'PNG' || image.updated !== 1 || image !== device.camera.image) throw new Error('screenshot');
+  wake = 'Asleep'; await device.showOnScreen({ url: 'my.homey.app' });
+  await device.closeApp('com.netflix.mediaclient'); await device.touch(540, 1200); await device.touch(540, 1800, 540, 600);
+  await device.setStreamVolume('alarm', 100);
+  const bad = await Promise.all([device.closeApp('x; reboot'), device.touch(1, 'x'), device.touch(-1, 5)].map((p) => p.then(() => 'accepted', (e) => e.message)));
+  console.log('24. show: screen', wake, '| ran:', ran.join(' ; '), '| alarm volume', otherVolumes[4], '| bad input:', bad.join(' / '));
+  if (wake !== 'Awake' || ran.join(' ; ') !== 'am force-stop com.netflix.mediaclient ; input tap 540 1200 ; input swipe 540 1800 540 600 300' || otherVolumes[4] !== 7 || bad.includes('accepted')) throw new Error('new actions');
+  console.log('25. app names:', (await device.listApps('spot')).map((a) => `${a.name} (${a.description})`).join(', '), '|', (await device.listApps('chrome')).map((a) => a.name).join(', '));
+  if ((await device.listApps('Spotify'))[0].name !== 'Spotify') throw new Error('app names');
   await device.reboot();
   console.log('    restart: device got reboot =', rebooted);
   if (rebooted !== 1) throw new Error('restart');

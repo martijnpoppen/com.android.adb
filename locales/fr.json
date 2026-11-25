@@ -1,6 +1,7 @@
 {
   "device": {
-    "default_name": "Appareil Android"
+    "default_name": "Appareil Android",
+    "screenshot": "Capture d'écran"
   },
   "errors": {
     "enter_host": "Saisissez l'adresse IP de l'appareil",
@@ -17,7 +18,10 @@
     "invalid_timeout": "Délai non valide",
     "enter_text": "Saisissez un texte",
     "bluetooth_failed": "Impossible de changer l'état du Bluetooth sur cet appareil",
-    "dnd_failed": "Impossible de modifier Ne pas déranger sur cet appareil"
+    "dnd_failed": "Impossible de modifier Ne pas déranger sur cet appareil",
+    "screenshot_failed": "Impossible de faire une capture d'écran",
+    "volume_failed": "Ce volume ne peut pas être modifié sur cet appareil",
+    "invalid_position": "Position non valide"
   },
   "pair": {
     "title": "Connectez votre appareil Android",

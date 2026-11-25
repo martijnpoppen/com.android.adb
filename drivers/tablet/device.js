@@ -3,9 +3,14 @@
 const Homey = require('homey');
 const AdbClient = require('../../lib/AdbClient');
 const { localizeError } = require('../../lib/errors');
+const { appName } = require('../../lib/AppNames');
 
 const CAPABILITIES = ['onoff', 'dim', 'volume_set', 'measure_battery', 'battery_charging_state', 'measure_temperature',
-  'bluetooth_enabled', 'auto_rotate', 'dnd_mode', 'wifi_network', 'measure_signal_strength', 'foreground_app'];
+  'bluetooth_enabled', 'auto_rotate', 'dnd_mode', 'wifi_network', 'measure_signal_strength', 'foreground_app',
+  'screen_timeout', 'stay_awake', 'storage_free',
+  'speaker_playing', 'speaker_prev', 'speaker_next', 'speaker_track', 'speaker_artist', 'speaker_album'];
+const VOLUME_STREAMS = { ring: 2, alarm: 4, notification: 5 }; // AudioManager.STREAM_*
+const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
 const DND_MODES = { 0: 'off', 1: 'priority', 2: 'none', 3: 'alarms' }; // settings global zen_mode
 
 const CMD_SCREEN_ON = 'input keyevent KEYCODE_WAKEUP';
@@ -40,6 +45,10 @@ const CMD_STATE = [
   "dumpsys window | grep -E 'mCurrentFocus|mFocusedApp'",
   'echo brightness_float=$(settings get system screen_brightness_float 2>/dev/null)',
   'echo brightness_raw=$(settings get system screen_brightness)',
+  'echo timeout=$(settings get system screen_off_timeout)',
+  'echo stayon=$(settings get global stay_on_while_plugged_in)',
+  'echo storage=$(df -k /data | tail -1)',
+  "dumpsys media_session | grep -E 'state=PlaybackState|metadata:'",
   CMD_VOLUME,
 ].join('; ');
 
@@ -47,6 +56,33 @@ const CMD_STATE = [
 function parseForegroundApp(output) {
   const match = output.match(/mCurrentFocus=.*?\s([\w.]+)\/[^\s}]*/) || output.match(/mFocusedApp=.*?\s([\w.]+)\/[^\s}]*/);
   return match ? match[1] : null;
+}
+
+/**
+ * What is playing, from 'dumpsys media_session' lines like
+ *   state=PlaybackState {state=PLAYING(3), position=...     (Android 14; older: state=3)
+ *   metadata: size=12, description=Title, Artist, Album
+ * A playing session wins; otherwise the first one that has a title.
+ * @returns {{ playing: boolean, track?: string, artist?: string, album?: string } | null}
+ */
+function parseMedia(output) {
+  const sessions = [];
+  let state = null;
+  for (const line of output.split('\n')) {
+    const stateMatch = line.match(/state=PlaybackState \{state=(?:[A-Z_]+\()?(\d+)/);
+    if (stateMatch) state = Number(stateMatch[1]);
+    const meta = line.match(/metadata:\s*size=\d+, description=(.*)$/);
+    if (meta) {
+      const parts = meta[1].trim().split(', ').map((part) => (part === 'null' ? '' : part));
+      // Titles can contain ", " themselves: artist and album are the last two parts.
+      const album = parts.length >= 3 ? parts.pop() : '';
+      const artist = parts.length >= 2 ? parts.pop() : '';
+      sessions.push({ playing: state === 3, track: parts.join(', '), artist, album });
+      state = null;
+    }
+  }
+  if (!sessions.length) return state === null ? null : { playing: state === 3 };
+  return sessions.find((s) => s.playing) || sessions.find((s) => s.track) || sessions[0];
 }
 
 /** Quotes a value for use as a single shell argument on the device. */
@@ -73,6 +109,16 @@ class TabletDevice extends Homey.Device {
     this.registerCapabilityListener('onoff', translated((value) => this.setScreen(value)));
     this.registerCapabilityListener('dim', translated((value) => this.setBrightness(value)));
     this.registerCapabilityListener('volume_set', translated((value) => this.setVolume(value)));
+    this.registerCapabilityListener('speaker_playing', translated((value) => this.pressKey(value ? 'KEYCODE_MEDIA_PLAY' : 'KEYCODE_MEDIA_PAUSE')));
+    this.registerCapabilityListener('speaker_next', translated(() => this.pressKey('KEYCODE_MEDIA_NEXT')));
+    this.registerCapabilityListener('speaker_prev', translated(() => this.pressKey('KEYCODE_MEDIA_PREVIOUS')));
+
+    // One image per device: shown on the device in Homey and returned by the screenshot card.
+    this.screenshotImage = await this.homey.images.createImage();
+    this.screenshotImage.setStream(async (stream) => {
+      stream.end(this.screenshot || await this.captureScreen());
+    });
+    await this.setCameraImage('screenshot', this.homey.__('device.screenshot'), this.screenshotImage).catch(this.error);
 
     this.poll().catch(this.error);
   }
@@ -312,6 +358,80 @@ class TabletDevice extends Homey.Device {
     await this.client.shell(`input text ${quote(String(text).replace(/ /g, '%s'))}`);
   }
 
+  /** @returns {Promise<Buffer>} PNG of what is on the screen now */
+  async captureScreen() {
+    const png = await this.client.exec('screencap -p', { purpose: 'screenshot' });
+    if (png.length < 100 || !png.subarray(0, 4).equals(PNG_SIGNATURE)) {
+      this.error('Screenshot failed:', png.subarray(0, 200).toString());
+      throw new Error(this.homey.__('errors.screenshot_failed'));
+    }
+    this.screenshot = png;
+    return png;
+  }
+
+  /** Takes a screenshot and returns the device's image, for the Flow card's image token. */
+  async takeScreenshot() {
+    const png = await this.captureScreen();
+    this.log(`Screenshot taken (${Math.round(png.length / 1024)} kB)`);
+    await this.screenshotImage.update();
+    return this.screenshotImage;
+  }
+
+  /** Wakes the screen, dismisses a swipe lock and opens a link or an app. */
+  async showOnScreen({ url, app }) {
+    await this.client.shell(CMD_SCREEN_ON);
+    await this.client.shell(CMD_DISMISS_KEYGUARD);
+    if (url !== undefined) await this.openUrl(url);
+    else await this.launchApp(app);
+    this.pollSoon();
+  }
+
+  async closeApp(packageName) {
+    if (!/^[\w.]+$/.test(packageName)) throw new Error(this.homey.__('errors.invalid_app'));
+    await this.client.shell(`am force-stop ${packageName}`);
+    this.pollSoon();
+  }
+
+  /** Taps (2 numbers) or swipes (4 numbers) at pixel positions. */
+  async touch(...positions) {
+    const numbers = positions.map((value) => Math.round(Number(value)));
+    if (numbers.some((value) => !Number.isFinite(value) || value < 0 || value > 20000)) {
+      throw new Error(this.homey.__('errors.invalid_position'));
+    }
+    await this.client.shell(numbers.length === 2 ? `input tap ${numbers.join(' ')}` : `input swipe ${numbers.join(' ')} 300`);
+    this.pollSoon();
+  }
+
+  /**
+   * Ringtone, notification or alarm volume. No key presses to fall back on here.
+   * @param {'ring'|'notification'|'alarm'} stream
+   * @param {number} percent 0..100
+   */
+  async setStreamVolume(stream, percent) {
+    const id = VOLUME_STREAMS[stream];
+    const read = async () => {
+      const output = await this.client.shell(`cmd media_session volume --stream ${id} --get 2>/dev/null || media volume --stream ${id} --get 2>/dev/null`);
+      const match = output.match(/volume is (\d+) in range \[(\d+)\.\.(\d+)\]/);
+      return match ? { index: Number(match[1]), max: Number(match[3]) } : null;
+    };
+    const before = id ? await read() : null;
+    if (!before) throw new Error(this.homey.__('errors.volume_failed'));
+    const index = Math.round((Math.min(100, Math.max(0, Number(percent) || 0)) / 100) * before.max);
+    for (const command of [`cmd media_session volume --stream ${id} --set ${index}`, `cmd audio set-volume ${id} ${index}`]) {
+      const output = await this.client.shell(`${command} 2>&1`);
+      await delay(300);
+      const after = await read();
+      this.log(`${stream} volume ${index}/${before.max} via ${command}: ${JSON.stringify(output)} -> now ${after ? after.index : '?'}`);
+      if (after && after.index === index) return;
+    }
+    throw new Error(this.homey.__('errors.volume_failed'));
+  }
+
+  /** Fires a device trigger; never lets a Flow problem break the state check. */
+  async fire(id, tokens) {
+    await this.homey.flow.getDeviceTriggerCard(id).trigger(this, tokens, {}).catch(this.error);
+  }
+
   /** Reads Bluetooth from the setting Android's Bluetooth service keeps up to date. */
   async readBluetooth() {
     const output = await this.client.shell('settings get global bluetooth_on', { purpose: 'bluetooth' });
@@ -346,8 +466,7 @@ class TabletDevice extends Homey.Device {
     // Not on the first reading after start: that is no change.
     if (before === undefined || before === null || before === on) return;
     this.log(`Bluetooth turned ${on ? 'on' : 'off'}`);
-    await this.homey.flow.getDeviceTriggerCard(on ? 'bluetooth_turned_on' : 'bluetooth_turned_off')
-      .trigger(this, {}, {}).catch(this.error);
+    await this.fire(on ? 'bluetooth_turned_on' : 'bluetooth_turned_off', {});
   }
 
   /** @param {'off'|'priority'|'alarms'|'none'} mode */
@@ -410,16 +529,28 @@ class TabletDevice extends Homey.Device {
       this.appsCacheTime = Date.now();
     }
     const needle = query.toLowerCase();
+    // Search matches the package name and the readable name.
     return this.appsCache
-      .filter((name) => name.toLowerCase().includes(needle))
-      .slice(0, 40)
-      .map((name) => ({ id: name, name }));
+      .map((id) => ({ id, name: appName(id), description: id }))
+      .filter((item) => item.id.toLowerCase().includes(needle) || item.name.toLowerCase().includes(needle))
+      .slice(0, 40);
   }
 
   async getForegroundApp() {
     const app = parseForegroundApp(await this.client.shell("dumpsys window | grep -E 'mCurrentFocus|mFocusedApp'"));
-    if (app) await this.setValue('foreground_app', app);
+    if (app) await this.updateForegroundApp(app);
     return app;
+  }
+
+  /** Shows the app's name on the sensor tab; fires the trigger when another app came to the front. */
+  async updateForegroundApp(packageName) {
+    const before = this.foregroundPackage;
+    this.foregroundPackage = packageName;
+    await this.setValue('foreground_app', appName(packageName));
+    if (before && before !== packageName) {
+      this.log(`App on screen: ${packageName}`);
+      await this.fire('foreground_app_changed', { name: appName(packageName), package: packageName });
+    }
   }
 
   async runShell(command) {
@@ -584,12 +715,33 @@ class TabletDevice extends Homey.Device {
     const wifi = (output.match(/^wifi=(.*)$/m) || [])[1] || '';
     const ssid = wifi.match(/SSID: "([^"]*)"/);
     const rssi = wifi.match(/RSSI: (-?\d+)/);
-    if (ssid) await this.setValue('wifi_network', ssid[1]);
+    if (ssid) {
+      const before = this.getCapabilityValue('wifi_network');
+      await this.setValue('wifi_network', ssid[1]);
+      if (this.stateSeen && before !== ssid[1]) await this.fire('wifi_network_changed', { network: ssid[1] });
+    }
     if (rssi && Number(rssi[1]) < 0 && Number(rssi[1]) > -127) await this.setValue('measure_signal_strength', Number(rssi[1]));
     if (!ssid && !rssi) this.logUnparsed('Wi-Fi', wifi);
 
     const app = parseForegroundApp(output);
-    if (app) await this.setValue('foreground_app', app);
+    if (app) await this.updateForegroundApp(app);
+
+    const timeout = output.match(/^timeout=(\d+)/m);
+    if (timeout) await this.setValue('screen_timeout', Math.round(Number(timeout[1]) / 1000));
+    const stayOn = output.match(/^stayon=(\d+)/m); // bit mask of power sources, 0 = off
+    if (stayOn) await this.setValue('stay_awake', Number(stayOn[1]) > 0);
+    // df -k: Filesystem 1K-blocks Used Available Use% Mounted
+    const storage = output.match(/^storage=\S+\s+\d+\s+\d+\s+(\d+)\s/m);
+    if (storage) await this.setValue('storage_free', Math.round(Number(storage[1]) / 1024 / 102.4) / 10);
+
+    const media = parseMedia(output);
+    await this.setValue('speaker_playing', media ? media.playing : false);
+    if (media && media.track !== undefined) {
+      await this.setValue('speaker_track', media.track);
+      await this.setValue('speaker_artist', media.artist);
+      await this.setValue('speaker_album', media.album);
+    }
+    this.stateSeen = true; // from now on, differences are real changes
 
     // Media volume, e.g. "volume is 7 in range [0..15]"
     const volume = output.match(/volume is (\d+) in range \[(\d+)\.\.(\d+)\]/);

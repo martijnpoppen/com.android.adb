@@ -1,6 +1,6 @@
 Bedien een Android-telefoon of -tablet vanuit Homey: zet het scherm aan en uit, stel de helderheid en het mediavolume in, bekijk het batterijniveau en open apps of webpagina's vanuit een Flow.
 
-Vanuit een Flow kun je ook Bluetooth aan- of uitzetten, Niet storen en automatisch draaien instellen, een melding op het apparaat tonen of het herstarten. Wijzigingen in scherm, opladen, batterijniveau, batterijtemperatuur en Bluetooth kunnen je Flows starten.
+Vanuit een Flow kun je ook Bluetooth aan- of uitzetten, Niet storen en automatisch draaien instellen, een melding tonen, een screenshot maken, op het scherm tikken of vegen, een app sluiten of het apparaat opnieuw opstarten. Muziek die op het apparaat speelt, zie je in Homey met afspelen, pauzeren, volgende en vorige. Veranderingen van het scherm, de app op het scherm, opladen, de batterij, Bluetooth en het wifi-netwerk kunnen je Flows starten.
 
 De app praat rechtstreeks met het apparaat via je lokale netwerk met het Android Debug Bridge-protocol (ADB). Je hoeft niets op het apparaat te installeren en er is geen computer nodig.
 

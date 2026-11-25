@@ -1,6 +1,7 @@
 {
   "device": {
-    "default_name": "Urządzenie z Androidem"
+    "default_name": "Urządzenie z Androidem",
+    "screenshot": "Zrzut ekranu"
   },
   "errors": {
     "enter_host": "Wpisz adres IP urządzenia",
@@ -17,7 +18,10 @@
     "invalid_timeout": "Nieprawidłowy czas wygaszania",
     "enter_text": "Wpisz tekst",
     "bluetooth_failed": "Nie udało się przełączyć Bluetooth na tym urządzeniu",
-    "dnd_failed": "Nie udało się zmienić trybu Nie przeszkadzać na tym urządzeniu"
+    "dnd_failed": "Nie udało się zmienić trybu Nie przeszkadzać na tym urządzeniu",
+    "screenshot_failed": "Nie udało się zrobić zrzutu ekranu",
+    "volume_failed": "Nie udało się zmienić tej głośności na tym urządzeniu",
+    "invalid_position": "Nieprawidłowa pozycja"
   },
   "pair": {
     "title": "Połącz urządzenie z Androidem",

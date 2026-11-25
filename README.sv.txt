@@ -1,6 +1,6 @@
 Styr en Android-telefon eller surfplatta från Homey: slå på och av skärmen, ställ in ljusstyrka och medievolym, se batterinivån och öppna appar eller webbsidor från ett Flow.
 
-Från ett Flow kan du också slå på eller av Bluetooth, ställa in Stör ej och automatisk rotation, visa en avisering på enheten eller starta om den. Ändringar av skärm, laddning, batterinivå, batteritemperatur och Bluetooth kan starta dina Flows.
+Från ett Flow kan du också slå på eller av Bluetooth, ställa in Stör ej och automatisk rotation, visa en avisering, ta en skärmbild, trycka eller svepa på skärmen, stänga en app eller starta om enheten. Musik som spelas på enheten visas i Homey med spela upp, pausa, nästa och föregående. Ändringar av skärmen, appen på skärmen, laddning, batteri, Bluetooth och Wi-Fi-nätverket kan starta dina Flows.
 
 Appen kommunicerar direkt med enheten via ditt lokala nätverk med protokollet Android Debug Bridge (ADB). Inget behöver installeras på enheten och ingen dator behövs.
 

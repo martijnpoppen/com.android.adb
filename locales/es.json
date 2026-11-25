@@ -1,6 +1,7 @@
 {
   "device": {
-    "default_name": "Dispositivo Android"
+    "default_name": "Dispositivo Android",
+    "screenshot": "Captura de pantalla"
   },
   "errors": {
     "enter_host": "Introduce la dirección IP del dispositivo",
@@ -17,7 +18,10 @@
     "invalid_timeout": "Tiempo de espera no válido",
     "enter_text": "Introduce un texto",
     "bluetooth_failed": "No se pudo cambiar el Bluetooth en este dispositivo",
-    "dnd_failed": "No se pudo cambiar No molestar en este dispositivo"
+    "dnd_failed": "No se pudo cambiar No molestar en este dispositivo",
+    "screenshot_failed": "No se ha podido hacer la captura de pantalla",
+    "volume_failed": "Este volumen no se ha podido cambiar en este dispositivo",
+    "invalid_position": "Posición no válida"
   },
   "pair": {
     "title": "Conecta tu dispositivo Android",
