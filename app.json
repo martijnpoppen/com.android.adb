@@ -2994,7 +2994,9 @@
         "speaker_track",
         "speaker_artist",
         "speaker_album",
-        "screenshot_button"
+        "screenshot_button",
+        "photo_button_back",
+        "photo_button_front"
       ],
       "capabilitiesOptions": {
         "onoff": {
@@ -3551,6 +3553,50 @@
       "setable": false,
       "uiComponent": "sensor",
       "icon": "/assets/capabilities/foreground_app.svg"
+    },
+    "photo_button_back": {
+      "type": "boolean",
+      "title": {
+        "en": "Take photo: Back camera",
+        "nl": "Foto maken: Camera achter",
+        "de": "Foto aufnehmen: Rückkamera",
+        "fr": "Prendre une photo: Caméra arrière",
+        "it": "Scatta una foto: Fotocamera posteriore",
+        "sv": "Ta ett foto: Bakre kamera",
+        "no": "Ta bilde: Bakkamera",
+        "es": "Hacer una foto: Cámara trasera",
+        "da": "Tag et billede: Bagkamera",
+        "ru": "Сделать фото: Основная камера",
+        "pl": "Zrób zdjęcie: Tylny aparat",
+        "ko": "사진 촬영: 후면 카메라",
+        "ar": "التقاط صورة: الكاميرا الخلفية"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/capabilities/photo_button_back.svg"
+    },
+    "photo_button_front": {
+      "type": "boolean",
+      "title": {
+        "en": "Take photo: Front camera",
+        "nl": "Foto maken: Camera voor",
+        "de": "Foto aufnehmen: Frontkamera",
+        "fr": "Prendre une photo: Caméra avant",
+        "it": "Scatta una foto: Fotocamera anteriore",
+        "sv": "Ta ett foto: Främre kamera",
+        "no": "Ta bilde: Frontkamera",
+        "es": "Hacer una foto: Cámara frontal",
+        "da": "Tag et billede: Frontkamera",
+        "ru": "Сделать фото: Фронтальная камера",
+        "pl": "Zrób zdjęcie: Przedni aparat",
+        "ko": "사진 촬영: 전면 카메라",
+        "ar": "التقاط صورة: الكاميرا الأمامية"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/capabilities/photo_button_front.svg"
     },
     "screen_timeout": {
       "type": "number",

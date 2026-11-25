@@ -37,7 +37,9 @@
     "speaker_track",
     "speaker_artist",
     "speaker_album",
-    "screenshot_button"
+    "screenshot_button",
+    "photo_button_back",
+    "photo_button_front"
   ],
   "capabilitiesOptions": {
     "onoff": {

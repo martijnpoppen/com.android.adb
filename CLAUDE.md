@@ -117,7 +117,9 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
     `touch` a marker file, then try shutter methods (KEYCODE_CAMERA, VOLUME_DOWN, VOLUME_UP,
     tap at 50% x / 87% y of `wm size`) until `find /sdcard/DCIM /sdcard/Pictures -newer
     <marker>` shows a new .jpg (the working method is remembered), wait for a stable size,
-    `cat` it via `exec()`, press BACK. Real OnePlus 9 (com.oplus.camera): the camera opens,
+    `cat` it via `exec()`, press BACK, then `am force-stop` the camera app (= the app that
+    came to the front after the start, if different from before; the user asked for this).
+    Buttons `photo_button_back` / `photo_button_front` on the device do the same. Real OnePlus 9 (com.oplus.camera): the camera opens,
     KEYCODE_CAMERA and VOLUME_DOWN produced no picture; the rest is unconfirmed. Second Image + tag "Photo (<device>)"; loading that image never
     opens the camera.
   - Action cards must NOT declare `tokens`: Homey then only shows them in Advanced Flow (the

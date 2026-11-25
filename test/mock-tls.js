@@ -61,7 +61,7 @@ let wake = 'Asleep'; let vol = 9;
 let bluetooth = 0; let zen = 0; let rotation = 1; let notifications = []; let rebooted = 0; const triggered = [];
 let front = 'com.spotify.music'; let playing = true; let wifiName = 'Home Wi-Fi'; const ran = []; const otherVolumes = { 2: 5, 4: 7, 5: 5 };
 const triggerTokens = {}; const flowTokens = {};
-let cameraOpen = false; let cameraStart = ''; const photos = ['IMG_1.jpg']; let photosAtMarker = 0;
+let cameraOpen = false; let cameraStart = ''; const photos = ['IMG_1.jpg']; let photosAtMarker = 0; let frontBefore = null; let cameraStopped = 0;
 const PHOTO_JPEG = Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0]), Buffer.alloc(2000, 7)]);
 // A 1x1 PNG, as 'screencap -p' output.
 const SCREEN_PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg' + 'A'.repeat(120) + '==', 'base64');
@@ -98,7 +98,7 @@ const adbd = net.createServer((plain) => {
         const single = !svc.includes('mWakefulness');
         const other = svc.match(/volume --stream ([245]) --(get|set)(?: (\d+))?/); // ring, alarm, notification
         // Camera: like the OnePlus is expected to behave (unconfirmed): no camera key, volume down is the shutter.
-        if (svc.includes('STILL_IMAGE_CAMERA')) { cameraOpen = true; cameraStart = svc; out = 'Starting: Intent { act=android.media.action.STILL_IMAGE_CAMERA }\n'; }
+        if (svc.includes('STILL_IMAGE_CAMERA')) { cameraOpen = true; cameraStart = svc; frontBefore = front; front = 'com.oplus.camera'; out = 'Starting: Intent { act=android.media.action.STILL_IMAGE_CAMERA }\n'; }
         // Real OnePlus 9: camera key and volume down take no picture. Assumed: tapping the shutter button does.
         else if (svc.includes('touch /data/local/tmp/homey_photo_marker')) photosAtMarker = photos.length;
         else if (svc.includes('-newer /data/local/tmp/homey_photo_marker')) out = photos.slice(photosAtMarker).map((name) => `/sdcard/DCIM/Camera/${name}\n`).join('');
@@ -107,7 +107,8 @@ const adbd = net.createServer((plain) => {
         else if (cameraOpen && svc.includes('input tap 540 2088')) photos.push(`IMG_${photos.length + 1}.jpg`);
         else if (svc.includes('stat -c %s')) out = `${PHOTO_JPEG.length}\n`;
         else if (svc.startsWith("exec:cat '/sdcard/DCIM/Camera/")) out = PHOTO_JPEG;
-        else if (svc.includes('KEYCODE_BACK')) cameraOpen = false;
+        else if (svc.includes('KEYCODE_BACK')) { cameraOpen = false; front = frontBefore || front; }
+        else if (svc.includes('am force-stop com.oplus.camera')) cameraStopped++;
         else if (svc.includes('screencap -p')) out = SCREEN_PNG;
         else if (other && svc.startsWith('exec:cmd media_session volume') && other[2] === 'set') otherVolumes[other[1]] = Number(other[3]); // assumed: works for these streams
         else if (other) out = `[V] volume is ${otherVolumes[other[1]]} in range [0..7]\n`;
@@ -310,7 +311,11 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   console.log('    button -> captures', afterButton, '| image updated', image.updated, '| refresh later -> captures', captures);
   if (afterButton !== 1 || image.updated !== 2 || captures !== 2) throw new Error('screenshot button / refresh');
   const volBefore = vol; const photo = await device.takePhoto('front'); const got = []; await photo.fn({ end: (b) => got.push(b) });
-  console.log('    photo:', photos[photos.length - 1], got[0].length, 'bytes | shutter', device.shutterMethod, '| front requested', cameraStart.includes('CAMERA_FACING 1'), '| camera closed', !cameraOpen, '| media volume untouched', vol === volBefore, '| tag set', flowTokens.photo_MOCKSERIAL.value === photo);
+  console.log('    photo:', photos[photos.length - 1], got[0].length, 'bytes | shutter', device.shutterMethod, '| front requested', cameraStart.includes('CAMERA_FACING 1'), '| camera closed', !cameraOpen, '| media volume untouched', vol === volBefore, '| tag set', flowTokens.photo_MOCKSERIAL.value === photo, '| camera app force-stopped', cameraStopped);
+  const frontStart = cameraStart; await device.listeners.photo_button_back(true);
+  console.log('    back camera button: photos', photos.length, '| back requested', cameraStart.includes('CAMERA_FACING 0'), '| force-stopped', cameraStopped);
+  if (photos.length !== 3 || !cameraStart.includes('CAMERA_FACING 0') || cameraStopped !== 2) throw new Error('photo button');
+  photos.pop(); cameraStart = frontStart;
   if (photos.length !== 2 || got[0].length !== 2004 || device.shutterMethod !== 'tap' || !cameraStart.includes('CAMERA_FACING 1') || cameraOpen || vol !== volBefore || flowTokens.photo_MOCKSERIAL.value !== photo || device.camera.id !== 'photo') throw new Error('photo');
   await device.runShell('settings get global zen_mode');
   console.log('    Flow tags:', Object.values(flowTokens).map((tk) => `${tk.opts.title} [${tk.opts.type}]`).join(', '), '| shell tag =', flowTokens.shell_output_MOCKSERIAL.value);

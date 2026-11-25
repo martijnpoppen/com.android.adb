@@ -1,0 +1,22 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Take photo: Back camera",
+    "nl": "Foto maken: Camera achter",
+    "de": "Foto aufnehmen: Rückkamera",
+    "fr": "Prendre une photo: Caméra arrière",
+    "it": "Scatta una foto: Fotocamera posteriore",
+    "sv": "Ta ett foto: Bakre kamera",
+    "no": "Ta bilde: Bakkamera",
+    "es": "Hacer una foto: Cámara trasera",
+    "da": "Tag et billede: Bagkamera",
+    "ru": "Сделать фото: Основная камера",
+    "pl": "Zrób zdjęcie: Tylny aparat",
+    "ko": "사진 촬영: 후면 카메라",
+    "ar": "التقاط صورة: الكاميرا الخلفية"
+  },
+  "getable": false,
+  "setable": true,
+  "uiComponent": "button",
+  "icon": "/assets/capabilities/photo_button_back.svg"
+}

@@ -9,7 +9,7 @@ const CAPABILITIES = ['onoff', 'dim', 'volume_set', 'measure_battery', 'battery_
   'bluetooth_enabled', 'auto_rotate', 'dnd_mode', 'wifi_network', 'measure_signal_strength', 'foreground_app',
   'screen_timeout', 'stay_awake', 'storage_free',
   'speaker_playing', 'speaker_prev', 'speaker_next', 'speaker_track', 'speaker_artist', 'speaker_album',
-  'screenshot_button'];
+  'screenshot_button', 'photo_button_back', 'photo_button_front'];
 const VOLUME_STREAMS = { ring: 2, alarm: 4, notification: 5 }; // AudioManager.STREAM_*
 const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
 // New photos are found as "files newer than a marker file", wherever the camera app saves them.
@@ -138,6 +138,8 @@ class TabletDevice extends Homey.Device {
       stream.end(this.photo);
     });
     this.registerCapabilityListener('screenshot_button', translated(() => this.takeScreenshot()));
+    this.registerCapabilityListener('photo_button_back', translated(() => this.takePhoto('back')));
+    this.registerCapabilityListener('photo_button_front', translated(() => this.takePhoto('front')));
     await this.setCameraImage('screenshot', this.homey.__('device.screenshot'), this.screenshotImage).catch(this.error);
 
     // Tags usable in every Flow (cards that return their own tag only show in Advanced Flow).
@@ -420,12 +422,16 @@ class TabletDevice extends Homey.Device {
     await this.client.shell(CMD_SCREEN_ON, { purpose: 'photo' });
     await this.client.shell(CMD_DISMISS_KEYGUARD);
     await this.client.shell(`touch ${PHOTO_MARKER}`);
+    const focus = "dumpsys window | grep -E 'mCurrentFocus|mFocusedApp'";
+    const appBefore = parseForegroundApp(await this.client.shell(focus));
     // The facing extras are unofficial; camera apps that don't know them keep their last lens.
     const front = camera === 'front';
     const facing = `--ei android.intent.extras.CAMERA_FACING ${front ? 1 : 0} --ei android.intent.extras.LENS_FACING_FRONT ${front ? 1 : 0} `
       + `--ez android.intent.extra.USE_FRONT_CAMERA ${front}`;
     const started = await this.client.shell(`am start -a android.media.action.STILL_IMAGE_CAMERA ${facing} 2>&1`);
     await delay(3000); // camera needs a moment before it accepts the shutter
+    // The app that came to the front is the camera app; it is stopped again afterwards.
+    const cameraApp = parseForegroundApp(await this.client.shell(focus));
 
     const press = async (method) => {
       if (method !== 'tap') return this.client.shell(`input keyevent ${method}`);
@@ -469,6 +475,10 @@ class TabletDevice extends Homey.Device {
       this.log(`Photo taken: ${file} (${Math.round(jpeg.length / 1024)} kB)`);
     } finally {
       await this.client.shell('input keyevent KEYCODE_BACK').catch(this.error); // leave the camera app
+      if (cameraApp && cameraApp !== appBefore && /^[\w.]+$/.test(cameraApp)) {
+        await this.client.shell(`am force-stop ${cameraApp}`).catch(this.error);
+        this.log(`Photo: closed ${cameraApp}`);
+      }
       this.pollSoon();
     }
     if (!this.photoShown) {

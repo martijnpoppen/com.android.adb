@@ -1,0 +1,22 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Take photo: Front camera",
+    "nl": "Foto maken: Camera voor",
+    "de": "Foto aufnehmen: Frontkamera",
+    "fr": "Prendre une photo: Caméra avant",
+    "it": "Scatta una foto: Fotocamera anteriore",
+    "sv": "Ta ett foto: Främre kamera",
+    "no": "Ta bilde: Frontkamera",
+    "es": "Hacer una foto: Cámara frontal",
+    "da": "Tag et billede: Frontkamera",
+    "ru": "Сделать фото: Фронтальная камера",
+    "pl": "Zrób zdjęcie: Przedni aparat",
+    "ko": "사진 촬영: 전면 카메라",
+    "ar": "التقاط صورة: الكاميرا الأمامية"
+  },
+  "getable": false,
+  "setable": true,
+  "uiComponent": "button",
+  "icon": "/assets/capabilities/photo_button_front.svg"
+}
