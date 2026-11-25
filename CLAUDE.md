@@ -114,9 +114,11 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
     `screenshot_button` capability), whose `image.update()` makes Homey reload it.
   - `take_photo` (mock only; shutter key and lens extras unconfirmed on any real phone): wake,
     `am start -a android.media.action.STILL_IMAGE_CAMERA` with unofficial front/back extras,
-    press KEYCODE_CAMERA then KEYCODE_VOLUME_DOWN until `ls -t /sdcard/DCIM/Camera | head -1`
-    shows a new .jpg (the working key is remembered), wait for a stable size, `cat` it via
-    `exec()`, press BACK. Second Image + tag "Photo (<device>)"; loading that image never
+    `touch` a marker file, then try shutter methods (KEYCODE_CAMERA, VOLUME_DOWN, VOLUME_UP,
+    tap at 50% x / 87% y of `wm size`) until `find /sdcard/DCIM /sdcard/Pictures -newer
+    <marker>` shows a new .jpg (the working method is remembered), wait for a stable size,
+    `cat` it via `exec()`, press BACK. Real OnePlus 9 (com.oplus.camera): the camera opens,
+    KEYCODE_CAMERA and VOLUME_DOWN produced no picture; the rest is unconfirmed. Second Image + tag "Photo (<device>)"; loading that image never
     opens the camera.
   - Action cards must NOT declare `tokens`: Homey then only shows them in Advanced Flow (the
     user couldn't find the screenshot card). Results go into global Flow tags per device

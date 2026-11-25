@@ -12,9 +12,13 @@ const CAPABILITIES = ['onoff', 'dim', 'volume_set', 'measure_battery', 'battery_
   'screenshot_button'];
 const VOLUME_STREAMS = { ring: 2, alarm: 4, notification: 5 }; // AudioManager.STREAM_*
 const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
-const CAMERA_DIR = '/sdcard/DCIM/Camera';
+// New photos are found as "files newer than a marker file", wherever the camera app saves them.
+const PHOTO_MARKER = '/data/local/tmp/homey_photo_marker';
+const CMD_NEW_PHOTOS = `find /sdcard/DCIM /sdcard/Pictures -type f -newer ${PHOTO_MARKER} 2>/dev/null | head -5`;
 // Ways to press the shutter; which one works differs per phone and camera app.
-const SHUTTER_KEYS = ['KEYCODE_CAMERA', 'KEYCODE_VOLUME_DOWN'];
+// 'tap' taps where camera apps put the shutter button: bottom centre of the screen.
+// (OnePlus 9, com.oplus.camera: the camera key and volume down do nothing.)
+const SHUTTER_METHODS = ['KEYCODE_CAMERA', 'KEYCODE_VOLUME_DOWN', 'KEYCODE_VOLUME_UP', 'tap'];
 const DND_MODES = { 0: 'off', 1: 'priority', 2: 'none', 3: 'alarms' }; // settings global zen_mode
 
 const CMD_SCREEN_ON = 'input keyevent KEYCODE_WAKEUP';
@@ -413,50 +417,56 @@ class TabletDevice extends Homey.Device {
    * @param {'back'|'front'} camera
    */
   async takePhoto(camera) {
-    const newest = async () => (await this.client.shell(`ls -t ${CAMERA_DIR} 2>/dev/null | head -1`, { purpose: 'photo' })).trim();
     await this.client.shell(CMD_SCREEN_ON, { purpose: 'photo' });
     await this.client.shell(CMD_DISMISS_KEYGUARD);
-    const before = await newest();
+    await this.client.shell(`touch ${PHOTO_MARKER}`);
     // The facing extras are unofficial; camera apps that don't know them keep their last lens.
     const front = camera === 'front';
     const facing = `--ei android.intent.extras.CAMERA_FACING ${front ? 1 : 0} --ei android.intent.extras.LENS_FACING_FRONT ${front ? 1 : 0} `
       + `--ez android.intent.extra.USE_FRONT_CAMERA ${front}`;
     const started = await this.client.shell(`am start -a android.media.action.STILL_IMAGE_CAMERA ${facing} 2>&1`);
-    await delay(2500); // camera needs a moment before it accepts the shutter
+    await delay(3000); // camera needs a moment before it accepts the shutter
 
-    let name = null;
-    const keys = [...SHUTTER_KEYS].sort((a, b) => (b === this.shutterKey) - (a === this.shutterKey));
-    for (const key of keys) {
-      await this.client.shell(`input keyevent ${key}`);
-      for (let i = 0; i < 8 && !name; i++) {
-        await delay(500);
-        const now = await newest();
-        if (now && now !== before) name = now;
-      }
-      this.log(`Photo: shutter ${key} -> ${name || 'no new file'}`);
-      if (name) {
-        this.shutterKey = key;
-        break;
-      }
-    }
+    const press = async (method) => {
+      if (method !== 'tap') return this.client.shell(`input keyevent ${method}`);
+      const size = [...(await this.client.shell('wm size')).matchAll(/(\d+)x(\d+)/g)].pop(); // last = override, if any
+      if (!size) return null;
+      return this.client.shell(`input tap ${Math.round(Number(size[1]) / 2)} ${Math.round(Number(size[2]) * 0.87)}`);
+    };
+    let found = '';
+    let file = null;
+    const methods = [...SHUTTER_METHODS].sort((a, b) => (b === this.shutterMethod) - (a === this.shutterMethod));
     try {
-      if (!name || !/^[\w.\- ()]+\.jpe?g$/i.test(name)) {
-        this.error(`Photo failed. Camera start: ${JSON.stringify(started)}, newest file: ${JSON.stringify(name)}`);
+      for (const method of methods) {
+        await press(method);
+        for (let i = 0; i < 8 && !file; i++) {
+          await delay(500);
+          found = await this.client.shell(CMD_NEW_PHOTOS);
+          file = found.split('\n').map((line) => line.trim()).find((line) => /^\/sdcard\/[\w.\- ()/]+\.jpe?g$/i.test(line)) || null;
+        }
+        this.log(`Photo: shutter ${method} -> ${file || 'no new picture'}`);
+        if (file) {
+          this.shutterMethod = method;
+          break;
+        }
+      }
+      if (!file) {
+        // found: new files that are not JPEG (e.g. HEIF), if any.
+        this.error(`Photo failed. Camera start: ${JSON.stringify(started)}, new files: ${JSON.stringify(found)}`);
         throw new Error(this.homey.__('errors.photo_failed'));
       }
       // Wait until the camera app finished writing the file.
-      const file = quote(`${CAMERA_DIR}/${name}`);
       let size = -1;
       for (let i = 0; i < 10; i++) {
-        const now = Number((await this.client.shell(`stat -c %s ${file} 2>/dev/null`)).trim());
+        const now = Number((await this.client.shell(`stat -c %s ${quote(file)} 2>/dev/null`)).trim());
         if (now > 0 && now === size) break;
         size = now;
         await delay(400);
       }
-      const jpeg = await this.client.exec(`cat ${file}`, { timeout: 60000, purpose: 'photo' });
+      const jpeg = await this.client.exec(`cat ${quote(file)}`, { timeout: 60000, purpose: 'photo' });
       if (jpeg.length < 1000 || jpeg[0] !== 0xff || jpeg[1] !== 0xd8) throw new Error(this.homey.__('errors.photo_failed'));
       this.photo = jpeg;
-      this.log(`Photo taken: ${name} (${Math.round(jpeg.length / 1024)} kB)`);
+      this.log(`Photo taken: ${file} (${Math.round(jpeg.length / 1024)} kB)`);
     } finally {
       await this.client.shell('input keyevent KEYCODE_BACK').catch(this.error); // leave the camera app
       this.pollSoon();
