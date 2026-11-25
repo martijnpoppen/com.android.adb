@@ -14,7 +14,10 @@
     "enter_link": "Wpisz link",
     "cannot_open_link": "Urządzenie nie może otworzyć __url__",
     "invalid_button": "Nieprawidłowy przycisk",
-    "invalid_timeout": "Nieprawidłowy czas wygaszania"
+    "invalid_timeout": "Nieprawidłowy czas wygaszania",
+    "enter_text": "Wpisz tekst",
+    "bluetooth_failed": "Nie udało się przełączyć Bluetooth na tym urządzeniu",
+    "dnd_failed": "Nie udało się zmienić trybu Nie przeszkadzać na tym urządzeniu"
   },
   "pair": {
     "title": "Połącz urządzenie z Androidem",

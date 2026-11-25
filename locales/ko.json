@@ -14,7 +14,10 @@
     "enter_link": "링크를 입력하세요",
     "cannot_open_link": "기기에서 __url__을(를) 열 수 없어요",
     "invalid_button": "잘못된 버튼",
-    "invalid_timeout": "잘못된 시간 제한"
+    "invalid_timeout": "잘못된 시간 제한",
+    "enter_text": "내용을 입력하세요",
+    "bluetooth_failed": "이 기기에서 블루투스를 전환할 수 없습니다",
+    "dnd_failed": "이 기기에서 방해 금지 모드를 변경할 수 없습니다"
   },
   "pair": {
     "title": "Android 기기 연결",

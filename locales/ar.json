@@ -14,7 +14,10 @@
     "enter_link": "أدخِل رابطًا",
     "cannot_open_link": "لا يمكن للجهاز فتح __url__",
     "invalid_button": "زر غير صالح",
-    "invalid_timeout": "مهلة غير صالحة"
+    "invalid_timeout": "مهلة غير صالحة",
+    "enter_text": "أدخل نصًا",
+    "bluetooth_failed": "تعذّر تبديل البلوتوث على هذا الجهاز",
+    "dnd_failed": "تعذّر تغيير وضع الرجاء عدم الإزعاج على هذا الجهاز"
   },
   "pair": {
     "title": "توصيل جهاز Android",

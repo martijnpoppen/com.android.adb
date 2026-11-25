@@ -14,7 +14,10 @@
     "enter_link": "Saisissez un lien",
     "cannot_open_link": "L'appareil ne peut pas ouvrir __url__",
     "invalid_button": "Bouton non valide",
-    "invalid_timeout": "Délai non valide"
+    "invalid_timeout": "Délai non valide",
+    "enter_text": "Saisissez un texte",
+    "bluetooth_failed": "Impossible de changer l'état du Bluetooth sur cet appareil",
+    "dnd_failed": "Impossible de modifier Ne pas déranger sur cet appareil"
   },
   "pair": {
     "title": "Connectez votre appareil Android",

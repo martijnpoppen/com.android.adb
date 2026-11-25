@@ -14,7 +14,10 @@
     "enter_link": "Inserisci un link",
     "cannot_open_link": "Il dispositivo non può aprire __url__",
     "invalid_button": "Pulsante non valido",
-    "invalid_timeout": "Tempo non valido"
+    "invalid_timeout": "Tempo non valido",
+    "enter_text": "Inserisci un testo",
+    "bluetooth_failed": "Impossibile cambiare lo stato del Bluetooth su questo dispositivo",
+    "dnd_failed": "Impossibile modificare Non disturbare su questo dispositivo"
   },
   "pair": {
     "title": "Collega il tuo dispositivo Android",

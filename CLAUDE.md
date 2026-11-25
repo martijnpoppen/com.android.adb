@@ -103,7 +103,19 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
   Flow cards open app, open link, press button, type text, keep screen on while charging,
   screen timeout, is charging, app is open on screen.
 - Only tested against the mock, NOT on a real device: mDNS port following, repair flow,
-  state checks with keep-alive on.
+  state checks with keep-alive on, and everything below.
+- Added (mock only): Bluetooth on/off (`cmd bluetooth_manager enable|disable`, fallback
+  `svc bluetooth`; verified via `settings get global bluetooth_on`), condition + triggers
+  "Bluetooth turned on/off" (not fired on the first reading after start); restart via adbd's
+  `reboot:` service (Tango `adb.power.reboot()`, 10 s limit, the phone just drops the
+  connection; Wireless debugging is off afterwards); Do Not Disturb via `cmd notification
+  set_dnd off|priority|alarms|none`, verified via `settings get global zen_mode` (0/1/3/2);
+  auto-rotate via `settings put system accelerometer_rotation`; notification via `cmd
+  notification post -S bigtext -t <title> <tag> <text>` (appears as the Shell app, unique tag
+  so they stack); battery temperature (`measure_temperature`) from `dumpsys battery`.
+- Not possible / left out on purpose: Wi-Fi off and airplane mode (would cut Homey's own
+  connection), hardware sensors like light/proximity (Android only reports them to an app that
+  is listening).
 - Per-brand menu paths in the pairing help were written from memory; verify on real devices.
 
 ## Git

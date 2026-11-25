@@ -41,7 +41,14 @@ class TabletDriver extends Homey.Driver {
     action('launch_app', async ({ device, app }) => device.launchApp(app.id))
       .registerArgumentAutocompleteListener('app', appSearch);
 
+    action('set_bluetooth', async ({ device, state }) => device.setBluetooth(state === 'true'));
+    action('restart_device', async ({ device }) => device.reboot());
+    action('set_do_not_disturb', async ({ device, mode }) => device.setDoNotDisturb(mode));
+    action('set_auto_rotate', async ({ device, state }) => device.setAutoRotate(state === 'true'));
+    action('show_notification', async ({ device, title, text }) => device.showNotification(title, text));
+
     condition('is_charging', async ({ device }) => device.pluggedIn === true);
+    condition('bluetooth_on', async ({ device }) => (await device.readBluetooth()) === true);
     condition('app_in_foreground', async ({ device, app }) => (await device.getForegroundApp()) === app.id)
       .registerArgumentAutocompleteListener('app', appSearch);
   }

@@ -20,7 +20,8 @@
     "dim",
     "volume_set",
     "measure_battery",
-    "battery_charging_state"
+    "battery_charging_state",
+    "measure_temperature"
   ],
   "capabilitiesOptions": {
     "onoff": {
@@ -102,6 +103,23 @@
         "pl": "Głośność multimediów",
         "ko": "미디어 볼륨",
         "ar": "مستوى صوت الوسائط"
+      }
+    },
+    "measure_temperature": {
+      "title": {
+        "en": "Battery temperature",
+        "nl": "Batterijtemperatuur",
+        "de": "Akkutemperatur",
+        "fr": "Température de la batterie",
+        "it": "Temperatura batteria",
+        "sv": "Batteritemperatur",
+        "no": "Batteritemperatur",
+        "es": "Temperatura de la batería",
+        "da": "Batteritemperatur",
+        "ru": "Температура батареи",
+        "pl": "Temperatura baterii",
+        "ko": "배터리 온도",
+        "ar": "درجة حرارة البطارية"
       }
     }
   },

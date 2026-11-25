@@ -1,5 +1,7 @@
 Controla un teléfono o tablet Android desde Homey: enciende y apaga la pantalla, ajusta el brillo y el volumen multimedia, consulta el nivel de batería y abre apps o páginas web desde un Flow.
 
+Desde un Flow también puedes activar o desactivar el Bluetooth, configurar No molestar y el giro automático, mostrar una notificación en el dispositivo o reiniciarlo. Los cambios de pantalla, carga, nivel y temperatura de la batería y Bluetooth pueden iniciar tus Flows.
+
 La app se comunica directamente con el dispositivo a través de tu red local mediante el protocolo Android Debug Bridge (ADB). No hay que instalar nada en el dispositivo y no necesitas ordenador.
 
 En Android 11 y versiones posteriores, activa la depuración inalámbrica en las opciones para desarrolladores y vincúlalo con el código de vinculación que aparece en el dispositivo. La pantalla de vinculación de Homey incluye instrucciones paso a paso para cada marca. Los dispositivos más antiguos pueden usar ADB de red clásico en el puerto 5555.

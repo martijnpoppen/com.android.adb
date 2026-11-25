@@ -345,6 +345,88 @@
     "email": "adb@martijnpoppen.nl"
   },
   "flow": {
+    "triggers": [
+      {
+        "id": "bluetooth_turned_on",
+        "title": {
+          "en": "Bluetooth turned on",
+          "nl": "Bluetooth is aangezet",
+          "de": "Bluetooth wurde eingeschaltet",
+          "fr": "Le Bluetooth a été activé",
+          "it": "Il Bluetooth è stato attivato",
+          "sv": "Bluetooth slogs på",
+          "no": "Bluetooth ble slått på",
+          "es": "Se activó el Bluetooth",
+          "da": "Bluetooth blev slået til",
+          "ru": "Bluetooth включён",
+          "pl": "Bluetooth został włączony",
+          "ko": "블루투스가 켜짐",
+          "ar": "تم تشغيل البلوتوث"
+        },
+        "hint": {
+          "en": "Noticed at the next state check: only with \"Keep the connection open\" on, or after a command.",
+          "nl": "Wordt opgemerkt bij de volgende controle: alleen als \"Verbinding open houden\" aan staat, of na een opdracht.",
+          "de": "Wird bei der nächsten Prüfung bemerkt: nur wenn „Verbindung offen halten“ an ist, oder nach einem Befehl.",
+          "fr": "Détecté lors de la vérification suivante : uniquement si « Garder la connexion ouverte » est activé, ou après une commande.",
+          "it": "Rilevato al controllo successivo: solo se \"Mantieni la connessione aperta\" è attivo, o dopo un comando.",
+          "sv": "Upptäcks vid nästa kontroll: bara när ”Håll anslutningen öppen” är på, eller efter ett kommando.",
+          "no": "Oppdages ved neste sjekk: bare når «Hold tilkoblingen åpen» er på, eller etter en kommando.",
+          "es": "Se detecta en la siguiente comprobación: solo si «Mantener la conexión abierta» está activado, o tras un comando.",
+          "da": "Opdages ved næste tjek: kun når \"Hold forbindelsen åben\" er slået til, eller efter en kommando.",
+          "ru": "Обнаруживается при следующей проверке: только если включено «Не разрывать соединение», или после команды.",
+          "pl": "Wykrywane przy następnym sprawdzeniu: tylko gdy włączone jest „Utrzymuj połączenie”, lub po poleceniu.",
+          "ko": "다음 확인 때 감지됩니다: '연결 계속 유지'가 켜져 있을 때나 명령을 보낸 후에만 해당됩니다.",
+          "ar": "يُكتشف عند التحقق التالي: فقط عند تفعيل «إبقاء الاتصال مفتوحًا»، أو بعد أمر."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          }
+        ]
+      },
+      {
+        "id": "bluetooth_turned_off",
+        "title": {
+          "en": "Bluetooth turned off",
+          "nl": "Bluetooth is uitgezet",
+          "de": "Bluetooth wurde ausgeschaltet",
+          "fr": "Le Bluetooth a été désactivé",
+          "it": "Il Bluetooth è stato disattivato",
+          "sv": "Bluetooth stängdes av",
+          "no": "Bluetooth ble slått av",
+          "es": "Se desactivó el Bluetooth",
+          "da": "Bluetooth blev slået fra",
+          "ru": "Bluetooth выключен",
+          "pl": "Bluetooth został wyłączony",
+          "ko": "블루투스가 꺼짐",
+          "ar": "تم إيقاف البلوتوث"
+        },
+        "hint": {
+          "en": "Noticed at the next state check: only with \"Keep the connection open\" on, or after a command.",
+          "nl": "Wordt opgemerkt bij de volgende controle: alleen als \"Verbinding open houden\" aan staat, of na een opdracht.",
+          "de": "Wird bei der nächsten Prüfung bemerkt: nur wenn „Verbindung offen halten“ an ist, oder nach einem Befehl.",
+          "fr": "Détecté lors de la vérification suivante : uniquement si « Garder la connexion ouverte » est activé, ou après une commande.",
+          "it": "Rilevato al controllo successivo: solo se \"Mantieni la connessione aperta\" è attivo, o dopo un comando.",
+          "sv": "Upptäcks vid nästa kontroll: bara när ”Håll anslutningen öppen” är på, eller efter ett kommando.",
+          "no": "Oppdages ved neste sjekk: bare når «Hold tilkoblingen åpen» er på, eller etter en kommando.",
+          "es": "Se detecta en la siguiente comprobación: solo si «Mantener la conexión abierta» está activado, o tras un comando.",
+          "da": "Opdages ved næste tjek: kun når \"Hold forbindelsen åben\" er slået til, eller efter en kommando.",
+          "ru": "Обнаруживается при следующей проверке: только если включено «Не разрывать соединение», или после команды.",
+          "pl": "Wykrywane przy następnym sprawdzeniu: tylko gdy włączone jest „Utrzymuj połączenie”, lub po poleceniu.",
+          "ko": "다음 확인 때 감지됩니다: '연결 계속 유지'가 켜져 있을 때나 명령을 보낸 후에만 해당됩니다.",
+          "ar": "يُكتشف عند التحقق التالي: فقط عند تفعيل «إبقاء الاتصال مفتوحًا»، أو بعد أمر."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          }
+        ]
+      }
+    ],
     "conditions": [
       {
         "id": "is_charging",
@@ -457,6 +539,31 @@
               "ko": "앱 검색...",
               "ar": "البحث عن تطبيق..."
             }
+          }
+        ]
+      },
+      {
+        "id": "bluetooth_on",
+        "title": {
+          "en": "Bluetooth !{{is|is not}} on",
+          "nl": "Bluetooth !{{staat|staat niet}} aan",
+          "de": "Bluetooth !{{ist|ist nicht}} an",
+          "fr": "Le Bluetooth !{{est|n'est pas}} activé",
+          "it": "Il Bluetooth !{{è|non è}} attivo",
+          "sv": "Bluetooth !{{är|är inte}} på",
+          "no": "Bluetooth !{{er|er ikke}} på",
+          "es": "El Bluetooth !{{está|no está}} activado",
+          "da": "Bluetooth !{{er|er ikke}} slået til",
+          "ru": "Bluetooth !{{включён|выключен}}",
+          "pl": "Bluetooth !{{jest|nie jest}} włączony",
+          "ko": "블루투스가 !{{켜져 있음|꺼져 있음}}",
+          "ar": "البلوتوث !{{مُشغَّل|غير مُشغَّل}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
           }
         ]
       }
@@ -1287,6 +1394,496 @@
             }
           }
         ]
+      },
+      {
+        "id": "set_bluetooth",
+        "title": {
+          "en": "Turn Bluetooth on or off",
+          "nl": "Bluetooth aan- of uitzetten",
+          "de": "Bluetooth ein- oder ausschalten",
+          "fr": "Activer ou désactiver le Bluetooth",
+          "it": "Attiva o disattiva il Bluetooth",
+          "sv": "Slå på eller av Bluetooth",
+          "no": "Slå Bluetooth på eller av",
+          "es": "Activar o desactivar el Bluetooth",
+          "da": "Slå Bluetooth til eller fra",
+          "ru": "Включить или выключить Bluetooth",
+          "pl": "Włącz lub wyłącz Bluetooth",
+          "ko": "블루투스 켜기 또는 끄기",
+          "ar": "تشغيل البلوتوث أو إيقافه"
+        },
+        "titleFormatted": {
+          "en": "Bluetooth: [[state]]",
+          "nl": "Bluetooth: [[state]]",
+          "de": "Bluetooth: [[state]]",
+          "fr": "Bluetooth: [[state]]",
+          "it": "Bluetooth: [[state]]",
+          "sv": "Bluetooth: [[state]]",
+          "no": "Bluetooth: [[state]]",
+          "es": "Bluetooth: [[state]]",
+          "da": "Bluetooth: [[state]]",
+          "ru": "Bluetooth: [[state]]",
+          "pl": "Bluetooth: [[state]]",
+          "ko": "Bluetooth: [[state]]",
+          "ar": "Bluetooth: [[state]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          },
+          {
+            "type": "dropdown",
+            "name": "state",
+            "title": {
+              "en": "State",
+              "nl": "Status",
+              "de": "Status",
+              "fr": "État",
+              "it": "Stato",
+              "sv": "Status",
+              "no": "Status",
+              "es": "Estado",
+              "da": "Status",
+              "ru": "Состояние",
+              "pl": "Stan",
+              "ko": "상태",
+              "ar": "الحالة"
+            },
+            "values": [
+              {
+                "id": "true",
+                "title": {
+                  "en": "On",
+                  "nl": "Aan",
+                  "de": "Ein",
+                  "fr": "Activé",
+                  "it": "Attivo",
+                  "sv": "På",
+                  "no": "På",
+                  "es": "Activado",
+                  "da": "Til",
+                  "ru": "Вкл.",
+                  "pl": "Wł.",
+                  "ko": "사용",
+                  "ar": "تشغيل"
+                }
+              },
+              {
+                "id": "false",
+                "title": {
+                  "en": "Off",
+                  "nl": "Uit",
+                  "de": "Aus",
+                  "fr": "Désactivé",
+                  "it": "Disattivo",
+                  "sv": "Av",
+                  "no": "Av",
+                  "es": "Desactivado",
+                  "da": "Fra",
+                  "ru": "Выкл.",
+                  "pl": "Wył.",
+                  "ko": "사용 안함",
+                  "ar": "إيقاف"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "restart_device",
+        "title": {
+          "en": "Restart device",
+          "nl": "Apparaat herstarten",
+          "de": "Gerät neu starten",
+          "fr": "Redémarrer l'appareil",
+          "it": "Riavvia il dispositivo",
+          "sv": "Starta om enheten",
+          "no": "Start enheten på nytt",
+          "es": "Reiniciar el dispositivo",
+          "da": "Genstart enheden",
+          "ru": "Перезагрузить устройство",
+          "pl": "Uruchom ponownie urządzenie",
+          "ko": "기기 다시 시작",
+          "ar": "إعادة تشغيل الجهاز"
+        },
+        "hint": {
+          "en": "Android turns Wireless debugging off after a restart: Homey can only reconnect once you turn it back on (no new pairing code needed). With classic network ADB on port 5555 it depends on the device.",
+          "nl": "Android zet Draadloze foutopsporing uit na een herstart: Homey kan pas weer verbinden als je het weer aanzet (geen nieuwe koppelingscode nodig). Met klassieke netwerk-ADB op poort 5555 hangt het af van het apparaat.",
+          "de": "Android schaltet Debugging über WLAN nach einem Neustart aus: Homey kann sich erst wieder verbinden, wenn du es wieder einschaltest (kein neuer Kopplungscode nötig). Bei klassischem Netzwerk-ADB auf Port 5555 hängt es vom Gerät ab.",
+          "fr": "Android désactive le débogage sans fil après un redémarrage : Homey ne peut se reconnecter qu'une fois que vous l'avez réactivé (pas besoin de nouveau code d'association). Avec l'ADB réseau classique sur le port 5555, cela dépend de l'appareil.",
+          "it": "Android disattiva il debug wireless dopo un riavvio: Homey può ricollegarsi solo dopo che lo hai riattivato (non serve un nuovo codice di accoppiamento). Con l'ADB di rete classico sulla porta 5555 dipende dal dispositivo.",
+          "sv": "Android stänger av trådlös felsökning efter en omstart: Homey kan ansluta igen först när du slår på den igen (ingen ny kopplingskod behövs). Med klassisk nätverks-ADB på port 5555 beror det på enheten.",
+          "no": "Android slår av trådløs feilsøking etter en omstart: Homey kan koble til igjen først når du slår det på igjen (ingen ny tilkoblingskode trengs). Med klassisk nettverks-ADB på port 5555 avhenger det av enheten.",
+          "es": "Android desactiva la depuración inalámbrica tras reiniciar: Homey solo puede volver a conectarse cuando la vuelvas a activar (no hace falta un nuevo código de vinculación). Con el ADB de red clásico en el puerto 5555 depende del dispositivo.",
+          "da": "Android slår trådløs fejlretning fra efter en genstart: Homey kan først forbinde igen, når du slår det til igen (ingen ny parringskode nødvendig). Med klassisk netværks-ADB på port 5555 afhænger det af enheden.",
+          "ru": "После перезагрузки Android выключает отладку по Wi-Fi: Homey сможет подключиться снова только после того, как вы её включите (новый код не нужен). С классическим сетевым ADB на порту 5555 это зависит от устройства.",
+          "pl": "Po ponownym uruchomieniu Android wyłącza debugowanie bezprzewodowe: Homey połączy się ponownie dopiero, gdy je włączysz (nowy kod parowania nie jest potrzebny). W przypadku klasycznego sieciowego ADB na porcie 5555 zależy to od urządzenia.",
+          "ko": "다시 시작하면 Android가 무선 디버깅을 끕니다: 다시 켜야만 Homey가 다시 연결할 수 있습니다(새 페어링 코드는 필요 없음). 포트 5555의 기존 네트워크 ADB는 기기에 따라 다릅니다.",
+          "ar": "يوقف Android تصحيح الأخطاء اللاسلكي بعد إعادة التشغيل: لا يمكن لـ Homey إعادة الاتصال إلا بعد تشغيله مجددًا (لا حاجة لرمز إقران جديد). مع ADB الشبكي الكلاسيكي على المنفذ 5555 يعتمد ذلك على الجهاز."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          }
+        ]
+      },
+      {
+        "id": "set_do_not_disturb",
+        "title": {
+          "en": "Set Do Not Disturb",
+          "nl": "Niet storen instellen",
+          "de": "Bitte nicht stören einstellen",
+          "fr": "Régler Ne pas déranger",
+          "it": "Imposta Non disturbare",
+          "sv": "Ställ in Stör ej",
+          "no": "Still inn Ikke forstyrr",
+          "es": "Configurar No molestar",
+          "da": "Indstil Forstyr ikke",
+          "ru": "Настроить режим «Не беспокоить»",
+          "pl": "Ustaw tryb Nie przeszkadzać",
+          "ko": "방해 금지 모드 설정",
+          "ar": "ضبط الرجاء عدم الإزعاج"
+        },
+        "titleFormatted": {
+          "en": "Set Do Not Disturb to [[mode]]",
+          "nl": "Zet Niet storen op [[mode]]",
+          "de": "Bitte nicht stören auf [[mode]] stellen",
+          "fr": "Régler Ne pas déranger sur [[mode]]",
+          "it": "Imposta Non disturbare su [[mode]]",
+          "sv": "Ställ in Stör ej på [[mode]]",
+          "no": "Still Ikke forstyrr til [[mode]]",
+          "es": "Poner No molestar en [[mode]]",
+          "da": "Indstil Forstyr ikke til [[mode]]",
+          "ru": "Режим «Не беспокоить»: [[mode]]",
+          "pl": "Tryb Nie przeszkadzać: [[mode]]",
+          "ko": "방해 금지 모드: [[mode]]",
+          "ar": "الرجاء عدم الإزعاج: [[mode]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode",
+              "nl": "Modus",
+              "de": "Modus",
+              "fr": "Mode",
+              "it": "Modalità",
+              "sv": "Läge",
+              "no": "Modus",
+              "es": "Modo",
+              "da": "Tilstand",
+              "ru": "Режим",
+              "pl": "Tryb",
+              "ko": "모드",
+              "ar": "الوضع"
+            },
+            "values": [
+              {
+                "id": "off",
+                "title": {
+                  "en": "Off",
+                  "nl": "Uit",
+                  "de": "Aus",
+                  "fr": "Désactivé",
+                  "it": "Disattivo",
+                  "sv": "Av",
+                  "no": "Av",
+                  "es": "Desactivado",
+                  "da": "Fra",
+                  "ru": "Выкл.",
+                  "pl": "Wył.",
+                  "ko": "사용 안함",
+                  "ar": "إيقاف"
+                }
+              },
+              {
+                "id": "priority",
+                "title": {
+                  "en": "Priority only",
+                  "nl": "Alleen prioriteit",
+                  "de": "Nur wichtige",
+                  "fr": "Prioritaires uniquement",
+                  "it": "Solo priorità",
+                  "sv": "Endast prioriterade",
+                  "no": "Bare prioritet",
+                  "es": "Solo prioritarias",
+                  "da": "Kun prioritet",
+                  "ru": "Только важные",
+                  "pl": "Tylko priorytetowe",
+                  "ko": "중요한 알림만",
+                  "ar": "الأولوية فقط"
+                }
+              },
+              {
+                "id": "alarms",
+                "title": {
+                  "en": "Alarms only",
+                  "nl": "Alleen wekkers",
+                  "de": "Nur Wecker",
+                  "fr": "Alarmes uniquement",
+                  "it": "Solo sveglie",
+                  "sv": "Endast alarm",
+                  "no": "Bare alarmer",
+                  "es": "Solo alarmas",
+                  "da": "Kun alarmer",
+                  "ru": "Только будильники",
+                  "pl": "Tylko alarmy",
+                  "ko": "알람만",
+                  "ar": "المنبهات فقط"
+                }
+              },
+              {
+                "id": "none",
+                "title": {
+                  "en": "Total silence",
+                  "nl": "Totale stilte",
+                  "de": "Absolute Ruhe",
+                  "fr": "Silence total",
+                  "it": "Silenzio totale",
+                  "sv": "Helt tyst",
+                  "no": "Total stillhet",
+                  "es": "Silencio total",
+                  "da": "Total stilhed",
+                  "ru": "Полная тишина",
+                  "pl": "Całkowita cisza",
+                  "ko": "알림 모두 차단",
+                  "ar": "صمت تام"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "set_auto_rotate",
+        "title": {
+          "en": "Turn auto-rotate on or off",
+          "nl": "Automatisch draaien aan- of uitzetten",
+          "de": "Automatisch drehen ein- oder ausschalten",
+          "fr": "Activer ou désactiver la rotation automatique",
+          "it": "Attiva o disattiva la rotazione automatica",
+          "sv": "Slå på eller av automatisk rotation",
+          "no": "Slå automatisk rotering på eller av",
+          "es": "Activar o desactivar el giro automático",
+          "da": "Slå automatisk rotation til eller fra",
+          "ru": "Включить или выключить автоповорот",
+          "pl": "Włącz lub wyłącz autoobracanie",
+          "ko": "자동 회전 켜기 또는 끄기",
+          "ar": "تشغيل التدوير التلقائي أو إيقافه"
+        },
+        "titleFormatted": {
+          "en": "Auto-rotate: [[state]]",
+          "nl": "Automatisch draaien: [[state]]",
+          "de": "Automatisch drehen: [[state]]",
+          "fr": "Rotation automatique : [[state]]",
+          "it": "Rotazione automatica: [[state]]",
+          "sv": "Automatisk rotation: [[state]]",
+          "no": "Automatisk rotering: [[state]]",
+          "es": "Giro automático: [[state]]",
+          "da": "Automatisk rotation: [[state]]",
+          "ru": "Автоповорот: [[state]]",
+          "pl": "Autoobracanie: [[state]]",
+          "ko": "자동 회전: [[state]]",
+          "ar": "التدوير التلقائي: [[state]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          },
+          {
+            "type": "dropdown",
+            "name": "state",
+            "title": {
+              "en": "State",
+              "nl": "Status",
+              "de": "Status",
+              "fr": "État",
+              "it": "Stato",
+              "sv": "Status",
+              "no": "Status",
+              "es": "Estado",
+              "da": "Status",
+              "ru": "Состояние",
+              "pl": "Stan",
+              "ko": "상태",
+              "ar": "الحالة"
+            },
+            "values": [
+              {
+                "id": "true",
+                "title": {
+                  "en": "On",
+                  "nl": "Aan",
+                  "de": "Ein",
+                  "fr": "Activé",
+                  "it": "Attivo",
+                  "sv": "På",
+                  "no": "På",
+                  "es": "Activado",
+                  "da": "Til",
+                  "ru": "Вкл.",
+                  "pl": "Wł.",
+                  "ko": "사용",
+                  "ar": "تشغيل"
+                }
+              },
+              {
+                "id": "false",
+                "title": {
+                  "en": "Off",
+                  "nl": "Uit",
+                  "de": "Aus",
+                  "fr": "Désactivé",
+                  "it": "Disattivo",
+                  "sv": "Av",
+                  "no": "Av",
+                  "es": "Desactivado",
+                  "da": "Fra",
+                  "ru": "Выкл.",
+                  "pl": "Wył.",
+                  "ko": "사용 안함",
+                  "ar": "إيقاف"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "show_notification",
+        "title": {
+          "en": "Show notification",
+          "nl": "Melding tonen",
+          "de": "Benachrichtigung anzeigen",
+          "fr": "Afficher une notification",
+          "it": "Mostra notifica",
+          "sv": "Visa avisering",
+          "no": "Vis varsel",
+          "es": "Mostrar notificación",
+          "da": "Vis notifikation",
+          "ru": "Показать уведомление",
+          "pl": "Pokaż powiadomienie",
+          "ko": "알림 표시",
+          "ar": "عرض إشعار"
+        },
+        "titleFormatted": {
+          "en": "Show notification [[title]]: [[text]]",
+          "nl": "Toon melding [[title]]: [[text]]",
+          "de": "Benachrichtigung [[title]] anzeigen: [[text]]",
+          "fr": "Afficher la notification [[title]] : [[text]]",
+          "it": "Mostra notifica [[title]]: [[text]]",
+          "sv": "Visa avisering [[title]]: [[text]]",
+          "no": "Vis varsel [[title]]: [[text]]",
+          "es": "Mostrar notificación [[title]]: [[text]]",
+          "da": "Vis notifikation [[title]]: [[text]]",
+          "ru": "Показать уведомление [[title]]: [[text]]",
+          "pl": "Pokaż powiadomienie [[title]]: [[text]]",
+          "ko": "알림 표시 [[title]]: [[text]]",
+          "ar": "عرض الإشعار [[title]]: [[text]]"
+        },
+        "hint": {
+          "en": "Shows up from the Shell app. If nothing appears, allow notifications for 'Shell' in the Android settings.",
+          "nl": "Verschijnt vanuit de app Shell. Zie je niets, sta dan meldingen toe voor 'Shell' in de Android-instellingen.",
+          "de": "Erscheint von der App „Shell“. Wenn nichts erscheint, erlaube Benachrichtigungen für „Shell“ in den Android-Einstellungen.",
+          "fr": "S'affiche depuis l'application Shell. Si rien n'apparaît, autorisez les notifications pour « Shell » dans les paramètres Android.",
+          "it": "Compare dall'app Shell. Se non vedi nulla, consenti le notifiche per \"Shell\" nelle impostazioni di Android.",
+          "sv": "Visas från appen Shell. Om inget syns, tillåt aviseringar för ”Shell” i Android-inställningarna.",
+          "no": "Vises fra appen Shell. Hvis ingenting vises, tillat varsler for «Shell» i Android-innstillingene.",
+          "es": "Aparece desde la app Shell. Si no aparece nada, permite las notificaciones de «Shell» en los ajustes de Android.",
+          "da": "Vises fra appen Shell. Hvis intet vises, så tillad notifikationer for \"Shell\" i Android-indstillingerne.",
+          "ru": "Появляется от приложения Shell. Если ничего не видно, разрешите уведомления для «Shell» в настройках Android.",
+          "pl": "Pojawia się z aplikacji Shell. Jeśli nic się nie pojawia, zezwól na powiadomienia dla „Shell” w ustawieniach Androida.",
+          "ko": "Shell 앱에서 표시됩니다. 아무것도 나타나지 않으면 Android 설정에서 'Shell'의 알림을 허용하세요.",
+          "ar": "يظهر من تطبيق Shell. إذا لم يظهر شيء، فاسمح بالإشعارات لتطبيق «Shell» في إعدادات Android."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          },
+          {
+            "type": "text",
+            "name": "title",
+            "title": {
+              "en": "Title",
+              "nl": "Titel",
+              "de": "Titel",
+              "fr": "Titre",
+              "it": "Titolo",
+              "sv": "Rubrik",
+              "no": "Tittel",
+              "es": "Título",
+              "da": "Titel",
+              "ru": "Заголовок",
+              "pl": "Tytuł",
+              "ko": "제목",
+              "ar": "العنوان"
+            },
+            "placeholder": {
+              "en": "Doorbell",
+              "nl": "Deurbel",
+              "de": "Türklingel",
+              "fr": "Sonnette",
+              "it": "Campanello",
+              "sv": "Dörrklocka",
+              "no": "Dørklokke",
+              "es": "Timbre",
+              "da": "Dørklokke",
+              "ru": "Дверной звонок",
+              "pl": "Dzwonek do drzwi",
+              "ko": "초인종",
+              "ar": "جرس الباب"
+            }
+          },
+          {
+            "type": "text",
+            "name": "text",
+            "title": {
+              "en": "Text",
+              "nl": "Tekst",
+              "de": "Text",
+              "fr": "Texte",
+              "it": "Testo",
+              "sv": "Text",
+              "no": "Tekst",
+              "es": "Texto",
+              "da": "Tekst",
+              "ru": "Текст",
+              "pl": "Tekst",
+              "ko": "내용",
+              "ar": "النص"
+            },
+            "placeholder": {
+              "en": "Someone is at the door",
+              "nl": "Er staat iemand voor de deur",
+              "de": "Jemand steht vor der Tür",
+              "fr": "Quelqu'un est à la porte",
+              "it": "C'è qualcuno alla porta",
+              "sv": "Någon står vid dörren",
+              "no": "Noen står ved døren",
+              "es": "Hay alguien en la puerta",
+              "da": "Der står nogen ved døren",
+              "ru": "Кто-то у двери",
+              "pl": "Ktoś stoi przy drzwiach",
+              "ko": "누군가 문 앞에 있습니다",
+              "ar": "يوجد شخص عند الباب"
+            }
+          }
+        ]
       }
     ]
   },
@@ -1313,7 +1910,8 @@
         "dim",
         "volume_set",
         "measure_battery",
-        "battery_charging_state"
+        "battery_charging_state",
+        "measure_temperature"
       ],
       "capabilitiesOptions": {
         "onoff": {
@@ -1395,6 +1993,23 @@
             "pl": "Głośność multimediów",
             "ko": "미디어 볼륨",
             "ar": "مستوى صوت الوسائط"
+          }
+        },
+        "measure_temperature": {
+          "title": {
+            "en": "Battery temperature",
+            "nl": "Batterijtemperatuur",
+            "de": "Akkutemperatur",
+            "fr": "Température de la batterie",
+            "it": "Temperatura batteria",
+            "sv": "Batteritemperatur",
+            "no": "Batteritemperatur",
+            "es": "Temperatura de la batería",
+            "da": "Batteritemperatur",
+            "ru": "Температура батареи",
+            "pl": "Temperatura baterii",
+            "ko": "배터리 온도",
+            "ar": "درجة حرارة البطارية"
           }
         }
       },

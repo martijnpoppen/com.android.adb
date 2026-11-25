@@ -4,7 +4,7 @@ const Homey = require('homey');
 const AdbClient = require('../../lib/AdbClient');
 const { localizeError } = require('../../lib/errors');
 
-const CAPABILITIES = ['onoff', 'dim', 'volume_set', 'measure_battery', 'battery_charging_state'];
+const CAPABILITIES = ['onoff', 'dim', 'volume_set', 'measure_battery', 'battery_charging_state', 'measure_temperature'];
 
 const CMD_SCREEN_ON = 'input keyevent KEYCODE_WAKEUP';
 const CMD_SCREEN_OFF = 'input keyevent KEYCODE_SLEEP';
@@ -29,7 +29,8 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 // Everything Homey shows is read in one go, to keep polling light.
 const CMD_STATE = [
   'dumpsys power | grep mWakefulness=',
-  "dumpsys battery | grep -E 'level:|status:|powered:'",
+  "dumpsys battery | grep -E 'level:|status:|powered:|temperature:'",
+  'echo bluetooth=$(settings get global bluetooth_on)',
   'echo brightness_float=$(settings get system screen_brightness_float 2>/dev/null)',
   'echo brightness_raw=$(settings get system screen_brightness)',
   CMD_VOLUME,
@@ -298,6 +299,79 @@ class TabletDevice extends Homey.Device {
     await this.client.shell(`input text ${quote(String(text).replace(/ /g, '%s'))}`);
   }
 
+  /** Reads Bluetooth from the setting Android's Bluetooth service keeps up to date. */
+  async readBluetooth() {
+    const output = await this.client.shell('settings get global bluetooth_on', { purpose: 'bluetooth' });
+    return /^1/.test(output.trim()) ? true : /^0/.test(output.trim()) ? false : null;
+  }
+
+  /** @param {boolean} on */
+  async setBluetooth(on) {
+    const word = on ? 'enable' : 'disable';
+    // Android 12+ has 'cmd bluetooth_manager'; 'svc bluetooth' is the older way.
+    for (const command of [`cmd bluetooth_manager ${word}`, `svc bluetooth ${word}`]) {
+      const output = await this.client.shell(`${command} 2>&1`);
+      let now = null;
+      for (let i = 0; i < 6 && now !== on; i++) { // switching takes a moment
+        await delay(500);
+        now = await this.readBluetooth();
+      }
+      this.log(`Bluetooth ${on ? 'on' : 'off'} via ${command}: ${JSON.stringify(output)} -> now ${now}`);
+      if (now === on) {
+        await this.updateBluetooth(on);
+        return;
+      }
+    }
+    throw new Error(this.homey.__('errors.bluetooth_failed'));
+  }
+
+  /** Remembers the Bluetooth state; fires the triggers when it changed. */
+  async updateBluetooth(on) {
+    const before = this.bluetoothOn;
+    this.bluetoothOn = on;
+    // Not on the first reading after start: that is no change.
+    if (before === undefined || before === null || before === on) return;
+    this.log(`Bluetooth turned ${on ? 'on' : 'off'}`);
+    await this.homey.flow.getDeviceTriggerCard(on ? 'bluetooth_turned_on' : 'bluetooth_turned_off')
+      .trigger(this, {}, {}).catch(this.error);
+  }
+
+  /** @param {'off'|'priority'|'alarms'|'none'} mode */
+  async setDoNotDisturb(mode) {
+    const ZEN = { off: '0', priority: '1', none: '2', alarms: '3' }; // settings global zen_mode
+    if (!(mode in ZEN)) throw new Error(this.homey.__('errors.dnd_failed'));
+    const output = await this.client.shell(`cmd notification set_dnd ${mode} 2>&1`);
+    await delay(300);
+    const now = (await this.client.shell('settings get global zen_mode')).trim();
+    this.log(`Do Not Disturb ${mode}: ${JSON.stringify(output)} -> zen_mode ${now}`);
+    if (now !== ZEN[mode]) throw new Error(this.homey.__('errors.dnd_failed'));
+  }
+
+  /** @param {boolean} on */
+  async setAutoRotate(on) {
+    await this.client.shell(`settings put system accelerometer_rotation ${on ? 1 : 0}`);
+    this.log(`Auto-rotate ${on ? 'on' : 'off'}`);
+  }
+
+  /** Posts a notification from the Shell app. Each gets its own tag, so they stack. */
+  async showNotification(title, text) {
+    title = String(title || '').trim();
+    text = String(text || '').trim() || title;
+    if (!text) throw new Error(this.homey.__('errors.enter_text'));
+    const tag = `homey-${Date.now()}`;
+    const args = title ? `-S bigtext -t ${quote(title)} ` : '-S bigtext ';
+    const output = await this.client.shell(`cmd notification post ${args}${tag} ${quote(text)} 2>&1`);
+    this.log(`Notification ${JSON.stringify(title)}: ${JSON.stringify(output)}`);
+    if (/exception|unknown|error/i.test(output)) throw new Error(output.split('\n')[0]);
+  }
+
+  /** Restarts the device. Wireless debugging is off afterwards until turned on again. */
+  async reboot() {
+    this.log('Restarting the device');
+    await this.client.reboot();
+    this.pollSoon();
+  }
+
   async setStayAwake(enabled) {
     await this.client.shell(`svc power stayon ${enabled ? 'true' : 'false'}`);
   }
@@ -477,6 +551,13 @@ class TabletDevice extends Homey.Device {
     if (raw) await this.setValue('dim', Math.min(1, Math.round((Number(raw[1]) / this.rawBrightnessMax()) * 100) / 100));
     else if (float) await this.setValue('dim', Math.min(1, Number(float[1])));
     else this.logUnparsed('brightness', output.split('\n').filter((l) => /^brightness/.test(l)).join('\n'));
+
+    // Battery temperature in tenths of a degree, e.g. "temperature: 312".
+    const temperature = output.match(/^\s*temperature:\s*(\d+)/m);
+    if (temperature) await this.setValue('measure_temperature', Number(temperature[1]) / 10);
+
+    const bluetooth = output.match(/^bluetooth=(\d)/m);
+    if (bluetooth) await this.updateBluetooth(bluetooth[1] === '1');
 
     // Media volume, e.g. "volume is 7 in range [0..15]"
     const volume = output.match(/volume is (\d+) in range \[(\d+)\.\.(\d+)\]/);

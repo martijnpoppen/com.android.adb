@@ -14,7 +14,10 @@
     "enter_link": "Ange en länk",
     "cannot_open_link": "Enheten kan inte öppna __url__",
     "invalid_button": "Ogiltig knapp",
-    "invalid_timeout": "Ogiltig tidsgräns"
+    "invalid_timeout": "Ogiltig tidsgräns",
+    "enter_text": "Ange en text",
+    "bluetooth_failed": "Det gick inte att ändra Bluetooth på den här enheten",
+    "dnd_failed": "Det gick inte att ändra Stör ej på den här enheten"
   },
   "pair": {
     "title": "Anslut din Android-enhet",

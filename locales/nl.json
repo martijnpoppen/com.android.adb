@@ -14,7 +14,10 @@
     "enter_link": "Vul een link in",
     "cannot_open_link": "Het apparaat kan __url__ niet openen",
     "invalid_button": "Ongeldige knop",
-    "invalid_timeout": "Ongeldige time-out"
+    "invalid_timeout": "Ongeldige time-out",
+    "enter_text": "Vul een tekst in",
+    "bluetooth_failed": "Bluetooth kon op dit apparaat niet worden omgeschakeld",
+    "dnd_failed": "Niet storen kon op dit apparaat niet worden gewijzigd"
   },
   "pair": {
     "title": "Verbind je Android-apparaat",

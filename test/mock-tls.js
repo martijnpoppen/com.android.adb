@@ -58,6 +58,7 @@ const pairingServer = tls.createServer({ ...deviceTls, requestCert: true, reject
 });
 
 let wake = 'Asleep'; let vol = 9;
+let bluetooth = 0; let zen = 0; let rotation = 1; let notifications = []; let rebooted = 0; const triggered = [];
 let brightRaw = 2048; let BRIGHT_MAX = 8191; // raw brightness scale of the OnePlus 9
 let brightMode = '1'; // adaptive brightness on, like most phones
 const adbd = net.createServer((plain) => {
@@ -87,7 +88,15 @@ const adbd = net.createServer((plain) => {
         return;
       } else if (cmd === CMD.OPEN && secure) {
         const svc = payload.toString().replace(/\0$/, ''); const id = lid++; let out = '';
-        if (svc.includes('KEYCODE_WAKEUP')) wake = 'Awake';
+        if (svc === 'reboot:') { rebooted++; s.destroy(); plain.destroy(); return; } // adbd's reboot service: the whole connection drops
+        const single = !svc.includes('mWakefulness');
+        if (single && svc.includes('cmd bluetooth_manager ')) bluetooth = svc.includes('enable') ? 1 : 0;
+        else if (single && svc.includes('settings get global bluetooth_on')) out = `${bluetooth}\n`;
+        else if (svc.includes('cmd notification set_dnd ')) zen = { off: 0, priority: 1, none: 2, alarms: 3 }[svc.match(/set_dnd (\w+)/)[1]];
+        else if (svc.includes('settings get global zen_mode')) out = `${zen}\n`;
+        else if (svc.includes('accelerometer_rotation')) rotation = Number(svc.match(/accelerometer_rotation (\d)/)[1]);
+        else if (svc.includes('cmd notification post')) { notifications.push(svc); out = 'Notification posted\n'; }
+        else if (svc.includes('KEYCODE_WAKEUP')) wake = 'Awake';
         else if (svc.includes('KEYCODE_SLEEP')) wake = 'Asleep';
         // Like the real OnePlus 9: 'cmd display set-brightness', the float setting and
         // 'media_session --set' are accepted and ignored; the raw setting (capped at 8191)
@@ -102,7 +111,7 @@ const adbd = net.createServer((plain) => {
           vol += (svc.match(/KEYCODE_VOLUME_UP/g) || []).length - (svc.match(/KEYCODE_VOLUME_DOWN/g) || []).length;
           vol = Math.max(0, Math.min(30, vol));
         } else if (svc.includes('media_session volume --stream 3 --get') && !svc.includes('mWakefulness')) out = `[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
-        else if (svc.includes('mWakefulness')) out = `  mWakefulness=${wake}\n  AC powered: true\n  USB powered: false\n  status: 2\n  level: 87\nbrightness_float=${Math.min(1, brightRaw / BRIGHT_MAX).toFixed(4)}\nbrightness_raw=${brightRaw}\n[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
+        else if (svc.includes('mWakefulness')) out = `  mWakefulness=${wake}\n  AC powered: true\n  USB powered: false\n  status: 2\n  level: 87\n  temperature: 312\nbluetooth=${bluetooth}\nbrightness_float=${Math.min(1, brightRaw / BRIGHT_MAX).toFixed(4)}\nbrightness_raw=${brightRaw}\n[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
         else if (svc.includes('pm list packages -3')) out = 'package:com.spotify.music\n';
         else if (svc.includes('pm list packages')) out = 'package:com.android.chrome\npackage:com.spotify.music\npackage:com.android.settings\n';
         else if (svc.includes('dumpsys window')) out = '  mCurrentFocus=Window{a1b2 u0 com.spotify.music/com.spotify.music.MainActivity}\n';
@@ -165,7 +174,7 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   // Like homey.__(): key path into /locales/en.json, __token__ replaced.
   const en = require('../locales/en.json');
   const __ = (key, tokens = {}) => key.split('.').reduce((o, k) => o[k], en).replace(/__(\w+)__/g, (m, k) => tokens[k]);
-  const homey2 = { ...homey, ...timers, __, flow: { getActionCard: () => card(), getConditionCard: () => card() } };
+  const homey2 = { ...homey, ...timers, __, flow: { getActionCard: () => card(), getConditionCard: () => card(), getDeviceTriggerCard: (id) => ({ trigger: async () => triggered.push(id) }) } };
   function card() { const c = { registerRunListener() { return c; }, registerArgumentAutocompleteListener() { return c; } }; return c; }
   settings.clear(); pairedModuli.clear();
   const driver = new (require('../drivers/tablet/driver.js'))(); driver.homey = homey2;
@@ -239,6 +248,22 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   const problems = checkTranslations();
   if (problems.length) throw new Error(`translations:\n${problems.join('\n')}`);
   console.log('19. translations complete:', LANGUAGES.length, 'languages');
+
+  await device.poll();
+  console.log('20. battery temperature =', device.caps.measure_temperature, '| bluetooth =', device.bluetoothOn, '| triggers so far:', triggered.length);
+  if (device.caps.measure_temperature !== 31.2 || device.bluetoothOn !== false || triggered.length) throw new Error('temperature / bluetooth state');
+  await device.setBluetooth(true);
+  bluetooth = 0; await device.poll(); // switched off on the phone itself
+  console.log('    bluetooth on via card, then off on the phone -> triggers:', triggered.join(', '));
+  if (triggered.join() !== 'bluetooth_turned_on,bluetooth_turned_off') throw new Error('bluetooth triggers');
+  await device.setDoNotDisturb('alarms'); const zenAlarms = zen; await device.setDoNotDisturb('off');
+  await device.setAutoRotate(false);
+  await device.showNotification("Door'bell", 'Someone is at the door; rm -rf /');
+  console.log('    dnd alarms -> zen', zenAlarms, '| dnd off -> zen', zen, '| rotation', rotation, '| notification:', notifications[0].replace(/^exec:/, ''));
+  if (zenAlarms !== 3 || zen !== 0 || rotation !== 0 || !notifications[0].includes("'Door'\\''bell'") || !notifications[0].includes("'Someone is at the door; rm -rf /'")) throw new Error('dnd / rotate / notification');
+  await device.reboot();
+  console.log('    restart: device got reboot =', rebooted);
+  if (rebooted !== 1) throw new Error('restart');
   await device.onUninit();
   process.exit(0);
 })().catch((e) => { console.error('FAIL', e); process.exit(1); });

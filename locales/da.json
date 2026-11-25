@@ -14,7 +14,10 @@
     "enter_link": "Angiv et link",
     "cannot_open_link": "Enheden kan ikke åbne __url__",
     "invalid_button": "Ugyldig knap",
-    "invalid_timeout": "Ugyldig timeout"
+    "invalid_timeout": "Ugyldig timeout",
+    "enter_text": "Indtast en tekst",
+    "bluetooth_failed": "Bluetooth kunne ikke ændres på denne enhed",
+    "dnd_failed": "Forstyr ikke kunne ikke ændres på denne enhed"
   },
   "pair": {
     "title": "Forbind din Android-enhed",

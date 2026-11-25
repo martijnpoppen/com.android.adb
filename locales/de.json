@@ -14,7 +14,10 @@
     "enter_link": "Gib einen Link ein",
     "cannot_open_link": "Das Gerät kann __url__ nicht öffnen",
     "invalid_button": "Ungültige Taste",
-    "invalid_timeout": "Ungültiges Timeout"
+    "invalid_timeout": "Ungültiges Timeout",
+    "enter_text": "Gib einen Text ein",
+    "bluetooth_failed": "Bluetooth konnte auf diesem Gerät nicht umgeschaltet werden",
+    "dnd_failed": "Bitte nicht stören konnte auf diesem Gerät nicht geändert werden"
   },
   "pair": {
     "title": "Verbinde dein Android-Gerät",

@@ -14,7 +14,10 @@
     "enter_link": "Introduce un enlace",
     "cannot_open_link": "El dispositivo no puede abrir __url__",
     "invalid_button": "Botón no válido",
-    "invalid_timeout": "Tiempo de espera no válido"
+    "invalid_timeout": "Tiempo de espera no válido",
+    "enter_text": "Introduce un texto",
+    "bluetooth_failed": "No se pudo cambiar el Bluetooth en este dispositivo",
+    "dnd_failed": "No se pudo cambiar No molestar en este dispositivo"
   },
   "pair": {
     "title": "Conecta tu dispositivo Android",

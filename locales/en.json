@@ -14,7 +14,10 @@
     "enter_link": "Enter a link",
     "cannot_open_link": "The device can't open __url__",
     "invalid_button": "Invalid button",
-    "invalid_timeout": "Invalid timeout"
+    "invalid_timeout": "Invalid timeout",
+    "enter_text": "Enter a text",
+    "bluetooth_failed": "Bluetooth could not be switched on this device",
+    "dnd_failed": "Do Not Disturb could not be changed on this device"
   },
   "pair": {
     "title": "Connect your Android device",

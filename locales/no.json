@@ -14,7 +14,10 @@
     "enter_link": "Skriv inn en lenke",
     "cannot_open_link": "Enheten kan ikke åpne __url__",
     "invalid_button": "Ugyldig knapp",
-    "invalid_timeout": "Ugyldig tidsavbrudd"
+    "invalid_timeout": "Ugyldig tidsavbrudd",
+    "enter_text": "Skriv inn en tekst",
+    "bluetooth_failed": "Kunne ikke endre Bluetooth på denne enheten",
+    "dnd_failed": "Kunne ikke endre Ikke forstyrr på denne enheten"
   },
   "pair": {
     "title": "Koble til Android-enheten din",
