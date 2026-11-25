@@ -61,6 +61,8 @@ let wake = 'Asleep'; let vol = 9;
 let bluetooth = 0; let zen = 0; let rotation = 1; let notifications = []; let rebooted = 0; const triggered = [];
 let front = 'com.spotify.music'; let playing = true; let wifiName = 'Home Wi-Fi'; const ran = []; const otherVolumes = { 2: 5, 4: 7, 5: 5 };
 const triggerTokens = {}; const flowTokens = {};
+let cameraOpen = false; let cameraStart = ''; const photos = ['IMG_1.jpg'];
+const PHOTO_JPEG = Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0]), Buffer.alloc(2000, 7)]);
 // A 1x1 PNG, as 'screencap -p' output.
 const SCREEN_PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg' + 'A'.repeat(120) + '==', 'base64');
 let brightRaw = 2048; let BRIGHT_MAX = 8191; // raw brightness scale of the OnePlus 9
@@ -95,7 +97,15 @@ const adbd = net.createServer((plain) => {
         if (svc === 'reboot:') { rebooted++; s.destroy(); plain.destroy(); return; } // adbd's reboot service: the whole connection drops
         const single = !svc.includes('mWakefulness');
         const other = svc.match(/volume --stream ([245]) --(get|set)(?: (\d+))?/); // ring, alarm, notification
-        if (svc.includes('screencap -p')) out = SCREEN_PNG;
+        // Camera: like the OnePlus is expected to behave (unconfirmed): no camera key, volume down is the shutter.
+        if (svc.includes('STILL_IMAGE_CAMERA')) { cameraOpen = true; cameraStart = svc; out = 'Starting: Intent { act=android.media.action.STILL_IMAGE_CAMERA }\n'; }
+        else if (svc.includes('ls -t /sdcard/DCIM/Camera')) out = `${photos[photos.length - 1]}\n`;
+        else if (svc.includes('KEYCODE_CAMERA')) out = '';
+        else if (cameraOpen && svc.includes('input keyevent KEYCODE_VOLUME_DOWN')) photos.push(`IMG_${photos.length + 1}.jpg`);
+        else if (svc.includes('stat -c %s')) out = `${PHOTO_JPEG.length}\n`;
+        else if (svc.startsWith("exec:cat '/sdcard/DCIM/Camera/")) out = PHOTO_JPEG;
+        else if (svc.includes('KEYCODE_BACK')) cameraOpen = false;
+        else if (svc.includes('screencap -p')) out = SCREEN_PNG;
         else if (other && svc.startsWith('exec:cmd media_session volume') && other[2] === 'set') otherVolumes[other[1]] = Number(other[3]); // assumed: works for these streams
         else if (other) out = `[V] volume is ${otherVolumes[other[1]]} in range [0..7]\n`;
         else if (svc.includes('am force-stop ') || svc.includes('input tap ') || svc.includes('input swipe ')) ran.push(svc.replace(/^exec:/, ''));
@@ -296,6 +306,9 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   const afterButton = captures; device.screenshotTime -= 6000; await image.fn({ end() {} }); // refresh later: a new capture
   console.log('    button -> captures', afterButton, '| image updated', image.updated, '| refresh later -> captures', captures);
   if (afterButton !== 1 || image.updated !== 2 || captures !== 2) throw new Error('screenshot button / refresh');
+  const volBefore = vol; const photo = await device.takePhoto('front'); const got = []; await photo.fn({ end: (b) => got.push(b) });
+  console.log('    photo:', photos[photos.length - 1], got[0].length, 'bytes | shutter', device.shutterKey, '| front requested', cameraStart.includes('CAMERA_FACING 1'), '| camera closed', !cameraOpen, '| media volume untouched', vol === volBefore, '| tag set', flowTokens.photo_MOCKSERIAL.value === photo);
+  if (photos.length !== 2 || got[0].length !== 2004 || device.shutterKey !== 'KEYCODE_VOLUME_DOWN' || !cameraStart.includes('CAMERA_FACING 1') || cameraOpen || vol !== volBefore || flowTokens.photo_MOCKSERIAL.value !== photo || device.camera.id !== 'photo') throw new Error('photo');
   await device.runShell('settings get global zen_mode');
   console.log('    Flow tags:', Object.values(flowTokens).map((tk) => `${tk.opts.title} [${tk.opts.type}]`).join(', '), '| shell tag =', flowTokens.shell_output_MOCKSERIAL.value);
   if (flowTokens.screenshot_MOCKSERIAL.value !== image || flowTokens.shell_output_MOCKSERIAL.value !== '0') throw new Error('flow tags');

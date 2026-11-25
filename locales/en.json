@@ -2,7 +2,8 @@
   "device": {
     "default_name": "Android device",
     "screenshot": "Screenshot",
-    "shell_output": "Output"
+    "shell_output": "Output",
+    "photo": "Photo"
   },
   "errors": {
     "enter_host": "Enter the IP address of the device",
@@ -22,7 +23,8 @@
     "dnd_failed": "Do Not Disturb could not be changed on this device",
     "screenshot_failed": "Could not take a screenshot",
     "volume_failed": "This volume could not be changed on this device",
-    "invalid_position": "Invalid position"
+    "invalid_position": "Invalid position",
+    "photo_failed": "Could not take a photo: the camera app did not save a new picture"
   },
   "pair": {
     "title": "Connect your Android device",

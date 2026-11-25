@@ -2,7 +2,8 @@
   "device": {
     "default_name": "Android-enhet",
     "screenshot": "Skärmbild",
-    "shell_output": "Utdata"
+    "shell_output": "Utdata",
+    "photo": "Foto"
   },
   "errors": {
     "enter_host": "Ange enhetens IP-adress",
@@ -22,7 +23,8 @@
     "dnd_failed": "Det gick inte att ändra Stör ej på den här enheten",
     "screenshot_failed": "Det gick inte att ta en skärmbild",
     "volume_failed": "Den här volymen kan inte ändras på den här enheten",
-    "invalid_position": "Ogiltig position"
+    "invalid_position": "Ogiltig position",
+    "photo_failed": "Det gick inte att ta ett foto: kameraappen sparade ingen ny bild"
   },
   "pair": {
     "title": "Anslut din Android-enhet",

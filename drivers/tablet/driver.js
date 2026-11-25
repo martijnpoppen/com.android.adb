@@ -42,6 +42,7 @@ class TabletDriver extends Homey.Driver {
       .registerArgumentAutocompleteListener('app', appSearch);
 
     action('take_screenshot', async ({ device }) => { await device.takeScreenshot(); });
+    action('take_photo', async ({ device, camera }) => { await device.takePhoto(camera); });
     action('show_url', async ({ device, url }) => device.showOnScreen({ url }));
     action('show_app', async ({ device, app }) => device.showOnScreen({ app: app.id }))
       .registerArgumentAutocompleteListener('app', appSearch);

@@ -2347,6 +2347,113 @@
           }
         }
       ]
+    },
+    {
+      "id": "take_photo",
+      "title": {
+        "en": "Take photo",
+        "nl": "Foto maken",
+        "de": "Foto aufnehmen",
+        "fr": "Prendre une photo",
+        "it": "Scatta una foto",
+        "sv": "Ta ett foto",
+        "no": "Ta bilde",
+        "es": "Hacer una foto",
+        "da": "Tag et billede",
+        "ru": "Сделать фото",
+        "pl": "Zrób zdjęcie",
+        "ko": "사진 촬영",
+        "ar": "التقاط صورة"
+      },
+      "titleFormatted": {
+        "en": "Take photo with the [[camera]]",
+        "nl": "Maak een foto met de [[camera]]",
+        "de": "Foto aufnehmen mit: [[camera]]",
+        "fr": "Prendre une photo avec : [[camera]]",
+        "it": "Scatta una foto con: [[camera]]",
+        "sv": "Ta ett foto med: [[camera]]",
+        "no": "Ta bilde med: [[camera]]",
+        "es": "Hacer una foto con: [[camera]]",
+        "da": "Tag et billede med: [[camera]]",
+        "ru": "Сделать фото: [[camera]]",
+        "pl": "Zrób zdjęcie: [[camera]]",
+        "ko": "사진 촬영: [[camera]]",
+        "ar": "التقاط صورة: [[camera]]"
+      },
+      "hint": {
+        "en": "Opens the camera app on the device, presses the shutter and fetches the photo. Takes about 5 seconds and the photo is also saved on the device. Does not work on every phone.",
+        "nl": "Opent de camera-app op het apparaat, drukt af en haalt de foto op. Duurt ongeveer 5 seconden en de foto wordt ook op het apparaat bewaard. Werkt niet op elke telefoon.",
+        "de": "Öffnet die Kamera-App auf dem Gerät, löst aus und holt das Foto ab. Dauert etwa 5 Sekunden und das Foto wird auch auf dem Gerät gespeichert. Funktioniert nicht auf jedem Handy.",
+        "fr": "Ouvre l'appareil photo sur l'appareil, déclenche et récupère la photo. Prend environ 5 secondes et la photo est aussi enregistrée sur l'appareil. Ne fonctionne pas sur tous les téléphones.",
+        "it": "Apre la fotocamera sul dispositivo, scatta e recupera la foto. Richiede circa 5 secondi e la foto viene salvata anche sul dispositivo. Non funziona su tutti i telefoni.",
+        "sv": "Öppnar kameraappen på enheten, tar bilden och hämtar fotot. Tar ungefär 5 sekunder och fotot sparas även på enheten. Fungerar inte på alla telefoner.",
+        "no": "Åpner kameraappen på enheten, tar bildet og henter det. Tar omtrent 5 sekunder, og bildet lagres også på enheten. Fungerer ikke på alle telefoner.",
+        "es": "Abre la cámara del dispositivo, dispara y recupera la foto. Tarda unos 5 segundos y la foto también se guarda en el dispositivo. No funciona en todos los teléfonos.",
+        "da": "Åbner kamera-appen på enheden, tager billedet og henter det. Tager cirka 5 sekunder, og billedet gemmes også på enheden. Virker ikke på alle telefoner.",
+        "ru": "Открывает камеру на устройстве, делает снимок и загружает фото. Занимает около 5 секунд, фото также сохраняется на устройстве. Работает не на всех телефонах.",
+        "pl": "Otwiera aparat na urządzeniu, robi zdjęcie i je pobiera. Trwa około 5 sekund, a zdjęcie jest też zapisywane na urządzeniu. Nie działa na każdym telefonie.",
+        "ko": "기기에서 카메라 앱을 열고 셔터를 눌러 사진을 가져옵니다. 약 5초가 걸리며 사진은 기기에도 저장됩니다. 모든 휴대전화에서 작동하지는 않습니다.",
+        "ar": "يفتح تطبيق الكاميرا على الجهاز ويضغط زر الالتقاط ثم يجلب الصورة. يستغرق نحو 5 ثوانٍ وتُحفظ الصورة على الجهاز أيضًا. لا يعمل على كل الهواتف."
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "camera",
+          "title": {
+            "en": "Camera",
+            "nl": "Camera",
+            "de": "Kamera",
+            "fr": "Caméra",
+            "it": "Fotocamera",
+            "sv": "Kamera",
+            "no": "Kamera",
+            "es": "Cámara",
+            "da": "Kamera",
+            "ru": "Камера",
+            "pl": "Aparat",
+            "ko": "카메라",
+            "ar": "الكاميرا"
+          },
+          "values": [
+            {
+              "id": "back",
+              "title": {
+                "en": "Back camera",
+                "nl": "Camera achter",
+                "de": "Rückkamera",
+                "fr": "Caméra arrière",
+                "it": "Fotocamera posteriore",
+                "sv": "Bakre kamera",
+                "no": "Bakkamera",
+                "es": "Cámara trasera",
+                "da": "Bagkamera",
+                "ru": "Основная камера",
+                "pl": "Tylny aparat",
+                "ko": "후면 카메라",
+                "ar": "الكاميرا الخلفية"
+              }
+            },
+            {
+              "id": "front",
+              "title": {
+                "en": "Front camera",
+                "nl": "Camera voor",
+                "de": "Frontkamera",
+                "fr": "Caméra avant",
+                "it": "Fotocamera anteriore",
+                "sv": "Främre kamera",
+                "no": "Frontkamera",
+                "es": "Cámara frontal",
+                "da": "Frontkamera",
+                "ru": "Фронтальная камера",
+                "pl": "Przedni aparat",
+                "ko": "전면 카메라",
+                "ar": "الكاميرا الأمامية"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

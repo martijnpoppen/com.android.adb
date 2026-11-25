@@ -2,7 +2,8 @@
   "device": {
     "default_name": "Android-Gerät",
     "screenshot": "Screenshot",
-    "shell_output": "Ausgabe"
+    "shell_output": "Ausgabe",
+    "photo": "Foto"
   },
   "errors": {
     "enter_host": "Gib die IP-Adresse des Geräts ein",
@@ -22,7 +23,8 @@
     "dnd_failed": "Bitte nicht stören konnte auf diesem Gerät nicht geändert werden",
     "screenshot_failed": "Screenshot konnte nicht aufgenommen werden",
     "volume_failed": "Diese Lautstärke kann auf diesem Gerät nicht geändert werden",
-    "invalid_position": "Ungültige Position"
+    "invalid_position": "Ungültige Position",
+    "photo_failed": "Foto konnte nicht aufgenommen werden: Die Kamera-App hat kein neues Bild gespeichert"
   },
   "pair": {
     "title": "Verbinde dein Android-Gerät",

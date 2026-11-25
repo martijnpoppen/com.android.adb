@@ -2,7 +2,8 @@
   "device": {
     "default_name": "Dispositivo Android",
     "screenshot": "Captura de pantalla",
-    "shell_output": "Salida"
+    "shell_output": "Salida",
+    "photo": "Foto"
   },
   "errors": {
     "enter_host": "Introduce la dirección IP del dispositivo",
@@ -22,7 +23,8 @@
     "dnd_failed": "No se pudo cambiar No molestar en este dispositivo",
     "screenshot_failed": "No se ha podido hacer la captura de pantalla",
     "volume_failed": "Este volumen no se ha podido cambiar en este dispositivo",
-    "invalid_position": "Posición no válida"
+    "invalid_position": "Posición no válida",
+    "photo_failed": "No se pudo hacer la foto: la cámara no guardó ninguna imagen nueva"
   },
   "pair": {
     "title": "Conecta tu dispositivo Android",

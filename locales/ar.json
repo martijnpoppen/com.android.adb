@@ -2,7 +2,8 @@
   "device": {
     "default_name": "جهاز Android",
     "screenshot": "لقطة الشاشة",
-    "shell_output": "المخرجات"
+    "shell_output": "المخرجات",
+    "photo": "صورة"
   },
   "errors": {
     "enter_host": "أدخِل عنوان IP للجهاز",
@@ -22,7 +23,8 @@
     "dnd_failed": "تعذّر تغيير وضع الرجاء عدم الإزعاج على هذا الجهاز",
     "screenshot_failed": "تعذّر أخذ لقطة شاشة",
     "volume_failed": "تعذّر تغيير مستوى هذا الصوت على هذا الجهاز",
-    "invalid_position": "موضع غير صالح"
+    "invalid_position": "موضع غير صالح",
+    "photo_failed": "تعذّر التقاط صورة: لم يحفظ تطبيق الكاميرا صورة جديدة"
   },
   "pair": {
     "title": "توصيل جهاز Android",

@@ -2,7 +2,8 @@
   "device": {
     "default_name": "Android 기기",
     "screenshot": "스크린샷",
-    "shell_output": "출력"
+    "shell_output": "출력",
+    "photo": "사진"
   },
   "errors": {
     "enter_host": "기기의 IP 주소를 입력하세요",
@@ -22,7 +23,8 @@
     "dnd_failed": "이 기기에서 방해 금지 모드를 변경할 수 없습니다",
     "screenshot_failed": "스크린샷을 찍을 수 없습니다",
     "volume_failed": "이 기기에서는 이 볼륨을 변경할 수 없습니다",
-    "invalid_position": "잘못된 위치입니다"
+    "invalid_position": "잘못된 위치입니다",
+    "photo_failed": "사진을 촬영할 수 없습니다: 카메라 앱이 새 사진을 저장하지 않았습니다"
   },
   "pair": {
     "title": "Android 기기 연결",

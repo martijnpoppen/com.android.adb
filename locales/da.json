@@ -2,7 +2,8 @@
   "device": {
     "default_name": "Android-enhed",
     "screenshot": "Screenshot",
-    "shell_output": "Output"
+    "shell_output": "Output",
+    "photo": "Billede"
   },
   "errors": {
     "enter_host": "Angiv enhedens IP-adresse",
@@ -22,7 +23,8 @@
     "dnd_failed": "Forstyr ikke kunne ikke ændres på denne enhed",
     "screenshot_failed": "Der kunne ikke tages et screenshot",
     "volume_failed": "Denne lydstyrke kunne ikke ændres på denne enhed",
-    "invalid_position": "Ugyldig position"
+    "invalid_position": "Ugyldig position",
+    "photo_failed": "Kunne ikke tage et billede: kamera-appen gemte ikke noget nyt billede"
   },
   "pair": {
     "title": "Forbind din Android-enhed",

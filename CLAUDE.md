@@ -112,6 +112,12 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
     per device (`setCameraImage`). Screen must be on. The image stream takes a NEW screenshot
     on every load (refresh in the app), except within 5 s of `takeScreenshot()` (card or the
     `screenshot_button` capability), whose `image.update()` makes Homey reload it.
+  - `take_photo` (mock only; shutter key and lens extras unconfirmed on any real phone): wake,
+    `am start -a android.media.action.STILL_IMAGE_CAMERA` with unofficial front/back extras,
+    press KEYCODE_CAMERA then KEYCODE_VOLUME_DOWN until `ls -t /sdcard/DCIM/Camera | head -1`
+    shows a new .jpg (the working key is remembered), wait for a stable size, `cat` it via
+    `exec()`, press BACK. Second Image + tag "Photo (<device>)"; loading that image never
+    opens the camera.
   - Action cards must NOT declare `tokens`: Homey then only shows them in Advanced Flow (the
     user couldn't find the screenshot card). Results go into global Flow tags per device
     instead (`homey.flow.createToken`): "Screenshot (<device>)" (image) and "Output

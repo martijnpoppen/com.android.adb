@@ -2,7 +2,8 @@
   "device": {
     "default_name": "Dispositivo Android",
     "screenshot": "Screenshot",
-    "shell_output": "Output"
+    "shell_output": "Output",
+    "photo": "Foto"
   },
   "errors": {
     "enter_host": "Inserisci l'indirizzo IP del dispositivo",
@@ -22,7 +23,8 @@
     "dnd_failed": "Impossibile modificare Non disturbare su questo dispositivo",
     "screenshot_failed": "Impossibile acquisire uno screenshot",
     "volume_failed": "Questo volume non può essere modificato su questo dispositivo",
-    "invalid_position": "Posizione non valida"
+    "invalid_position": "Posizione non valida",
+    "photo_failed": "Impossibile scattare una foto: la fotocamera non ha salvato una nuova immagine"
   },
   "pair": {
     "title": "Collega il tuo dispositivo Android",

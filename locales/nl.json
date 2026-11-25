@@ -2,7 +2,8 @@
   "device": {
     "default_name": "Android-apparaat",
     "screenshot": "Screenshot",
-    "shell_output": "Uitvoer"
+    "shell_output": "Uitvoer",
+    "photo": "Foto"
   },
   "errors": {
     "enter_host": "Vul het IP-adres van het apparaat in",
@@ -22,7 +23,8 @@
     "dnd_failed": "Niet storen kon op dit apparaat niet worden gewijzigd",
     "screenshot_failed": "Screenshot maken is mislukt",
     "volume_failed": "Dit volume kan op dit apparaat niet worden aangepast",
-    "invalid_position": "Ongeldige positie"
+    "invalid_position": "Ongeldige positie",
+    "photo_failed": "Kon geen foto maken: de camera-app heeft geen nieuwe foto opgeslagen"
   },
   "pair": {
     "title": "Verbind je Android-apparaat",

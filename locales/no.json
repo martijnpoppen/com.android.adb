@@ -2,7 +2,8 @@
   "device": {
     "default_name": "Android-enhet",
     "screenshot": "Skjermbilde",
-    "shell_output": "Utdata"
+    "shell_output": "Utdata",
+    "photo": "Bilde"
   },
   "errors": {
     "enter_host": "Skriv inn IP-adressen til enheten",
@@ -22,7 +23,8 @@
     "dnd_failed": "Kunne ikke endre Ikke forstyrr på denne enheten",
     "screenshot_failed": "Kunne ikke ta skjermbilde",
     "volume_failed": "Dette volumet kan ikke endres på denne enheten",
-    "invalid_position": "Ugyldig posisjon"
+    "invalid_position": "Ugyldig posisjon",
+    "photo_failed": "Kunne ikke ta bilde: kameraappen lagret ikke noe nytt bilde"
   },
   "pair": {
     "title": "Koble til Android-enheten din",

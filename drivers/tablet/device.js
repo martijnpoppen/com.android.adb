@@ -12,6 +12,9 @@ const CAPABILITIES = ['onoff', 'dim', 'volume_set', 'measure_battery', 'battery_
   'screenshot_button'];
 const VOLUME_STREAMS = { ring: 2, alarm: 4, notification: 5 }; // AudioManager.STREAM_*
 const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+const CAMERA_DIR = '/sdcard/DCIM/Camera';
+// Ways to press the shutter; which one works differs per phone and camera app.
+const SHUTTER_KEYS = ['KEYCODE_CAMERA', 'KEYCODE_VOLUME_DOWN'];
 const DND_MODES = { 0: 'off', 1: 'priority', 2: 'none', 3: 'alarms' }; // settings global zen_mode
 
 const CMD_SCREEN_ON = 'input keyevent KEYCODE_WAKEUP';
@@ -120,7 +123,15 @@ class TabletDevice extends Homey.Device {
     // screenshot, except right after takeScreenshot(), which just made one.
     this.screenshotImage.setStream(async (stream) => {
       const fresh = this.screenshot && Date.now() - this.screenshotTime < 5000;
+      stream.contentType = 'image/png';
       stream.end(fresh ? this.screenshot : await this.captureScreen());
+    });
+    // Photos from the camera: only ever the last one taken (loading never opens the camera).
+    this.photoImage = await this.homey.images.createImage();
+    this.photoImage.setStream(async (stream) => {
+      if (!this.photo) throw new Error(this.homey.__('errors.photo_failed'));
+      stream.contentType = 'image/jpeg';
+      stream.end(this.photo);
     });
     this.registerCapabilityListener('screenshot_button', translated(() => this.takeScreenshot()));
     await this.setCameraImage('screenshot', this.homey.__('device.screenshot'), this.screenshotImage).catch(this.error);
@@ -131,6 +142,9 @@ class TabletDevice extends Homey.Device {
       type: 'image', title: `${this.homey.__('device.screenshot')} (${this.getName()})`,
     });
     await this.screenshotToken.setValue(this.screenshotImage);
+    this.photoToken = await this.homey.flow.createToken(`photo_${id}`, {
+      type: 'image', title: `${this.homey.__('device.photo')} (${this.getName()})`,
+    });
     this.shellToken = await this.homey.flow.createToken(`shell_output_${id}`, {
       type: 'string', title: `${this.homey.__('device.shell_output')} (${this.getName()})`, value: '',
     });
@@ -391,6 +405,69 @@ class TabletDevice extends Homey.Device {
     this.log(`Screenshot taken (${Math.round(png.length / 1024)} kB)`);
     await this.screenshotImage.update();
     return this.screenshotImage;
+  }
+
+  /**
+   * There is no ADB command that takes a photo. So: open the camera app, press the
+   * shutter with a key event, and fetch the new file from the camera folder.
+   * @param {'back'|'front'} camera
+   */
+  async takePhoto(camera) {
+    const newest = async () => (await this.client.shell(`ls -t ${CAMERA_DIR} 2>/dev/null | head -1`, { purpose: 'photo' })).trim();
+    await this.client.shell(CMD_SCREEN_ON, { purpose: 'photo' });
+    await this.client.shell(CMD_DISMISS_KEYGUARD);
+    const before = await newest();
+    // The facing extras are unofficial; camera apps that don't know them keep their last lens.
+    const front = camera === 'front';
+    const facing = `--ei android.intent.extras.CAMERA_FACING ${front ? 1 : 0} --ei android.intent.extras.LENS_FACING_FRONT ${front ? 1 : 0} `
+      + `--ez android.intent.extra.USE_FRONT_CAMERA ${front}`;
+    const started = await this.client.shell(`am start -a android.media.action.STILL_IMAGE_CAMERA ${facing} 2>&1`);
+    await delay(2500); // camera needs a moment before it accepts the shutter
+
+    let name = null;
+    const keys = [...SHUTTER_KEYS].sort((a, b) => (b === this.shutterKey) - (a === this.shutterKey));
+    for (const key of keys) {
+      await this.client.shell(`input keyevent ${key}`);
+      for (let i = 0; i < 8 && !name; i++) {
+        await delay(500);
+        const now = await newest();
+        if (now && now !== before) name = now;
+      }
+      this.log(`Photo: shutter ${key} -> ${name || 'no new file'}`);
+      if (name) {
+        this.shutterKey = key;
+        break;
+      }
+    }
+    try {
+      if (!name || !/^[\w.\- ()]+\.jpe?g$/i.test(name)) {
+        this.error(`Photo failed. Camera start: ${JSON.stringify(started)}, newest file: ${JSON.stringify(name)}`);
+        throw new Error(this.homey.__('errors.photo_failed'));
+      }
+      // Wait until the camera app finished writing the file.
+      const file = quote(`${CAMERA_DIR}/${name}`);
+      let size = -1;
+      for (let i = 0; i < 10; i++) {
+        const now = Number((await this.client.shell(`stat -c %s ${file} 2>/dev/null`)).trim());
+        if (now > 0 && now === size) break;
+        size = now;
+        await delay(400);
+      }
+      const jpeg = await this.client.exec(`cat ${file}`, { timeout: 60000, purpose: 'photo' });
+      if (jpeg.length < 1000 || jpeg[0] !== 0xff || jpeg[1] !== 0xd8) throw new Error(this.homey.__('errors.photo_failed'));
+      this.photo = jpeg;
+      this.log(`Photo taken: ${name} (${Math.round(jpeg.length / 1024)} kB)`);
+    } finally {
+      await this.client.shell('input keyevent KEYCODE_BACK').catch(this.error); // leave the camera app
+      this.pollSoon();
+    }
+    if (!this.photoShown) {
+      await this.setCameraImage('photo', this.homey.__('device.photo'), this.photoImage).catch(this.error);
+      await this.photoToken.setValue(this.photoImage);
+      this.photoShown = true;
+    }
+    await this.photoImage.update();
+    return this.photoImage;
   }
 
   /** Wakes the screen, dismisses a swipe lock and opens a link or an app. */
@@ -782,7 +859,7 @@ class TabletDevice extends Homey.Device {
   }
 
   async onUninit() {
-    for (const token of [this.screenshotToken, this.shellToken]) {
+    for (const token of [this.screenshotToken, this.photoToken, this.shellToken]) {
       if (token) await this.homey.flow.unregisterToken(token).catch(this.error);
     }
     this.homey.clearTimeout(this.pollTimer);
