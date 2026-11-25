@@ -8,7 +8,8 @@ const { appName } = require('../../lib/AppNames');
 const CAPABILITIES = ['onoff', 'dim', 'volume_set', 'measure_battery', 'battery_charging_state', 'measure_temperature',
   'bluetooth_enabled', 'auto_rotate', 'dnd_mode', 'wifi_network', 'measure_signal_strength', 'foreground_app',
   'screen_timeout', 'stay_awake', 'storage_free',
-  'speaker_playing', 'speaker_prev', 'speaker_next', 'speaker_track', 'speaker_artist', 'speaker_album'];
+  'speaker_playing', 'speaker_prev', 'speaker_next', 'speaker_track', 'speaker_artist', 'speaker_album',
+  'screenshot_button'];
 const VOLUME_STREAMS = { ring: 2, alarm: 4, notification: 5 }; // AudioManager.STREAM_*
 const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
 const DND_MODES = { 0: 'off', 1: 'priority', 2: 'none', 3: 'alarms' }; // settings global zen_mode
@@ -115,9 +116,13 @@ class TabletDevice extends Homey.Device {
 
     // One image per device: shown on the device in Homey and returned by the screenshot card.
     this.screenshotImage = await this.homey.images.createImage();
+    // Every time Homey loads the image (also "refresh" in the app) it is a new
+    // screenshot, except right after takeScreenshot(), which just made one.
     this.screenshotImage.setStream(async (stream) => {
-      stream.end(this.screenshot || await this.captureScreen());
+      const fresh = this.screenshot && Date.now() - this.screenshotTime < 5000;
+      stream.end(fresh ? this.screenshot : await this.captureScreen());
     });
+    this.registerCapabilityListener('screenshot_button', translated(() => this.takeScreenshot()));
     await this.setCameraImage('screenshot', this.homey.__('device.screenshot'), this.screenshotImage).catch(this.error);
 
     // Tags usable in every Flow (cards that return their own tag only show in Advanced Flow).
@@ -376,6 +381,7 @@ class TabletDevice extends Homey.Device {
       throw new Error(this.homey.__('errors.screenshot_failed'));
     }
     this.screenshot = png;
+    this.screenshotTime = Date.now();
     return png;
   }
 

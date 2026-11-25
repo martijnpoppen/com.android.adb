@@ -291,6 +291,11 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   const image = await device.takeScreenshot(); const chunks = []; await image.fn({ end: (b) => chunks.push(b) });
   console.log('23. screenshot: PNG', chunks[0].subarray(1, 4).toString(), chunks[0].length, 'bytes | image updated', image.updated, '| shown on device as', device.camera.title);
   if (chunks[0].subarray(1, 4).toString() !== 'PNG' || image.updated !== 1 || image !== device.camera.image) throw new Error('screenshot');
+  let captures = 0; const realExec = device.client.exec.bind(device.client); device.client.exec = (...args) => { captures++; return realExec(...args); };
+  await device.listeners.screenshot_button(true); await image.fn({ end() {} }); // button: one capture, the reload right after reuses it
+  const afterButton = captures; device.screenshotTime -= 6000; await image.fn({ end() {} }); // refresh later: a new capture
+  console.log('    button -> captures', afterButton, '| image updated', image.updated, '| refresh later -> captures', captures);
+  if (afterButton !== 1 || image.updated !== 2 || captures !== 2) throw new Error('screenshot button / refresh');
   await device.runShell('settings get global zen_mode');
   console.log('    Flow tags:', Object.values(flowTokens).map((tk) => `${tk.opts.title} [${tk.opts.type}]`).join(', '), '| shell tag =', flowTokens.shell_output_MOCKSERIAL.value);
   if (flowTokens.screenshot_MOCKSERIAL.value !== image || flowTokens.shell_output_MOCKSERIAL.value !== '0') throw new Error('flow tags');

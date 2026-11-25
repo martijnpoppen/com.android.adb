@@ -2881,7 +2881,8 @@
         "speaker_next",
         "speaker_track",
         "speaker_artist",
-        "speaker_album"
+        "speaker_album",
+        "screenshot_button"
       ],
       "capabilitiesOptions": {
         "onoff": {
@@ -3476,6 +3477,28 @@
       "setable": false,
       "uiComponent": "sensor",
       "icon": "/assets/capabilities/screen_timeout.svg"
+    },
+    "screenshot_button": {
+      "type": "boolean",
+      "title": {
+        "en": "Take screenshot",
+        "nl": "Maak een screenshot",
+        "de": "Screenshot aufnehmen",
+        "fr": "Faire une capture d'écran",
+        "it": "Acquisisci screenshot",
+        "sv": "Ta en skärmbild",
+        "no": "Ta skjermbilde",
+        "es": "Hacer captura de pantalla",
+        "da": "Tag screenshot",
+        "ru": "Сделать скриншот",
+        "pl": "Zrób zrzut ekranu",
+        "ko": "스크린샷 찍기",
+        "ar": "أخذ لقطة شاشة"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/capabilities/screenshot_button.svg"
     },
     "stay_awake": {
       "type": "boolean",
