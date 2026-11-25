@@ -444,28 +444,6 @@
             "ar": "input keyevent KEYCODE_HOME"
           }
         }
-      ],
-      "tokens": [
-        {
-          "name": "output",
-          "type": "string",
-          "title": {
-            "en": "Output",
-            "nl": "Uitvoer",
-            "de": "Ausgabe",
-            "fr": "Sortie",
-            "it": "Output",
-            "sv": "Utdata",
-            "no": "Utdata",
-            "es": "Salida",
-            "da": "Output",
-            "ru": "Вывод",
-            "pl": "Wynik",
-            "ko": "출력",
-            "ar": "المخرجات"
-          },
-          "example": "volume is 7 in range [0..15]"
-        }
       ]
     },
     {
@@ -1647,28 +1625,7 @@
         "pl": "Ekran musi być włączony, inaczej obraz będzie czarny. Aplikacje blokujące zrzuty ekranu (bankowe, niektóre aplikacje wideo) też będą czarne.",
         "ko": "화면이 켜져 있어야 합니다. 그렇지 않으면 사진이 검게 나옵니다. 스크린샷을 차단하는 앱(은행 앱, 일부 동영상 앱)도 검게 나옵니다.",
         "ar": "يجب أن تكون الشاشة مضاءة، وإلا ستظهر الصورة سوداء. التطبيقات التي تمنع لقطات الشاشة (التطبيقات المصرفية وبعض تطبيقات الفيديو) تظهر سوداء أيضًا."
-      },
-      "tokens": [
-        {
-          "name": "screenshot",
-          "type": "image",
-          "title": {
-            "en": "Screenshot",
-            "nl": "Screenshot",
-            "de": "Screenshot",
-            "fr": "Capture d'écran",
-            "it": "Screenshot",
-            "sv": "Skärmbild",
-            "no": "Skjermbilde",
-            "es": "Captura de pantalla",
-            "da": "Screenshot",
-            "ru": "Скриншот",
-            "pl": "Zrzut ekranu",
-            "ko": "스크린샷",
-            "ar": "لقطة الشاشة"
-          }
-        }
-      ]
+      }
     },
     {
       "id": "show_url",

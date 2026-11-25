@@ -1,7 +1,8 @@
 {
   "device": {
     "default_name": "Android-enhet",
-    "screenshot": "Skjermbilde"
+    "screenshot": "Skjermbilde",
+    "shell_output": "Utdata"
   },
   "errors": {
     "enter_host": "Skriv inn IP-adressen til enheten",

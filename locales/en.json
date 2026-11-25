@@ -1,7 +1,8 @@
 {
   "device": {
     "default_name": "Android device",
-    "screenshot": "Screenshot"
+    "screenshot": "Screenshot",
+    "shell_output": "Output"
   },
   "errors": {
     "enter_host": "Enter the IP address of the device",

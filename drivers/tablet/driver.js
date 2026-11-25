@@ -32,7 +32,7 @@ class TabletDriver extends Homey.Driver {
     };
     const appSearch = async (query, args) => args.device.listApps(query);
 
-    action('run_shell_command', async ({ device, command }) => ({ output: await device.runShell(command) }));
+    action('run_shell_command', async ({ device, command }) => { await device.runShell(command); });
     action('open_url', async ({ device, url }) => device.openUrl(url));
     action('press_key', async ({ device, key }) => device.pressKey(key));
     action('type_text', async ({ device, text }) => device.typeText(text));
@@ -41,7 +41,7 @@ class TabletDriver extends Homey.Driver {
     action('launch_app', async ({ device, app }) => device.launchApp(app.id))
       .registerArgumentAutocompleteListener('app', appSearch);
 
-    action('take_screenshot', async ({ device }) => ({ screenshot: await device.takeScreenshot() }));
+    action('take_screenshot', async ({ device }) => { await device.takeScreenshot(); });
     action('show_url', async ({ device, url }) => device.showOnScreen({ url }));
     action('show_app', async ({ device, app }) => device.showOnScreen({ app: app.id }))
       .registerArgumentAutocompleteListener('app', appSearch);

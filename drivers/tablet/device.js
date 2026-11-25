@@ -120,6 +120,16 @@ class TabletDevice extends Homey.Device {
     });
     await this.setCameraImage('screenshot', this.homey.__('device.screenshot'), this.screenshotImage).catch(this.error);
 
+    // Tags usable in every Flow (cards that return their own tag only show in Advanced Flow).
+    const id = this.getData().id;
+    this.screenshotToken = await this.homey.flow.createToken(`screenshot_${id}`, {
+      type: 'image', title: `${this.homey.__('device.screenshot')} (${this.getName()})`,
+    });
+    await this.screenshotToken.setValue(this.screenshotImage);
+    this.shellToken = await this.homey.flow.createToken(`shell_output_${id}`, {
+      type: 'string', title: `${this.homey.__('device.shell_output')} (${this.getName()})`, value: '',
+    });
+
     this.poll().catch(this.error);
   }
 
@@ -556,6 +566,7 @@ class TabletDevice extends Homey.Device {
   async runShell(command) {
     const output = await this.client.shell(command);
     this.log(`Shell: ${command} -> ${JSON.stringify(output.length > 2000 ? `${output.slice(0, 2000)}...` : output)}`);
+    await this.shellToken.setValue(output).catch(this.error);
     return output;
   }
 
@@ -765,6 +776,9 @@ class TabletDevice extends Homey.Device {
   }
 
   async onUninit() {
+    for (const token of [this.screenshotToken, this.shellToken]) {
+      if (token) await this.homey.flow.unregisterToken(token).catch(this.error);
+    }
     this.homey.clearTimeout(this.pollTimer);
     if (this.client) await this.client.disconnect();
   }

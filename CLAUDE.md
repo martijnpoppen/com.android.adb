@@ -109,7 +109,11 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
   - Triggers `foreground_app_changed` (tokens name, package) and `wifi_network_changed`; not
     fired on the first state reading (`stateSeen` / `foregroundPackage`).
   - `take_screenshot`: `screencap -p` through `AdbClient.exec()` (raw bytes), one Homey Image
-    per device (`setCameraImage`, also the card's image token). Screen must be on.
+    per device (`setCameraImage`). Screen must be on.
+  - Action cards must NOT declare `tokens`: Homey then only shows them in Advanced Flow (the
+    user couldn't find the screenshot card). Results go into global Flow tags per device
+    instead (`homey.flow.createToken`): "Screenshot (<device>)" (image) and "Output
+    (<device>)" (string, from Run ADB shell command). Titles use the name at app start.
   - `show_url` / `show_app`: wake, `wm dismiss-keyguard`, then open. `close_app` = `am
     force-stop`. `tap_screen` / `swipe_screen` = `input tap|swipe`.
   - `set_stream_volume` (ring 2, alarm 4, notification 5): media_session then `cmd audio

@@ -60,7 +60,7 @@ const pairingServer = tls.createServer({ ...deviceTls, requestCert: true, reject
 let wake = 'Asleep'; let vol = 9;
 let bluetooth = 0; let zen = 0; let rotation = 1; let notifications = []; let rebooted = 0; const triggered = [];
 let front = 'com.spotify.music'; let playing = true; let wifiName = 'Home Wi-Fi'; const ran = []; const otherVolumes = { 2: 5, 4: 7, 5: 5 };
-const triggerTokens = {};
+const triggerTokens = {}; const flowTokens = {};
 // A 1x1 PNG, as 'screencap -p' output.
 const SCREEN_PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg' + 'A'.repeat(120) + '==', 'base64');
 let brightRaw = 2048; let BRIGHT_MAX = 8191; // raw brightness scale of the OnePlus 9
@@ -180,13 +180,14 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
     getAvailable() { return this.available; } async setAvailable() { this.available = true; }
     async setUnavailable(m) { this.available = false; this.reason = m; }
     async setCameraImage(id, title, image) { this.camera = { id, title, image }; }
+    getName() { return 'OnePlus 9'; }
   }
   Module._load = (req, ...rest) => (req === 'homey' ? { Driver: Base, Device, App: Base } : origLoad(req, ...rest));
   const timers = { setInterval: () => 0, clearInterval() {}, setTimeout: () => 0, clearTimeout() {} };
   // Like homey.__(): key path into /locales/en.json, __token__ replaced.
   const en = require('../locales/en.json');
   const __ = (key, tokens = {}) => key.split('.').reduce((o, k) => o[k], en).replace(/__(\w+)__/g, (m, k) => tokens[k]);
-  const homey2 = { ...homey, ...timers, __, images: { createImage: async () => ({ setStream(fn) { this.fn = fn; }, async update() { this.updated = (this.updated || 0) + 1; } }) }, flow: { getActionCard: () => card(), getConditionCard: () => card(), getDeviceTriggerCard: (id) => ({ trigger: async (dev, tokens) => { triggered.push(id); triggerTokens[id] = tokens; } }) } };
+  const homey2 = { ...homey, ...timers, __, images: { createImage: async () => ({ setStream(fn) { this.fn = fn; }, async update() { this.updated = (this.updated || 0) + 1; } }) }, flow: { getActionCard: () => card(), getConditionCard: () => card(), createToken: async (id, opts) => { const token = { id, opts, async setValue(v) { this.value = v; } }; flowTokens[id] = token; return token; }, unregisterToken: async (token) => { delete flowTokens[token.id]; }, getDeviceTriggerCard: (id) => ({ trigger: async (dev, tokens) => { triggered.push(id); triggerTokens[id] = tokens; } }) } };
   function card() { const c = { registerRunListener() { return c; }, registerArgumentAutocompleteListener() { return c; } }; return c; }
   settings.clear(); pairedModuli.clear();
   const driver = new (require('../drivers/tablet/driver.js'))(); driver.homey = homey2;
@@ -290,6 +291,9 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   const image = await device.takeScreenshot(); const chunks = []; await image.fn({ end: (b) => chunks.push(b) });
   console.log('23. screenshot: PNG', chunks[0].subarray(1, 4).toString(), chunks[0].length, 'bytes | image updated', image.updated, '| shown on device as', device.camera.title);
   if (chunks[0].subarray(1, 4).toString() !== 'PNG' || image.updated !== 1 || image !== device.camera.image) throw new Error('screenshot');
+  await device.runShell('settings get global zen_mode');
+  console.log('    Flow tags:', Object.values(flowTokens).map((tk) => `${tk.opts.title} [${tk.opts.type}]`).join(', '), '| shell tag =', flowTokens.shell_output_MOCKSERIAL.value);
+  if (flowTokens.screenshot_MOCKSERIAL.value !== image || flowTokens.shell_output_MOCKSERIAL.value !== '0') throw new Error('flow tags');
   wake = 'Asleep'; await device.showOnScreen({ url: 'my.homey.app' });
   await device.closeApp('com.netflix.mediaclient'); await device.touch(540, 1200); await device.touch(540, 1800, 540, 600);
   await device.setStreamVolume('alarm', 100);
