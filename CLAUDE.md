@@ -103,8 +103,8 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
   Flow cards open app, open link, press button, type text, keep screen on while charging,
   screen timeout, is charging, app is open on screen.
 - Only tested against the mock, NOT on a real device: mDNS port following, repair flow,
-  state checks with keep-alive on, and everything below.
-- Added (mock only): Bluetooth on/off (`cmd bluetooth_manager enable|disable`, fallback
+  state checks with keep-alive on.
+- Added (user: "works" on the OnePlus 9, no per-card detail given): Bluetooth on/off (`cmd bluetooth_manager enable|disable`, fallback
   `svc bluetooth`; verified via `settings get global bluetooth_on`), condition + triggers
   "Bluetooth turned on/off" (not fired on the first reading after start); restart via adbd's
   `reboot:` service (Tango `adb.power.reboot()`, 10 s limit, the phone just drops the
@@ -113,13 +113,12 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
   auto-rotate via `settings put system accelerometer_rotation`; notification via `cmd
   notification post -S bigtext -t <title> <tag> <text>` (appears as the Shell app, unique tag
   so they stack); battery temperature (`measure_temperature`) from `dumpsys battery`.
-- Sensor tab (mock only): custom capabilities in `.homeycompose/capabilities/` (sensor UI,
+- Sensor tab (user: "works perfect" on the OnePlus 9, incl. Wi-Fi): custom capabilities in `.homeycompose/capabilities/` (sensor UI,
   icons in `assets/capabilities/`, Bootstrap Icons): `bluetooth_enabled`, `auto_rotate`,
   `dnd_mode` (translated text from `locales` `dnd.*`), `wifi_network`, `foreground_app`, plus
   the system `measure_signal_strength` (Wi-Fi RSSI, dBm). All read in the one state command.
   Wi-Fi comes from `cmd wifi status | grep SSID:` (fallback `dumpsys wifi | grep mWifiInfo`);
-  the real output format on the OnePlus is NOT confirmed (unparsed lines are logged as
-  "Could not read Wi-Fi from"). The mock's state branches must be guarded with `single`,
+  unparsed lines are logged as "Could not read Wi-Fi from". The mock's state branches must be guarded with `single`,
   because the combined state command contains the same words as the single commands.
 - Not possible / left out on purpose: Wi-Fi off and airplane mode (would cut Homey's own
   connection), hardware sensors like light/proximity (Android only reports them to an app that
