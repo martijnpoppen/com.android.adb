@@ -1911,7 +1911,13 @@
         "volume_set",
         "measure_battery",
         "battery_charging_state",
-        "measure_temperature"
+        "measure_temperature",
+        "bluetooth_enabled",
+        "auto_rotate",
+        "dnd_mode",
+        "wifi_network",
+        "measure_signal_strength",
+        "foreground_app"
       ],
       "capabilitiesOptions": {
         "onoff": {
@@ -2010,6 +2016,23 @@
             "pl": "Temperatura baterii",
             "ko": "배터리 온도",
             "ar": "درجة حرارة البطارية"
+          }
+        },
+        "measure_signal_strength": {
+          "title": {
+            "en": "Wi-Fi signal",
+            "nl": "Wifi-signaal",
+            "de": "WLAN-Signal",
+            "fr": "Signal Wi-Fi",
+            "it": "Segnale Wi-Fi",
+            "sv": "Wi-Fi-signal",
+            "no": "Wi-Fi-signal",
+            "es": "Señal Wi-Fi",
+            "da": "Wi-Fi-signal",
+            "ru": "Сигнал Wi-Fi",
+            "pl": "Sygnał Wi-Fi",
+            "ko": "Wi-Fi 신호",
+            "ar": "إشارة Wi-Fi"
           }
         }
       },
@@ -2363,6 +2386,118 @@
       ]
     }
   ],
+  "capabilities": {
+    "auto_rotate": {
+      "type": "boolean",
+      "title": {
+        "en": "Auto-rotate",
+        "nl": "Automatisch draaien",
+        "de": "Automatisch drehen",
+        "fr": "Rotation automatique",
+        "it": "Rotazione automatica",
+        "sv": "Automatisk rotation",
+        "no": "Automatisk rotering",
+        "es": "Giro automático",
+        "da": "Automatisk rotation",
+        "ru": "Автоповорот",
+        "pl": "Autoobracanie",
+        "ko": "자동 회전",
+        "ar": "التدوير التلقائي"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/auto_rotate.svg"
+    },
+    "bluetooth_enabled": {
+      "type": "boolean",
+      "title": {
+        "en": "Bluetooth",
+        "nl": "Bluetooth",
+        "de": "Bluetooth",
+        "fr": "Bluetooth",
+        "it": "Bluetooth",
+        "sv": "Bluetooth",
+        "no": "Bluetooth",
+        "es": "Bluetooth",
+        "da": "Bluetooth",
+        "ru": "Bluetooth",
+        "pl": "Bluetooth",
+        "ko": "Bluetooth",
+        "ar": "Bluetooth"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/bluetooth_enabled.svg"
+    },
+    "dnd_mode": {
+      "type": "string",
+      "title": {
+        "en": "Do Not Disturb",
+        "nl": "Niet storen",
+        "de": "Bitte nicht stören",
+        "fr": "Ne pas déranger",
+        "it": "Non disturbare",
+        "sv": "Stör ej",
+        "no": "Ikke forstyrr",
+        "es": "No molestar",
+        "da": "Forstyr ikke",
+        "ru": "Не беспокоить",
+        "pl": "Nie przeszkadzać",
+        "ko": "방해 금지 모드",
+        "ar": "الرجاء عدم الإزعاج"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/dnd_mode.svg"
+    },
+    "foreground_app": {
+      "type": "string",
+      "title": {
+        "en": "App on screen",
+        "nl": "App op scherm",
+        "de": "App auf dem Bildschirm",
+        "fr": "Appli à l'écran",
+        "it": "App sullo schermo",
+        "sv": "App på skärmen",
+        "no": "App på skjermen",
+        "es": "App en pantalla",
+        "da": "App på skærmen",
+        "ru": "Приложение на экране",
+        "pl": "Aplikacja na ekranie",
+        "ko": "화면의 앱",
+        "ar": "التطبيق على الشاشة"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/foreground_app.svg"
+    },
+    "wifi_network": {
+      "type": "string",
+      "title": {
+        "en": "Wi-Fi network",
+        "nl": "Wifi-netwerk",
+        "de": "WLAN-Netzwerk",
+        "fr": "Réseau Wi-Fi",
+        "it": "Rete Wi-Fi",
+        "sv": "Wi-Fi-nätverk",
+        "no": "Wi-Fi-nettverk",
+        "es": "Red Wi-Fi",
+        "da": "Wi-Fi-netværk",
+        "ru": "Сеть Wi-Fi",
+        "pl": "Sieć Wi-Fi",
+        "ko": "Wi-Fi 네트워크",
+        "ar": "شبكة Wi-Fi"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/wifi_network.svg"
+    }
+  },
   "discovery": {
     "adb-tls": {
       "type": "mdns-sd",

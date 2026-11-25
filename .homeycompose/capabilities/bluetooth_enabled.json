@@ -1,0 +1,22 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Bluetooth",
+    "nl": "Bluetooth",
+    "de": "Bluetooth",
+    "fr": "Bluetooth",
+    "it": "Bluetooth",
+    "sv": "Bluetooth",
+    "no": "Bluetooth",
+    "es": "Bluetooth",
+    "da": "Bluetooth",
+    "ru": "Bluetooth",
+    "pl": "Bluetooth",
+    "ko": "Bluetooth",
+    "ar": "Bluetooth"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/bluetooth_enabled.svg"
+}

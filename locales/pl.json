@@ -75,5 +75,11 @@
     "old_4": "W formularzu wpisz adres IP urządzenia i port <strong>5555</strong>. Pola parowania zostaw puste.",
     "old_5": "Naciśnij <strong>Połącz</strong>, potem zaznacz <strong>Zawsze zezwalaj z tego komputera</strong> i kliknij <strong>Zezwól</strong> na urządzeniu.",
     "old_tip": "Bez przełącznika „ADB przez sieć” port 5555 zamyka się ponownie po restarcie urządzenia i krok z kablem trzeba powtórzyć."
+  },
+  "dnd": {
+    "off": "Wył.",
+    "priority": "Tylko priorytetowe",
+    "alarms": "Tylko alarmy",
+    "none": "Całkowita cisza"
   }
 }

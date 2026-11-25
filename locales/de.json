@@ -75,5 +75,11 @@
     "old_4": "Gib im Formular die IP-Adresse des Geräts und Port <strong>5555</strong> ein. Lass die Kopplungsfelder leer.",
     "old_5": "Tippe auf <strong>Verbinden</strong>, setze dann auf dem Gerät ein Häkchen bei <strong>Von diesem Computer immer zulassen</strong> und tippe auf <strong>Zulassen</strong>.",
     "old_tip": "Ohne Schalter \"ADB über Netzwerk\" wird Port 5555 beim Neustart des Geräts wieder geschlossen und du musst den Schritt mit dem Kabel wiederholen."
+  },
+  "dnd": {
+    "off": "Aus",
+    "priority": "Nur wichtige",
+    "alarms": "Nur Wecker",
+    "none": "Absolute Ruhe"
   }
 }

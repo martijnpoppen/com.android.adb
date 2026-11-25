@@ -1,0 +1,22 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Do Not Disturb",
+    "nl": "Niet storen",
+    "de": "Bitte nicht stören",
+    "fr": "Ne pas déranger",
+    "it": "Non disturbare",
+    "sv": "Stör ej",
+    "no": "Ikke forstyrr",
+    "es": "No molestar",
+    "da": "Forstyr ikke",
+    "ru": "Не беспокоить",
+    "pl": "Nie przeszkadzać",
+    "ko": "방해 금지 모드",
+    "ar": "الرجاء عدم الإزعاج"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/dnd_mode.svg"
+}

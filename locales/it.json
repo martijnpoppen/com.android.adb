@@ -75,5 +75,11 @@
     "old_4": "Nel modulo, inserisci l'indirizzo IP del dispositivo e la porta <strong>5555</strong>. Lascia vuoti i campi di accoppiamento.",
     "old_5": "Premi <strong>Collega</strong>, poi seleziona <strong>Consenti sempre da questo computer</strong> e tocca <strong>Consenti</strong> sul dispositivo.",
     "old_tip": "Senza un interruttore \"ADB tramite rete\", la porta 5555 si richiude quando il dispositivo si riavvia e il passaggio con il cavo va ripetuto."
+  },
+  "dnd": {
+    "off": "Disattivo",
+    "priority": "Solo priorità",
+    "alarms": "Solo sveglie",
+    "none": "Silenzio totale"
   }
 }

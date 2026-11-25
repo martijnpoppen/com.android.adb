@@ -75,5 +75,11 @@
     "old_4": "En el formulario, introduce la dirección IP del dispositivo y el puerto <strong>5555</strong>. Deja vacíos los campos de vinculación.",
     "old_5": "Pulsa <strong>Conectar</strong>, luego marca <strong>Permitir siempre desde este ordenador</strong> y toca <strong>Permitir</strong> en el dispositivo.",
     "old_tip": "Sin un interruptor \"ADB por red\", el puerto 5555 se vuelve a cerrar cuando el dispositivo se reinicia y hay que repetir el paso del cable."
+  },
+  "dnd": {
+    "off": "Desactivado",
+    "priority": "Solo prioritarias",
+    "alarms": "Solo alarmas",
+    "none": "Silencio total"
   }
 }

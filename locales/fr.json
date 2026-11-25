@@ -75,5 +75,11 @@
     "old_4": "Dans le formulaire, saisissez l'adresse IP de l'appareil et le port <strong>5555</strong>. Laissez les champs d'association vides.",
     "old_5": "Appuyez sur <strong>Connecter</strong>, puis cochez <strong>Toujours autoriser à partir de cet ordinateur</strong> et appuyez sur <strong>Autoriser</strong> sur l'appareil.",
     "old_tip": "Sans interrupteur « ADB via le réseau », le port 5555 se referme au redémarrage de l'appareil et l'étape avec le câble doit être refaite."
+  },
+  "dnd": {
+    "off": "Désactivé",
+    "priority": "Prioritaires uniquement",
+    "alarms": "Alarmes uniquement",
+    "none": "Silence total"
   }
 }

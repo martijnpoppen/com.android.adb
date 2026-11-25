@@ -21,7 +21,13 @@
     "volume_set",
     "measure_battery",
     "battery_charging_state",
-    "measure_temperature"
+    "measure_temperature",
+    "bluetooth_enabled",
+    "auto_rotate",
+    "dnd_mode",
+    "wifi_network",
+    "measure_signal_strength",
+    "foreground_app"
   ],
   "capabilitiesOptions": {
     "onoff": {
@@ -120,6 +126,23 @@
         "pl": "Temperatura baterii",
         "ko": "배터리 온도",
         "ar": "درجة حرارة البطارية"
+      }
+    },
+    "measure_signal_strength": {
+      "title": {
+        "en": "Wi-Fi signal",
+        "nl": "Wifi-signaal",
+        "de": "WLAN-Signal",
+        "fr": "Signal Wi-Fi",
+        "it": "Segnale Wi-Fi",
+        "sv": "Wi-Fi-signal",
+        "no": "Wi-Fi-signal",
+        "es": "Señal Wi-Fi",
+        "da": "Wi-Fi-signal",
+        "ru": "Сигнал Wi-Fi",
+        "pl": "Sygnał Wi-Fi",
+        "ko": "Wi-Fi 신호",
+        "ar": "إشارة Wi-Fi"
       }
     }
   },

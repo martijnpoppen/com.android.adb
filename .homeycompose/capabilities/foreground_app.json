@@ -1,0 +1,22 @@
+{
+  "type": "string",
+  "title": {
+    "en": "App on screen",
+    "nl": "App op scherm",
+    "de": "App auf dem Bildschirm",
+    "fr": "Appli à l'écran",
+    "it": "App sullo schermo",
+    "sv": "App på skärmen",
+    "no": "App på skjermen",
+    "es": "App en pantalla",
+    "da": "App på skærmen",
+    "ru": "Приложение на экране",
+    "pl": "Aplikacja na ekranie",
+    "ko": "화면의 앱",
+    "ar": "التطبيق على الشاشة"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/foreground_app.svg"
+}

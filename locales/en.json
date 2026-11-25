@@ -75,5 +75,11 @@
     "old_4": "In the form, enter the IP address of the device and port <strong>5555</strong>. Leave the pairing fields empty.",
     "old_5": "Press <strong>Connect</strong>, then tick <strong>Always allow from this computer</strong> and tap <strong>Allow</strong> on the device.",
     "old_tip": "Without an \"ADB over network\" switch, port 5555 closes again when the device restarts and the cable step has to be repeated."
+  },
+  "dnd": {
+    "off": "Off",
+    "priority": "Priority only",
+    "alarms": "Alarms only",
+    "none": "Total silence"
   }
 }

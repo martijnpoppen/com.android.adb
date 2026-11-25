@@ -4,7 +4,9 @@ const Homey = require('homey');
 const AdbClient = require('../../lib/AdbClient');
 const { localizeError } = require('../../lib/errors');
 
-const CAPABILITIES = ['onoff', 'dim', 'volume_set', 'measure_battery', 'battery_charging_state', 'measure_temperature'];
+const CAPABILITIES = ['onoff', 'dim', 'volume_set', 'measure_battery', 'battery_charging_state', 'measure_temperature',
+  'bluetooth_enabled', 'auto_rotate', 'dnd_mode', 'wifi_network', 'measure_signal_strength', 'foreground_app'];
+const DND_MODES = { 0: 'off', 1: 'priority', 2: 'none', 3: 'alarms' }; // settings global zen_mode
 
 const CMD_SCREEN_ON = 'input keyevent KEYCODE_WAKEUP';
 const CMD_SCREEN_OFF = 'input keyevent KEYCODE_SLEEP';
@@ -31,10 +33,21 @@ const CMD_STATE = [
   'dumpsys power | grep mWakefulness=',
   "dumpsys battery | grep -E 'level:|status:|powered:|temperature:'",
   'echo bluetooth=$(settings get global bluetooth_on)',
+  'echo rotation=$(settings get system accelerometer_rotation)',
+  'echo zen=$(settings get global zen_mode)',
+  // e.g. 'WifiInfo: SSID: "Home", BSSID: ..., RSSI: -55, ...'. 'cmd wifi' is Android 11+.
+  "echo wifi=$(cmd wifi status 2>/dev/null | grep -m1 'SSID:' || dumpsys wifi | grep -m1 'mWifiInfo')",
+  "dumpsys window | grep -E 'mCurrentFocus|mFocusedApp'",
   'echo brightness_float=$(settings get system screen_brightness_float 2>/dev/null)',
   'echo brightness_raw=$(settings get system screen_brightness)',
   CMD_VOLUME,
 ].join('; ');
+
+/** Package name of the app in front, from 'dumpsys window' focus lines. */
+function parseForegroundApp(output) {
+  const match = output.match(/mCurrentFocus=.*?\s([\w.]+)\/[^\s}]*/) || output.match(/mFocusedApp=.*?\s([\w.]+)\/[^\s}]*/);
+  return match ? match[1] : null;
+}
 
 /** Quotes a value for use as a single shell argument on the device. */
 function quote(value) {
@@ -329,6 +342,7 @@ class TabletDevice extends Homey.Device {
   async updateBluetooth(on) {
     const before = this.bluetoothOn;
     this.bluetoothOn = on;
+    await this.setValue('bluetooth_enabled', on);
     // Not on the first reading after start: that is no change.
     if (before === undefined || before === null || before === on) return;
     this.log(`Bluetooth turned ${on ? 'on' : 'off'}`);
@@ -345,12 +359,14 @@ class TabletDevice extends Homey.Device {
     const now = (await this.client.shell('settings get global zen_mode')).trim();
     this.log(`Do Not Disturb ${mode}: ${JSON.stringify(output)} -> zen_mode ${now}`);
     if (now !== ZEN[mode]) throw new Error(this.homey.__('errors.dnd_failed'));
+    await this.setValue('dnd_mode', this.homey.__(`dnd.${mode}`));
   }
 
   /** @param {boolean} on */
   async setAutoRotate(on) {
     await this.client.shell(`settings put system accelerometer_rotation ${on ? 1 : 0}`);
     this.log(`Auto-rotate ${on ? 'on' : 'off'}`);
+    await this.setValue('auto_rotate', on);
   }
 
   /** Posts a notification from the Shell app. Each gets its own tag, so they stack. */
@@ -401,9 +417,9 @@ class TabletDevice extends Homey.Device {
   }
 
   async getForegroundApp() {
-    const output = await this.client.shell("dumpsys window | grep -E 'mCurrentFocus|mFocusedApp'");
-    const match = output.match(/mCurrentFocus=.*?\s([\w.]+)\/[^\s}]*/) || output.match(/mFocusedApp=.*?\s([\w.]+)\/[^\s}]*/);
-    return match ? match[1] : null;
+    const app = parseForegroundApp(await this.client.shell("dumpsys window | grep -E 'mCurrentFocus|mFocusedApp'"));
+    if (app) await this.setValue('foreground_app', app);
+    return app;
   }
 
   async runShell(command) {
@@ -558,6 +574,22 @@ class TabletDevice extends Homey.Device {
 
     const bluetooth = output.match(/^bluetooth=(\d)/m);
     if (bluetooth) await this.updateBluetooth(bluetooth[1] === '1');
+
+    const rotation = output.match(/^rotation=(\d)/m);
+    if (rotation) await this.setValue('auto_rotate', rotation[1] === '1');
+    const zen = output.match(/^zen=(\d)/m);
+    if (zen && DND_MODES[zen[1]]) await this.setValue('dnd_mode', this.homey.__(`dnd.${DND_MODES[zen[1]]}`));
+
+    // Wi-Fi the device is on. Android reports "<unknown ssid>" when it won't tell.
+    const wifi = (output.match(/^wifi=(.*)$/m) || [])[1] || '';
+    const ssid = wifi.match(/SSID: "([^"]*)"/);
+    const rssi = wifi.match(/RSSI: (-?\d+)/);
+    if (ssid) await this.setValue('wifi_network', ssid[1]);
+    if (rssi && Number(rssi[1]) < 0 && Number(rssi[1]) > -127) await this.setValue('measure_signal_strength', Number(rssi[1]));
+    if (!ssid && !rssi) this.logUnparsed('Wi-Fi', wifi);
+
+    const app = parseForegroundApp(output);
+    if (app) await this.setValue('foreground_app', app);
 
     // Media volume, e.g. "volume is 7 in range [0..15]"
     const volume = output.match(/volume is (\d+) in range \[(\d+)\.\.(\d+)\]/);

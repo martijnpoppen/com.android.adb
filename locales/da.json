@@ -75,5 +75,11 @@
     "old_4": "Udfyld enhedens IP-adresse og port <strong>5555</strong> i formularen. Lad parringsfelterne være tomme.",
     "old_5": "Tryk på <strong>Forbind</strong>, sæt derefter flueben ved <strong>Tillad altid fra denne computer</strong>, og tryk på <strong>Tillad</strong> på enheden.",
     "old_tip": "Uden en kontakt til \"ADB via netværk\" lukker port 5555 igen, når enheden genstarter, og trinnet med kablet skal gentages."
+  },
+  "dnd": {
+    "off": "Fra",
+    "priority": "Kun prioritet",
+    "alarms": "Kun alarmer",
+    "none": "Total stilhed"
   }
 }

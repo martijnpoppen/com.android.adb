@@ -75,5 +75,11 @@
     "old_4": "Fyll inn IP-adressen til enheten og port <strong>5555</strong> i skjemaet. La tilkoblingsfeltene stå tomme.",
     "old_5": "Trykk på <strong>Koble til</strong>, huk deretter av for <strong>Tillat alltid fra denne datamaskinen</strong> og trykk på <strong>Tillat</strong> på enheten.",
     "old_tip": "Uten en bryter for «ADB over nettverk» lukkes port 5555 igjen når enheten startes på nytt, og kabeltrinnet må gjentas."
+  },
+  "dnd": {
+    "off": "Av",
+    "priority": "Bare prioritet",
+    "alarms": "Bare alarmer",
+    "none": "Total stillhet"
   }
 }

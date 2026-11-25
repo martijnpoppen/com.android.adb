@@ -75,5 +75,11 @@
     "old_4": "Fyll i enhetens IP-adress och port <strong>5555</strong> i formuläret. Lämna kopplingsfälten tomma.",
     "old_5": "Tryck på <strong>Anslut</strong>, markera sedan <strong>Tillåt alltid från den här datorn</strong> och tryck på <strong>Tillåt</strong> på enheten.",
     "old_tip": "Utan reglaget ”ADB via nätverk” stängs port 5555 igen när enheten startas om, och kabelsteget måste upprepas."
+  },
+  "dnd": {
+    "off": "Av",
+    "priority": "Endast prioriterade",
+    "alarms": "Endast alarm",
+    "none": "Helt tyst"
   }
 }

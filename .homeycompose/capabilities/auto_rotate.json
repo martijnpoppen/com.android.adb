@@ -1,0 +1,22 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Auto-rotate",
+    "nl": "Automatisch draaien",
+    "de": "Automatisch drehen",
+    "fr": "Rotation automatique",
+    "it": "Rotazione automatica",
+    "sv": "Automatisk rotation",
+    "no": "Automatisk rotering",
+    "es": "Giro automático",
+    "da": "Automatisk rotation",
+    "ru": "Автоповорот",
+    "pl": "Autoobracanie",
+    "ko": "자동 회전",
+    "ar": "التدوير التلقائي"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/auto_rotate.svg"
+}

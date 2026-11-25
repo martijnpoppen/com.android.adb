@@ -92,9 +92,9 @@ const adbd = net.createServer((plain) => {
         const single = !svc.includes('mWakefulness');
         if (single && svc.includes('cmd bluetooth_manager ')) bluetooth = svc.includes('enable') ? 1 : 0;
         else if (single && svc.includes('settings get global bluetooth_on')) out = `${bluetooth}\n`;
-        else if (svc.includes('cmd notification set_dnd ')) zen = { off: 0, priority: 1, none: 2, alarms: 3 }[svc.match(/set_dnd (\w+)/)[1]];
-        else if (svc.includes('settings get global zen_mode')) out = `${zen}\n`;
-        else if (svc.includes('accelerometer_rotation')) rotation = Number(svc.match(/accelerometer_rotation (\d)/)[1]);
+        else if (single && svc.includes('cmd notification set_dnd ')) zen = { off: 0, priority: 1, none: 2, alarms: 3 }[svc.match(/set_dnd (\w+)/)[1]];
+        else if (single && svc.includes('settings get global zen_mode')) out = `${zen}\n`;
+        else if (single && svc.includes('put system accelerometer_rotation')) rotation = Number(svc.match(/accelerometer_rotation (\d)/)[1]);
         else if (svc.includes('cmd notification post')) { notifications.push(svc); out = 'Notification posted\n'; }
         else if (svc.includes('KEYCODE_WAKEUP')) wake = 'Awake';
         else if (svc.includes('KEYCODE_SLEEP')) wake = 'Asleep';
@@ -111,7 +111,7 @@ const adbd = net.createServer((plain) => {
           vol += (svc.match(/KEYCODE_VOLUME_UP/g) || []).length - (svc.match(/KEYCODE_VOLUME_DOWN/g) || []).length;
           vol = Math.max(0, Math.min(30, vol));
         } else if (svc.includes('media_session volume --stream 3 --get') && !svc.includes('mWakefulness')) out = `[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
-        else if (svc.includes('mWakefulness')) out = `  mWakefulness=${wake}\n  AC powered: true\n  USB powered: false\n  status: 2\n  level: 87\n  temperature: 312\nbluetooth=${bluetooth}\nbrightness_float=${Math.min(1, brightRaw / BRIGHT_MAX).toFixed(4)}\nbrightness_raw=${brightRaw}\n[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
+        else if (svc.includes('mWakefulness')) out = `  mWakefulness=${wake}\n  AC powered: true\n  USB powered: false\n  status: 2\n  level: 87\n  temperature: 312\nbluetooth=${bluetooth}\nrotation=${rotation}\nzen=${zen}\nwifi=WifiInfo: SSID: "Home Wi-Fi", BSSID: 02:00:00:00:00:00, MAC: 02:00:00:00:00:00, RSSI: -55, Link speed: 866Mbps\n  mCurrentFocus=Window{a1b2 u0 com.spotify.music/com.spotify.music.MainActivity}\nbrightness_float=${Math.min(1, brightRaw / BRIGHT_MAX).toFixed(4)}\nbrightness_raw=${brightRaw}\n[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
         else if (svc.includes('pm list packages -3')) out = 'package:com.spotify.music\n';
         else if (svc.includes('pm list packages')) out = 'package:com.android.chrome\npackage:com.spotify.music\npackage:com.android.settings\n';
         else if (svc.includes('dumpsys window')) out = '  mCurrentFocus=Window{a1b2 u0 com.spotify.music/com.spotify.music.MainActivity}\n';
@@ -261,6 +261,10 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   await device.showNotification("Door'bell", 'Someone is at the door; rm -rf /');
   console.log('    dnd alarms -> zen', zenAlarms, '| dnd off -> zen', zen, '| rotation', rotation, '| notification:', notifications[0].replace(/^exec:/, ''));
   if (zenAlarms !== 3 || zen !== 0 || rotation !== 0 || !notifications[0].includes("'Door'\\''bell'") || !notifications[0].includes("'Someone is at the door; rm -rf /'")) throw new Error('dnd / rotate / notification');
+  await device.poll();
+  const sensors = ['bluetooth_enabled', 'auto_rotate', 'dnd_mode', 'wifi_network', 'measure_signal_strength', 'foreground_app'].map((k) => `${k}=${device.caps[k]}`).join(' ');
+  console.log('    sensors:', sensors);
+  if (sensors !== 'bluetooth_enabled=false auto_rotate=false dnd_mode=Off wifi_network=Home Wi-Fi measure_signal_strength=-55 foreground_app=com.spotify.music') throw new Error('sensor values');
   await device.reboot();
   console.log('    restart: device got reboot =', rebooted);
   if (rebooted !== 1) throw new Error('restart');
@@ -282,7 +286,7 @@ function checkTranslations() {
       else Object.keys(node).forEach((k) => walk(node[k], `${where}.${k}`, fn));
     }
   };
-  for (const file of ['.homeycompose/app.json', 'drivers/tablet/driver.compose.json', 'drivers/tablet/driver.flow.compose.json', 'drivers/tablet/driver.settings.compose.json']) {
+  for (const file of [...fs.readdirSync(path.join(root, '.homeycompose/capabilities')).map((f) => `.homeycompose/capabilities/${f}`), '.homeycompose/app.json', 'drivers/tablet/driver.compose.json', 'drivers/tablet/driver.flow.compose.json', 'drivers/tablet/driver.settings.compose.json']) {
     walk(JSON.parse(fs.readFileSync(path.join(root, file))), file, (texts, where) => {
       for (const lang of LANGUAGES) {
         if (typeof texts[lang] !== 'string' || !texts[lang].trim()) problems.push(`${where}: no ${lang}`);

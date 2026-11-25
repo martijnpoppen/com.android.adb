@@ -75,5 +75,11 @@
     "old_4": "Vul in het formulier het IP-adres van het apparaat en poort <strong>5555</strong> in. Laat de koppelvelden leeg.",
     "old_5": "Druk op <strong>Verbinden</strong>, vink dan op het apparaat <strong>Altijd toestaan vanaf deze computer</strong> aan en tik op <strong>Toestaan</strong>.",
     "old_tip": "Zonder schakelaar \"ADB via netwerk\" gaat poort 5555 weer dicht als het apparaat opnieuw opstart en moet je de stap met de kabel herhalen."
+  },
+  "dnd": {
+    "off": "Uit",
+    "priority": "Alleen prioriteit",
+    "alarms": "Alleen wekkers",
+    "none": "Totale stilte"
   }
 }
