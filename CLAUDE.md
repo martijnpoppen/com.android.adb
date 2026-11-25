@@ -122,6 +122,9 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
     Buttons `photo_button_back` / `photo_button_front` on the device do the same. Real OnePlus 9 (com.oplus.camera): the camera opens,
     KEYCODE_CAMERA and VOLUME_DOWN produced no picture; the rest is unconfirmed. Second Image + tag "Photo (<device>)"; loading that image never
     opens the camera.
+  - Triggers `screenshot_taken` / `photo_taken` (image token): fired by `takeScreenshot()` /
+    `takePhoto()` only (button or card), never by an image reload, or a Flow using the image
+    would trigger itself.
   - Action cards must NOT declare `tokens`: Homey then only shows them in Advanced Flow (the
     user couldn't find the screenshot card). Images: `setCameraImage('screenshot'|'photo')`
     already gives an image tag under the DEVICE in every Flow (like a camera's "Snapshot");

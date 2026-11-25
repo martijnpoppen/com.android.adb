@@ -407,6 +407,9 @@ class TabletDevice extends Homey.Device {
     const png = await this.captureScreen();
     this.log(`Screenshot taken (${Math.round(png.length / 1024)} kB)`);
     await this.screenshotImage.update();
+    // Only here (button or Flow card), not when Homey merely reloads the image:
+    // a Flow that uses the image would otherwise trigger itself.
+    await this.fire('screenshot_taken', { image: this.screenshotImage });
     return this.screenshotImage;
   }
 
@@ -479,6 +482,7 @@ class TabletDevice extends Homey.Device {
       this.pollSoon();
     }
     await this.photoImage.update();
+    await this.fire('photo_taken', { image: this.photoImage });
     return this.photoImage;
   }
 

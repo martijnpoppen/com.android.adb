@@ -611,6 +611,98 @@
             "filter": "driver_id=tablet"
           }
         ]
+      },
+      {
+        "id": "screenshot_taken",
+        "title": {
+          "en": "A screenshot was taken",
+          "nl": "Er is een screenshot gemaakt",
+          "de": "Ein Screenshot wurde aufgenommen",
+          "fr": "Une capture d'écran a été prise",
+          "it": "È stato acquisito uno screenshot",
+          "sv": "En skärmbild togs",
+          "no": "Et skjermbilde ble tatt",
+          "es": "Se hizo una captura de pantalla",
+          "da": "Der blev taget et skærmbillede",
+          "ru": "Сделан снимок экрана",
+          "pl": "Zrobiono zrzut ekranu",
+          "ko": "스크린샷이 촬영됨",
+          "ar": "تم التقاط لقطة شاشة"
+        },
+        "tokens": [
+          {
+            "name": "image",
+            "type": "image",
+            "title": {
+              "en": "Screenshot",
+              "nl": "Screenshot",
+              "de": "Screenshot",
+              "fr": "Capture d'écran",
+              "it": "Screenshot",
+              "sv": "Skärmbild",
+              "no": "Skjermbilde",
+              "es": "Captura de pantalla",
+              "da": "Screenshot",
+              "ru": "Скриншот",
+              "pl": "Zrzut ekranu",
+              "ko": "스크린샷",
+              "ar": "لقطة الشاشة"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          }
+        ]
+      },
+      {
+        "id": "photo_taken",
+        "title": {
+          "en": "A photo was taken",
+          "nl": "Er is een foto gemaakt",
+          "de": "Ein Foto wurde aufgenommen",
+          "fr": "Une photo a été prise",
+          "it": "È stata scattata una foto",
+          "sv": "Ett foto togs",
+          "no": "Et bilde ble tatt",
+          "es": "Se hizo una foto",
+          "da": "Der blev taget et billede",
+          "ru": "Сделано фото",
+          "pl": "Zrobiono zdjęcie",
+          "ko": "사진이 촬영됨",
+          "ar": "تم التقاط صورة"
+        },
+        "tokens": [
+          {
+            "name": "image",
+            "type": "image",
+            "title": {
+              "en": "Photo",
+              "nl": "Foto",
+              "de": "Foto",
+              "fr": "Photo",
+              "it": "Foto",
+              "sv": "Foto",
+              "no": "Bilde",
+              "es": "Foto",
+              "da": "Billede",
+              "ru": "Фото",
+              "pl": "Zdjęcie",
+              "ko": "사진",
+              "ar": "صورة"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          }
+        ]
       }
     ],
     "conditions": [

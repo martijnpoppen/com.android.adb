@@ -317,6 +317,9 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   if (photos.length !== 3 || !cameraStart.includes('CAMERA_FACING 0') || cameraStopped !== 2) throw new Error('photo button');
   photos.pop(); cameraStart = frontStart;
   if (photos.length !== 2 || got[0].length !== 2004 || device.shutterMethod !== 'tap' || !cameraStart.includes('CAMERA_FACING 1') || cameraOpen || vol !== volBefore || device.cameras.photo.image !== photo) throw new Error('photo');
+  const imageTriggers = triggered.filter((id) => /_taken$/.test(id)).join(',');
+  console.log('    triggers:', imageTriggers, '| carry the images', triggerTokens.screenshot_taken.image === image, triggerTokens.photo_taken.image === photo);
+  if (imageTriggers !== 'screenshot_taken,screenshot_taken,photo_taken,photo_taken' || triggerTokens.screenshot_taken.image !== image || triggerTokens.photo_taken.image !== photo) throw new Error('taken triggers');
   await device.runShell('settings get global zen_mode');
   console.log('    Flow tags:', Object.values(flowTokens).map((tk) => `${tk.opts.title} [${tk.opts.type}]`).join(', '), '| shell tag =', flowTokens.shell_output_MOCKSERIAL.value);
   if (Object.keys(flowTokens).join() !== 'shell_output_MOCKSERIAL' || flowTokens.shell_output_MOCKSERIAL.value !== '0') throw new Error('flow tags');
