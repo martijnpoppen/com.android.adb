@@ -193,7 +193,7 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
     getCapabilityValue(k) { return this.caps[k]; } hasCapability(k) { return k === 'onoff'; } async addCapability(k) { this.added = (this.added || []).concat(k); } async setCapabilityValue(k, v) { this.caps[k] = v; }
     getAvailable() { return this.available; } async setAvailable() { this.available = true; }
     async setUnavailable(m) { this.available = false; this.reason = m; }
-    async setCameraImage(id, title, image) { this.camera = { id, title, image }; }
+    async setCameraImage(id, title, image) { this.cameras = { ...this.cameras, [id]: { id, title, image } }; }
     getName() { return 'OnePlus 9'; }
   }
   Module._load = (req, ...rest) => (req === 'homey' ? { Driver: Base, Device, App: Base } : origLoad(req, ...rest));
@@ -303,23 +303,23 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   console.log('22. app + Wi-Fi changed -> triggers:', triggered.join(', '), JSON.stringify(triggerTokens.foreground_app_changed), JSON.stringify(triggerTokens.wifi_network_changed));
   if (triggered.sort().join() !== 'foreground_app_changed,wifi_network_changed' || triggerTokens.foreground_app_changed.name !== 'Netflix' || triggerTokens.foreground_app_changed.package !== 'com.netflix.mediaclient' || triggerTokens.wifi_network_changed.network !== 'Guest') throw new Error('change triggers');
   const image = await device.takeScreenshot(); const chunks = []; await image.fn({ end: (b) => chunks.push(b) });
-  console.log('23. screenshot: PNG', chunks[0].subarray(1, 4).toString(), chunks[0].length, 'bytes | image updated', image.updated, '| shown on device as', device.camera.title);
-  if (chunks[0].subarray(1, 4).toString() !== 'PNG' || image.updated !== 1 || image !== device.camera.image) throw new Error('screenshot');
+  console.log('23. screenshot: PNG', chunks[0].subarray(1, 4).toString(), chunks[0].length, 'bytes | image updated', image.updated, '| shown on device as', device.cameras.screenshot.title);
+  if (chunks[0].subarray(1, 4).toString() !== 'PNG' || image.updated !== 1 || image !== device.cameras.screenshot.image) throw new Error('screenshot');
   let captures = 0; const realExec = device.client.exec.bind(device.client); device.client.exec = (...args) => { captures++; return realExec(...args); };
   await device.listeners.screenshot_button(true); await image.fn({ end() {} }); // button: one capture, the reload right after reuses it
   const afterButton = captures; device.screenshotTime -= 6000; await image.fn({ end() {} }); // refresh later: a new capture
   console.log('    button -> captures', afterButton, '| image updated', image.updated, '| refresh later -> captures', captures);
   if (afterButton !== 1 || image.updated !== 2 || captures !== 2) throw new Error('screenshot button / refresh');
   const volBefore = vol; const photo = await device.takePhoto('front'); const got = []; await photo.fn({ end: (b) => got.push(b) });
-  console.log('    photo:', photos[photos.length - 1], got[0].length, 'bytes | shutter', device.shutterMethod, '| front requested', cameraStart.includes('CAMERA_FACING 1'), '| camera closed', !cameraOpen, '| media volume untouched', vol === volBefore, '| tag set', flowTokens.photo_MOCKSERIAL.value === photo, '| camera app force-stopped', cameraStopped);
+  console.log('    photo:', photos[photos.length - 1], got[0].length, 'bytes | shutter', device.shutterMethod, '| front requested', cameraStart.includes('CAMERA_FACING 1'), '| camera closed', !cameraOpen, '| media volume untouched', vol === volBefore, '| device image', device.cameras.photo.image === photo, '| camera app force-stopped', cameraStopped);
   const frontStart = cameraStart; await device.listeners.photo_button_back(true);
   console.log('    back camera button: photos', photos.length, '| back requested', cameraStart.includes('CAMERA_FACING 0'), '| force-stopped', cameraStopped);
   if (photos.length !== 3 || !cameraStart.includes('CAMERA_FACING 0') || cameraStopped !== 2) throw new Error('photo button');
   photos.pop(); cameraStart = frontStart;
-  if (photos.length !== 2 || got[0].length !== 2004 || device.shutterMethod !== 'tap' || !cameraStart.includes('CAMERA_FACING 1') || cameraOpen || vol !== volBefore || flowTokens.photo_MOCKSERIAL.value !== photo || device.camera.id !== 'photo') throw new Error('photo');
+  if (photos.length !== 2 || got[0].length !== 2004 || device.shutterMethod !== 'tap' || !cameraStart.includes('CAMERA_FACING 1') || cameraOpen || vol !== volBefore || device.cameras.photo.image !== photo) throw new Error('photo');
   await device.runShell('settings get global zen_mode');
   console.log('    Flow tags:', Object.values(flowTokens).map((tk) => `${tk.opts.title} [${tk.opts.type}]`).join(', '), '| shell tag =', flowTokens.shell_output_MOCKSERIAL.value);
-  if (flowTokens.screenshot_MOCKSERIAL.value !== image || flowTokens.shell_output_MOCKSERIAL.value !== '0') throw new Error('flow tags');
+  if (Object.keys(flowTokens).join() !== 'shell_output_MOCKSERIAL' || flowTokens.shell_output_MOCKSERIAL.value !== '0') throw new Error('flow tags');
   wake = 'Asleep'; await device.showOnScreen({ url: 'my.homey.app' });
   await device.closeApp('com.netflix.mediaclient'); await device.touch(540, 1200); await device.touch(540, 1800, 540, 600);
   await device.setStreamVolume('alarm', 100);

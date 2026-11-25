@@ -12,6 +12,8 @@ const CAPABILITIES = ['onoff', 'dim', 'volume_set', 'measure_battery', 'battery_
   'screenshot_button', 'photo_button_back', 'photo_button_front'];
 const VOLUME_STREAMS = { ring: 2, alarm: 4, notification: 5 }; // AudioManager.STREAM_*
 const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+// 1x1 transparent PNG, shown as the photo until one is taken.
+const EMPTY_PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==', 'base64');
 // New photos are found as "files newer than a marker file", wherever the camera app saves them.
 const PHOTO_MARKER = '/data/local/tmp/homey_photo_marker';
 const CMD_NEW_PHOTOS = `find /sdcard/DCIM /sdcard/Pictures -type f -newer ${PHOTO_MARKER} 2>/dev/null | head -5`;
@@ -133,24 +135,19 @@ class TabletDevice extends Homey.Device {
     // Photos from the camera: only ever the last one taken (loading never opens the camera).
     this.photoImage = await this.homey.images.createImage();
     this.photoImage.setStream(async (stream) => {
-      if (!this.photo) throw new Error(this.homey.__('errors.photo_failed'));
-      stream.contentType = 'image/jpeg';
-      stream.end(this.photo);
+      stream.contentType = this.photo ? 'image/jpeg' : 'image/png';
+      stream.end(this.photo || EMPTY_PNG); // nothing taken yet since the app started
     });
     this.registerCapabilityListener('screenshot_button', translated(() => this.takeScreenshot()));
     this.registerCapabilityListener('photo_button_back', translated(() => this.takePhoto('back')));
     this.registerCapabilityListener('photo_button_front', translated(() => this.takePhoto('front')));
     await this.setCameraImage('screenshot', this.homey.__('device.screenshot'), this.screenshotImage).catch(this.error);
 
-    // Tags usable in every Flow (cards that return their own tag only show in Advanced Flow).
+    // Homey turns every camera image into an image tag under the device, for all Flows.
+    await this.setCameraImage('photo', this.homey.__('device.photo'), this.photoImage).catch(this.error);
+
+    // Text has no such thing: the shell output is an app-level tag, named after the device.
     const id = this.getData().id;
-    this.screenshotToken = await this.homey.flow.createToken(`screenshot_${id}`, {
-      type: 'image', title: `${this.homey.__('device.screenshot')} (${this.getName()})`,
-    });
-    await this.screenshotToken.setValue(this.screenshotImage);
-    this.photoToken = await this.homey.flow.createToken(`photo_${id}`, {
-      type: 'image', title: `${this.homey.__('device.photo')} (${this.getName()})`,
-    });
     this.shellToken = await this.homey.flow.createToken(`shell_output_${id}`, {
       type: 'string', title: `${this.homey.__('device.shell_output')} (${this.getName()})`, value: '',
     });
@@ -480,11 +477,6 @@ class TabletDevice extends Homey.Device {
         this.log(`Photo: closed ${cameraApp}`);
       }
       this.pollSoon();
-    }
-    if (!this.photoShown) {
-      await this.setCameraImage('photo', this.homey.__('device.photo'), this.photoImage).catch(this.error);
-      await this.photoToken.setValue(this.photoImage);
-      this.photoShown = true;
     }
     await this.photoImage.update();
     return this.photoImage;
@@ -879,7 +871,7 @@ class TabletDevice extends Homey.Device {
   }
 
   async onUninit() {
-    for (const token of [this.screenshotToken, this.photoToken, this.shellToken]) {
+    for (const token of [this.shellToken]) {
       if (token) await this.homey.flow.unregisterToken(token).catch(this.error);
     }
     this.homey.clearTimeout(this.pollTimer);
