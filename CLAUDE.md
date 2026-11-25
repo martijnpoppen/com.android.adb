@@ -112,16 +112,18 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
     per device (`setCameraImage`). Screen must be on. The image stream takes a NEW screenshot
     on every load (refresh in the app), except within 5 s of `takeScreenshot()` (card or the
     `screenshot_button` capability), whose `image.update()` makes Homey reload it.
-  - `take_photo` (mock only; shutter key and lens extras unconfirmed on any real phone): wake,
+  - `take_photo` (user: "photo works" on the OnePlus 9 after volume up + tap were added;
+    which shutter method fires and whether front/back is respected was not reported): wake,
     `am start -a android.media.action.STILL_IMAGE_CAMERA` with unofficial front/back extras,
     `touch` a marker file, then try shutter methods (KEYCODE_CAMERA, VOLUME_DOWN, VOLUME_UP,
     tap at 50% x / 87% y of `wm size`) until `find /sdcard/DCIM /sdcard/Pictures -newer
     <marker>` shows a new .jpg (the working method is remembered), wait for a stable size,
     `cat` it via `exec()`, press BACK, then `am force-stop` the camera app (= the app that
     came to the front after the start, if different from before; the user asked for this).
-    Buttons `photo_button_back` / `photo_button_front` on the device do the same. Real OnePlus 9 (com.oplus.camera): the camera opens,
-    KEYCODE_CAMERA and VOLUME_DOWN produced no picture; the rest is unconfirmed. Second Image + tag "Photo (<device>)"; loading that image never
-    opens the camera.
+    Buttons `photo_button_back` / `photo_button_front` on the device do the same. Real
+    OnePlus 9 (com.oplus.camera): KEYCODE_CAMERA and VOLUME_DOWN produce no picture. Second
+    camera image 'photo' (1x1 placeholder until one is taken); loading it never opens the
+    camera.
   - Triggers `screenshot_taken` / `photo_taken` (image token): fired by `takeScreenshot()` /
     `takePhoto()` only (button or card), never by an image reload, or a Flow using the image
     would trigger itself.
