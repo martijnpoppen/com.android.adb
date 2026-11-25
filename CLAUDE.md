@@ -99,9 +99,16 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
 - Volume: setting it works on the OnePlus (user confirmed); setVolume tries media_session,
   `cmd audio set-volume`, then volume key presses, verified via the AudioService reading,
   and remembers the first that sticks. Which one the OnePlus uses is not logged back yet.
-- Only tested against the mock, NOT on a real device: battery parsing, app list / open app /
-  open URL / type text, foreground-app condition, mDNS port following, repair flow.
+- User reported OK on the OnePlus 9 ("rest is ok"): battery level and charging state, and the
+  Flow cards open app, open link, press button, type text, keep screen on while charging,
+  screen timeout, is charging, app is open on screen.
+- Only tested against the mock, NOT on a real device: mDNS port following, repair flow,
+  state checks with keep-alive on.
 - Per-brand menu paths in the pairing help were written from memory; verify on real devices.
+
+## Git
+
+- Commit straight to `main` (the user's choice).
 
 ## Gotchas
 
