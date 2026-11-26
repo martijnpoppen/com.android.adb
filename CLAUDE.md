@@ -78,6 +78,9 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
 
 ## Status
 
+- Reported working by a community user (Peter_Kawa, forum topic 162642, post 4) on a
+  Samsung Galaxy Tab A9+ and a Galaxy S21+. No detail on which features or One UI version;
+  the Samsung "Auto Blocker" tip in the pairing help is still unconfirmed.
 - Confirmed on a real OnePlus 9 (Android 14, OxygenOS) by the user: pairing with code and
   connecting over Wireless debugging, the two-page pairing view, keep-alive off (connect /
   idle-disconnect logged), state check slowing to 300 s with the screen off on battery,
