@@ -28,5 +28,20 @@
     "pl": "Nowość: zrzuty ekranu i zdjęcia (z wyzwalaczami i tagami obrazu), wyzwalacz przy zmianie aplikacji na ekranie, włączanie ekranu z otwarciem aplikacji lub linku, sterowanie multimediami, Bluetooth, Nie przeszkadzać, autoobracanie, powiadomienia, restart, dotknięcie i przesunięcie, więcej głośności i wartości czujników, czytelne nazwy aplikacji.",
     "ko": "새 기능: 스크린샷과 사진(트리거 및 이미지 태그 포함), 화면의 앱이 바뀔 때 트리거, 화면 켜고 앱 또는 링크 열기, 미디어 제어, 블루투스, 방해 금지, 자동 회전, 알림, 재시작, 탭과 스와이프, 더 많은 볼륨과 센서 값, 읽기 쉬운 앱 이름.",
     "ar": "جديد: لقطات شاشة وصور (مع مشغّلات وعلامات صور)، مشغّل عند تغيّر التطبيق على الشاشة، تشغيل الشاشة وفتح تطبيق أو رابط، التحكم في الوسائط، بلوتوث، عدم الإزعاج، التدوير التلقائي، الإشعارات، إعادة التشغيل، النقر والسحب، مزيد من مستويات الصوت وقيم المستشعرات، أسماء تطبيقات مقروءة."
+  },
+  "1.1.1": {
+    "en": "Take photo: the front and back camera buttons now pick the right camera on devices whose camera app keeps the last used one (e.g. Samsung).",
+    "nl": "Foto maken: de knoppen voor de camera aan de voor- en achterkant kiezen nu de juiste camera op apparaten waarvan de camera-app de laatst gebruikte onthoudt (bijv. Samsung).",
+    "de": "Foto aufnehmen: Die Tasten für Front- und Rückkamera wählen jetzt die richtige Kamera auf Geräten, deren Kamera-App die zuletzt verwendete beibehält (z. B. Samsung).",
+    "fr": "Prendre une photo : les boutons caméra avant et arrière choisissent maintenant la bonne caméra sur les appareils dont l'application photo garde la dernière utilisée (p. ex. Samsung).",
+    "it": "Scatta foto: i pulsanti della fotocamera anteriore e posteriore ora scelgono la fotocamera giusta sui dispositivi la cui app fotocamera mantiene l'ultima usata (ad es. Samsung).",
+    "sv": "Ta foto: knapparna för främre och bakre kameran väljer nu rätt kamera på enheter vars kameraapp behåller den senast använda (t.ex. Samsung).",
+    "no": "Ta bilde: knappene for front- og bakkamera velger nå riktig kamera på enheter der kameraappen beholder det sist brukte (f.eks. Samsung).",
+    "es": "Hacer foto: los botones de cámara frontal y trasera ahora eligen la cámara correcta en dispositivos cuya app de cámara mantiene la última usada (p. ej. Samsung).",
+    "da": "Tag billede: knapperne til front- og bagkamera vælger nu det rigtige kamera på enheder, hvis kamera-app beholder det sidst brugte (f.eks. Samsung).",
+    "ru": "Сделать фото: кнопки фронтальной и основной камеры теперь выбирают нужную камеру на устройствах, где приложение камеры запоминает последнюю использованную (например, Samsung).",
+    "pl": "Zrób zdjęcie: przyciski przedniego i tylnego aparatu wybierają teraz właściwy aparat na urządzeniach, których aplikacja aparatu zapamiętuje ostatnio używany (np. Samsung).",
+    "ko": "사진 촬영: 카메라 앱이 마지막으로 사용한 카메라를 유지하는 기기(예: 삼성)에서도 전면 및 후면 카메라 버튼이 올바른 카메라를 선택합니다.",
+    "ar": "التقاط صورة: زرّا الكاميرا الأمامية والخلفية يختاران الآن الكاميرا الصحيحة على الأجهزة التي يحتفظ تطبيق الكاميرا فيها بآخر كاميرا مستخدمة (مثل سامسونج)."
   }
 }
