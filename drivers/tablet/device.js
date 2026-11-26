@@ -62,6 +62,30 @@ const CMD_STATE = [
   CMD_VOLUME,
 ].join('; ');
 
+// Which camera is in use: the static part lists each camera's facing, the dynamic part which one is open.
+const CMD_OPEN_CAMERA = "dumpsys media.camera | grep -E 'static information|Facing:|is open'";
+
+/**
+ * 'back' or 'front' for the camera that is open, null when none is or it can't be told.
+ * @param {string} output of CMD_OPEN_CAMERA
+ */
+function parseOpenCamera(output) {
+  const facing = {};
+  let id = null;
+  let open = null;
+  for (const line of String(output).split('\n')) {
+    const info = line.match(/([^\s/]+) \(v[\d.]+\) static information/);
+    const face = line.match(/Facing:\s*(Back|Front)/i);
+    const opened = line.match(/Device (\S+) is open/);
+    if (info) [, id] = info;
+    else if (face && id !== null && !facing[id]) facing[id] = face[1].toLowerCase();
+    else if (opened && open === null) [, open] = opened;
+  }
+  if (open === null) return null;
+  // Without the list: ids 0 and 1 are back and front on about every device.
+  return facing[open] || { 0: 'back', 1: 'front' }[open] || null;
+}
+
 /** Package name of the app in front, from 'dumpsys window' focus lines. */
 function parseForegroundApp(output) {
   const match = output.match(/mCurrentFocus=.*?\s([\w.]+)\/[^\s}]*/) || output.match(/mFocusedApp=.*?\s([\w.]+)\/[^\s}]*/);
@@ -424,20 +448,44 @@ class TabletDevice extends Homey.Device {
     await this.client.shell(`touch ${PHOTO_MARKER}`);
     const focus = "dumpsys window | grep -E 'mCurrentFocus|mFocusedApp'";
     const appBefore = parseForegroundApp(await this.client.shell(focus));
-    // The facing extras are unofficial; camera apps that don't know them keep their last lens.
+    // The facing extras are unofficial; camera apps that don't know them (Samsung) keep their last lens.
     const front = camera === 'front';
     const facing = `--ei android.intent.extras.CAMERA_FACING ${front ? 1 : 0} --ei android.intent.extras.LENS_FACING_FRONT ${front ? 1 : 0} `
-      + `--ez android.intent.extra.USE_FRONT_CAMERA ${front}`;
+      + `--ez android.intent.extra.USE_FRONT_CAMERA ${front} --ez com.google.assistant.extra.USE_FRONT_CAMERA ${front}`;
     const started = await this.client.shell(`am start -a android.media.action.STILL_IMAGE_CAMERA ${facing} 2>&1`);
     await delay(3000); // camera needs a moment before it accepts the shutter
     // The app that came to the front is the camera app; it is stopped again afterwards.
     const cameraApp = parseForegroundApp(await this.client.shell(focus));
 
+    let screen; // last 'wm size' line = override, if any
+    const screenSize = async () => {
+      if (screen === undefined) {
+        const size = [...(await this.client.shell('wm size')).matchAll(/(\d+)x(\d+)/g)].pop();
+        screen = size ? { width: Number(size[1]), height: Number(size[2]) } : null;
+      }
+      return screen;
+    };
+    // So check which lens is really open, and switch with a vertical swipe over the preview
+    // (Samsung's "swipe up/down to switch cameras") when it is the wrong one.
+    const openLens = async () => parseOpenCamera(await this.client.shell(CMD_OPEN_CAMERA).catch(() => ''));
+    let lens = await openLens();
+    if (lens && lens !== camera && await screenSize()) {
+      // Positions that are on the screen in portrait and in landscape.
+      const short = Math.min(screen.width, screen.height);
+      const x = Math.round(short / 2);
+      await this.client.shell(`input swipe ${x} ${Math.round(short * 0.35)} ${x} ${Math.round(short * 0.7)} 200`);
+      await delay(2000);
+      const after = await openLens();
+      this.log(`Photo: ${lens} camera was open, swiped to switch -> ${after || 'unknown'}`);
+      lens = after;
+    }
+    this.log(`Photo: ${camera} camera asked, open: ${lens || 'unknown'}`);
+
     const press = async (method) => {
       if (method !== 'tap') return this.client.shell(`input keyevent ${method}`);
-      const size = [...(await this.client.shell('wm size')).matchAll(/(\d+)x(\d+)/g)].pop(); // last = override, if any
+      const size = await screenSize();
       if (!size) return null;
-      return this.client.shell(`input tap ${Math.round(Number(size[1]) / 2)} ${Math.round(Number(size[2]) * 0.87)}`);
+      return this.client.shell(`input tap ${Math.round(size.width / 2)} ${Math.round(size.height * 0.87)}`);
     };
     let found = '';
     let file = null;
