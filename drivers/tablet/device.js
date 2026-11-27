@@ -1,5 +1,8 @@
 'use strict';
 
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 const Homey = require('homey');
 const AdbClient = require('../../lib/AdbClient');
 const { localizeError } = require('../../lib/errors');
@@ -39,7 +42,10 @@ const RETRY_SECONDS = 30;
 
 const CMD_VOLUME = '(cmd media_session volume --stream 3 --get 2>/dev/null || media volume --stream 3 --get 2>/dev/null)';
 const CMD_BRIGHTNESS = 'echo mode=$(settings get system screen_brightness_mode); '
-  + 'echo float=$(settings get system screen_brightness_float); echo raw=$(settings get system screen_brightness)';
+  + 'echo float=$(settings get system screen_brightness_float); echo raw=$(settings get system screen_brightness); '
+  + 'echo brand=$(getprop ro.product.manufacturer); '
+  // What the platform itself calls the top of the raw scale. Only logged, to learn what brands report.
+  + 'echo platform_max=$(cmd overlay lookup android android:integer/config_screenBrightnessSettingMaximum 2>/dev/null)';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -55,6 +61,7 @@ const CMD_STATE = [
   "dumpsys window | grep -E 'mCurrentFocus|mFocusedApp'",
   'echo brightness_float=$(settings get system screen_brightness_float 2>/dev/null)',
   'echo brightness_raw=$(settings get system screen_brightness)',
+  'echo brand=$(getprop ro.product.manufacturer)',
   'echo timeout=$(settings get system screen_off_timeout)',
   'echo stayon=$(settings get global stay_on_while_plugged_in)',
   'echo storage=$(df -k /data | tail -1)',
@@ -157,10 +164,17 @@ class TabletDevice extends Homey.Device {
       stream.end(fresh ? this.screenshot : await this.captureScreen());
     });
     // Photos from the camera: only ever the last one taken (loading never opens the camera).
+    this.photoFile = path.join(fs.existsSync('/userdata') ? '/userdata' : os.tmpdir(), `photo-${String(this.getData().id).replace(/[^\w.-]/g, '_')}.jpg`);
     this.photoImage = await this.homey.images.createImage();
     this.photoImage.setStream(async (stream) => {
-      stream.contentType = this.photo ? 'image/jpeg' : 'image/png';
-      stream.end(this.photo || EMPTY_PNG); // nothing taken yet since the app started
+      // The last photo is kept on disk, not in memory (several MB per device).
+      if (fs.existsSync(this.photoFile)) {
+        stream.contentType = 'image/jpeg';
+        fs.createReadStream(this.photoFile).on('error', (err) => stream.destroy(err)).pipe(stream);
+      } else {
+        stream.contentType = 'image/png';
+        stream.end(EMPTY_PNG); // nothing taken yet
+      }
     });
     this.registerCapabilityListener('screenshot_button', translated(() => this.takeScreenshot()));
     this.registerCapabilityListener('photo_button_back', translated(() => this.takePhoto('back')));
@@ -275,17 +289,36 @@ class TabletDevice extends Homey.Device {
       const match = output.match(new RegExp(`^${key}=([\\d.]+)\\s*$`, 'm'));
       return match ? Number(match[1]) : null;
     };
+    this.noteBrand(output);
+    const platformMax = get('platform_max');
+    if (platformMax !== null && platformMax !== this.platformBrightnessMax) {
+      this.platformBrightnessMax = platformMax;
+      this.log(`Brightness: the platform reports ${platformMax} as the top of the raw scale (${this.brand || 'unknown brand'}), using ${this.rawBrightnessMax()}`);
+    }
     return { mode: get('mode'), float: get('float'), raw: get('raw') };
+  }
+
+  /** Remembers the manufacturer from a 'brand=' line; the raw brightness scale depends on it. */
+  noteBrand(output) {
+    const brand = output.match(/^brand=(.+?)\s*$/m);
+    if (brand) this.brand = brand[1].toLowerCase();
+  }
+
+  /** Samsung: raw brightness is 0..255 and the float setting doesn't follow it, so nothing can be learned. */
+  fixedBrightnessScale() {
+    return this.brand === 'samsung' ? 255 : null;
   }
 
   /**
    * Top of the raw screen_brightness scale: 8191 on the OnePlus 9, 255 on stock
-   * Android. Starts at 8191: guessing from the current raw value got stuck at 255
-   * after a dark setting. Too high is corrected (the float setting saturates);
-   * the learned value is stored. ('brightnessRawMax' from an older build is ignored.)
+   * Android and Samsung. Starts at 8191: guessing from the current raw value got
+   * stuck at 255 after a dark setting. Too high is corrected (the float setting
+   * saturates); the learned value is stored. Samsung is fixed at 255: with 8191,
+   * 4% was already full brightness there (Galaxy S21+, Tab A9+).
+   * ('brightnessRawMax' from an older build is ignored.)
    */
   rawBrightnessMax() {
-    return this.getStoreValue('brightnessScale') || 8191;
+    return this.fixedBrightnessScale() || this.getStoreValue('brightnessScale') || 8191;
   }
 
   /**
@@ -322,7 +355,7 @@ class TabletDevice extends Homey.Device {
           mirrors = true;
           await this.setStoreValue('brightnessMirrors', true);
         }
-        if (!mirrors || after.float === null || after.float < 0.05) break;
+        if (this.fixedBrightnessScale() || !mirrors || after.float === null || after.float < 0.05) break;
         lastFloat = after.float;
         saturated = after.float >= 0.99 && level < 0.97;
         if (after.float >= 0.99 && !saturated) break; // asked for (nearly) full: nothing to learn
@@ -423,6 +456,9 @@ class TabletDevice extends Homey.Device {
     }
     this.screenshot = png;
     this.screenshotTime = Date.now();
+    // Only reused for 5 s (see setStream): don't hold several MB after that.
+    this.homey.clearTimeout(this.screenshotTimer);
+    this.screenshotTimer = this.homey.setTimeout(() => { this.screenshot = null; }, 5000);
     return png;
   }
 
@@ -519,7 +555,7 @@ class TabletDevice extends Homey.Device {
       }
       const jpeg = await this.client.exec(`cat ${quote(file)}`, { timeout: 60000, purpose: 'photo' });
       if (jpeg.length < 1000 || jpeg[0] !== 0xff || jpeg[1] !== 0xd8) throw new Error(this.homey.__('errors.photo_failed'));
-      this.photo = jpeg;
+      await fs.promises.writeFile(this.photoFile, jpeg);
       this.log(`Photo taken: ${file} (${Math.round(jpeg.length / 1024)} kB)`);
     } finally {
       await this.client.shell('input keyevent KEYCODE_BACK').catch(this.error); // leave the camera app
@@ -851,6 +887,7 @@ class TabletDevice extends Homey.Device {
 
     // Brightness 0..1 from the raw setting, the one that really drives the screen
     // (see setBrightness). Scale per phone; the float setting only as a fallback.
+    this.noteBrand(output);
     const raw = output.match(/^brightness_raw=(\d+)\s*$/m);
     const float = output.match(/^brightness_float=([\d.]+)\s*$/m);
     if (raw) await this.setValue('dim', Math.min(1, Math.round((Number(raw[1]) / this.rawBrightnessMax()) * 100) / 100));
@@ -907,7 +944,7 @@ class TabletDevice extends Homey.Device {
       this.volumeMax = Number(volume[3]);
       await this.setValue('volume_set', Math.round((Number(volume[1]) / this.volumeMax) * 100) / 100);
     } else {
-      const known = /mWakefulness=|^\s*(level|status|powered|AC powered|USB powered|Wireless powered|Dock powered):|^brightness/;
+      const known = /mWakefulness=|^\s*(level|status|powered|AC powered|USB powered|Wireless powered|Dock powered):|^brightness|^brand=/;
       this.logUnparsed('volume', output.split('\n').filter((l) => !known.test(l)).join('\n'));
     }
   }
@@ -927,11 +964,14 @@ class TabletDevice extends Homey.Device {
       if (token) await this.homey.flow.unregisterToken(token).catch(this.error);
     }
     this.homey.clearTimeout(this.pollTimer);
+    this.homey.clearTimeout(this.screenshotTimer);
+    this.screenshot = null;
     if (this.client) await this.client.disconnect();
   }
 
   async onDeleted() {
     await this.onUninit();
+    if (this.photoFile) await fs.promises.unlink(this.photoFile).catch(() => {});
   }
 
 }

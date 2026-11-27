@@ -99,6 +99,13 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
   while the float sits at 1.0 (saturated), up to 8 rounds; stored as `brightnessScale`.
   Whether the OnePlus mirrors is NOT confirmed. Never verify a setting by reading the same
   setting back: that always "works".
+- Brightness on Samsung (GS21+ Android 15, Tab A9+ Android 16, reported by Peter_Kawa): with
+  the 8191 start 1% gave a 25% slider, 3% gave 95%, 4% and up 100%, so raw is 0..255 there and
+  the scale was never learned (the float evidently doesn't follow raw; diag log not seen). Now
+  `ro.product.manufacturer` = samsung (read in the state command and in CMD_BRIGHTNESS, for
+  keep-alive off) fixes the scale at 255, over any stored value. NOT confirmed on a Samsung
+  yet. `cmd overlay lookup android android:integer/config_screenBrightnessSettingMaximum` is
+  only logged ("the platform reports ..."), to see what other brands say before trusting it.
 - Volume: setting it works on the OnePlus (user confirmed); setVolume tries media_session,
   `cmd audio set-volume`, then volume key presses, verified via the AudioService reading,
   and remembers the first that sticks. Which one the OnePlus uses is not logged back yet.
@@ -125,8 +132,8 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
     came to the front after the start, if different from before; the user asked for this).
     Buttons `photo_button_back` / `photo_button_front` on the device do the same. Real
     OnePlus 9 (com.oplus.camera): KEYCODE_CAMERA and VOLUME_DOWN produce no picture. Second
-    camera image 'photo' (1x1 placeholder until one is taken); loading it never opens the
-    camera.
+    camera image 'photo' (1x1 placeholder until one is taken; kept on disk); loading it never
+    opens the camera.
     Samsung stock camera (GS21+ Android 15, Tab A9+ Android 16, reported by Peter_Kawa):
     ignores the facing extras and keeps its last lens. So after the start `parseOpenCamera`
     reads the open lens from `dumpsys media.camera` (static "Facing:" per camera id + "Device
@@ -183,6 +190,14 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
   connect for a command, read the state right after it (`pollSoon`), disconnect. The only
   exception: while the device is unreachable it retries every 30 s, or it would stay
   unavailable for good. The two check-interval settings only apply with keep-alive on.
+- Memory (Peter_Kawa: 67 → 120 MB in two days with two devices, rising in steps): large
+  transfers were the suspect, not a classic leak. `AdbClient` joined its receive buffer on
+  every 16 kB piece (~32 MB allocated per MB received); it now collects pieces and joins once
+  per packet. The last photo lives in `/userdata/photo-<id>.jpg` (os.tmpdir() in the tests),
+  not in memory, and so survives an app restart; the screenshot buffer is dropped after its
+  5 s of reuse. Effect on a real Homey NOT measured yet.
+- The mock's `big` reply (3.25 MB, checked byte for byte via `shell()` and `exec()`) is the
+  only test of the receive path with packets split over many pieces; keep it.
 - `Device.poll()` is single-flight; never `await this.poll()` from code that runs inside a
   poll (it waits on itself). Use `this.poll().catch(this.error)`.
 - `this.config` mirrors the device settings; update it together with `setSettings()`.

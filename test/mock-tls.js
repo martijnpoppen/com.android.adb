@@ -65,7 +65,10 @@ let cameraOpen = false; let cameraStart = ''; const photos = ['IMG_1.jpg']; let 
 const PHOTO_JPEG = Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0]), Buffer.alloc(2000, 7)]);
 // A 1x1 PNG, as 'screencap -p' output.
 const SCREEN_PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg' + 'A'.repeat(120) + '==', 'base64');
+const BIG = '0123456789abc'.repeat(250000); // 3.25 MB, arrives in many pieces
 let brightRaw = 2048; let BRIGHT_MAX = 8191; // raw brightness scale of the OnePlus 9
+let BRAND = 'OnePlus'; let floatMirrors = true; // Samsung: scale 255 and the float setting doesn't follow raw
+const brightFloat = () => (floatMirrors ? Math.min(1, brightRaw / BRIGHT_MAX).toFixed(4) : 'null');
 let brightMode = '1'; // adaptive brightness on, like most phones
 const adbd = net.createServer((plain) => {
   let s = plain; let buf = Buffer.alloc(0); let lid = 100; let secure = false;
@@ -133,19 +136,19 @@ const adbd = net.createServer((plain) => {
         else if (svc.includes('set-brightness') || svc.includes('put system screen_brightness_float')) out = '';
         else if (svc.includes('put system screen_brightness ')) brightRaw = Number(svc.match(/screen_brightness (\d+)/)[1]); // stored as is, the screen saturates
         else if (svc.includes('put system screen_brightness_mode')) brightMode = svc.match(/screen_brightness_mode (\d)/)[1];
-        else if (svc.includes('echo mode=')) out = `mode=${brightMode}\nfloat=${Math.min(1, brightRaw / BRIGHT_MAX).toFixed(4)}\nraw=${brightRaw}\n`;
+        else if (svc.includes('echo mode=')) out = `mode=${brightMode}\nfloat=${brightFloat()}\nraw=${brightRaw}\nbrand=${BRAND}\nplatform_max=255\n`;
         else if (svc.includes('media_session volume --stream 3 --set')) out = '[V] will control stream=3 (STREAM_MUSIC)\n[V] will set volume to index=x\n[V] Connecting to AudioService\n';
         else if (svc.includes('cmd audio set-volume')) out = "Unknown command: set-volume\n";
         else if (svc.includes('KEYCODE_VOLUME_')) {
           vol += (svc.match(/KEYCODE_VOLUME_UP/g) || []).length - (svc.match(/KEYCODE_VOLUME_DOWN/g) || []).length;
           vol = Math.max(0, Math.min(30, vol));
         } else if (svc.includes('media_session volume --stream 3 --get') && !svc.includes('mWakefulness')) out = `[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
-        else if (svc.includes('mWakefulness')) out = `  mWakefulness=${wake}\n  AC powered: true\n  USB powered: false\n  status: 2\n  level: 87\n  temperature: 312\nbluetooth=${bluetooth}\nrotation=${rotation}\nzen=${zen}\nwifi=WifiInfo: SSID: "${wifiName}", BSSID: 02:00:00:00:00:00, MAC: 02:00:00:00:00:00, RSSI: -55, Link speed: 866Mbps\n  mCurrentFocus=Window{a1b2 u0 ${front}/${front}.MainActivity}\ntimeout=30000\nstayon=3\nstorage=/dev/block/dm-48 111762240 61762240 50000000 56% /data\n      state=PlaybackState {state=${playing ? 'PLAYING(3)' : 'PAUSED(2)'}, position=1000, buffered position=0, speed=1.0}\n      metadata: size=12, description=Hello, Goodbye, The Beatles, Magical Mystery Tour\nbrightness_float=${Math.min(1, brightRaw / BRIGHT_MAX).toFixed(4)}\nbrightness_raw=${brightRaw}\n[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
+        else if (svc.includes('mWakefulness')) out = `  mWakefulness=${wake}\n  AC powered: true\n  USB powered: false\n  status: 2\n  level: 87\n  temperature: 312\nbluetooth=${bluetooth}\nrotation=${rotation}\nzen=${zen}\nwifi=WifiInfo: SSID: "${wifiName}", BSSID: 02:00:00:00:00:00, MAC: 02:00:00:00:00:00, RSSI: -55, Link speed: 866Mbps\n  mCurrentFocus=Window{a1b2 u0 ${front}/${front}.MainActivity}\ntimeout=30000\nstayon=3\nstorage=/dev/block/dm-48 111762240 61762240 50000000 56% /data\n      state=PlaybackState {state=${playing ? 'PLAYING(3)' : 'PAUSED(2)'}, position=1000, buffered position=0, speed=1.0}\n      metadata: size=12, description=Hello, Goodbye, The Beatles, Magical Mystery Tour\nbrightness_float=${brightFloat()}\nbrightness_raw=${brightRaw}\nbrand=${BRAND}\n[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
         else if (svc.includes('pm list packages -3')) out = 'package:com.spotify.music\n';
         else if (svc.includes('pm list packages')) out = 'package:com.android.chrome\npackage:com.spotify.music\npackage:com.android.settings\n';
         else if (svc.includes('dumpsys window')) out = `  mCurrentFocus=Window{a1b2 u0 ${front}/${front}.MainActivity}\n`;
         if (!svc.includes('dumpsys') && !svc.includes('getprop')) console.log('   [device ran]', svc.replace(/^exec:/, ''));
-        else if (svc.includes('big')) out = 'x'.repeat(200000);
+        if (svc.endsWith(':big')) out = BIG; // never ran before: it hung off the logging 'if' above
         s.write(pkt(CMD.OKAY, id, a0));
         for (let i = 0; i < out.length; i += 60000) s.write(pkt(CMD.WRTE, id, a0, Buffer.from(out.slice(i, i + 60000))));
         s.write(pkt(CMD.CLSE, id, a0));
@@ -178,7 +181,9 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   console.log('   state:', await c.shell('dumpsys power | grep mWakefulness='));
   await c.shell('input keyevent KEYCODE_WAKEUP');
   console.log('   state:', await c.shell('dumpsys power | grep mWakefulness='));
-  console.log('   large output bytes:', (await c.shell('big')).length);
+  const big = await c.shell('big', { timeout: 30000 }); const bigRaw = await c.exec('big', { timeout: 30000 });
+  console.log('   large output bytes:', big.length, bigRaw.length);
+  if (big !== BIG || bigRaw.toString() !== BIG) throw new Error('large output damaged');
   const gone = new Promise((r) => c.once('disconnect', r));
   c.socket.destroy(); await gone;
   await c.shell('input keyevent KEYCODE_SLEEP');
@@ -246,7 +251,18 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   await device.listeners.dim(1);
   console.log('    OnePlus starting dark, 100% -> raw', brightRaw);
   if (brightRaw !== 8191) throw new Error('OnePlus stuck below full brightness');
-  BRIGHT_MAX = 8191; brightRaw = 2048; device.store = {}; device.latestRuns = {};
+  // Samsung (Galaxy S21+ / Tab A9+): 0..255, float not mirrored. With 8191, 4% was already full brightness.
+  BRIGHT_MAX = 255; brightRaw = 100; BRAND = 'samsung'; floatMirrors = false; device.store = {}; device.latestRuns = {};
+  await device.poll(); // brand known from the state check
+  for (const [level, want] of [[0.02, 5], [0.5, 128], [1, 255]]) {
+    await device.listeners.dim(level); await device.poll();
+    console.log(`    Samsung ${level * 100}% -> raw`, brightRaw, '| slider', device.caps.dim);
+    if (brightRaw !== want || device.caps.dim !== level) throw new Error('Samsung brightness not on the 255 scale');
+  }
+  device.brand = undefined; // keep-alive off: no state check before the first command
+  await device.listeners.dim(0.25);
+  if (brightRaw !== 64) throw new Error('Samsung brightness wrong without a state check first');
+  BRIGHT_MAX = 8191; brightRaw = 2048; BRAND = 'OnePlus'; floatMirrors = true; device.brand = undefined; device.platformBrightnessMax = undefined; device.store = {}; device.latestRuns = {};
   console.log('12. apps "o":', (await device.listApps('o')).map((a) => a.id).join(','), '| foreground:', await device.getForegroundApp());
   await device.launchApp('com.spotify.music'); await device.openUrl("my.homey.app/it's?a=1&b=2"); await device.typeText("it's me"); await device.pressKey('KEYCODE_HOME'); await device.setStayAwake(true); await device.setScreenTimeout(60);
   console.log('13. bad input rejected:', await device.launchApp('x; reboot').catch((e) => e.message), '/', await device.pressKey('1; reboot').catch((e) => e.message));
@@ -314,7 +330,7 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   const afterButton = captures; device.screenshotTime -= 6000; await image.fn({ end() {} }); // refresh later: a new capture
   console.log('    button -> captures', afterButton, '| image updated', image.updated, '| refresh later -> captures', captures);
   if (afterButton !== 1 || image.updated !== 2 || captures !== 2) throw new Error('screenshot button / refresh');
-  const volBefore = vol; const photo = await device.takePhoto('front'); const got = []; await photo.fn({ end: (b) => got.push(b) });
+  const volBefore = vol; const photo = await device.takePhoto('front'); const got = []; { const sink = new (require('node:stream').PassThrough)(); const parts = []; sink.on('data', (d) => parts.push(d)); const ended = new Promise((r) => sink.on('end', r)); await photo.fn(sink); await ended; got.push(Buffer.concat(parts)); }
   console.log('    photo:', photos[photos.length - 1], got[0].length, 'bytes | shutter', device.shutterMethod, '| front requested', cameraStart.includes('CAMERA_FACING 1'), '| camera closed', !cameraOpen, '| media volume untouched', vol === volBefore, '| device image', device.cameras.photo.image === photo, '| camera app force-stopped', cameraStopped, '| lens switched by swipe', lens === 1 && lensSwipes === 1);
   if (lens !== 1 || lensSwipes !== 1) throw new Error('front camera not selected');
   const frontStart = cameraStart; await device.listeners.photo_button_back(true);
