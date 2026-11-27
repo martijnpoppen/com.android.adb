@@ -127,6 +127,12 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
     OnePlus 9 (com.oplus.camera): KEYCODE_CAMERA and VOLUME_DOWN produce no picture. Second
     camera image 'photo' (1x1 placeholder until one is taken); loading it never opens the
     camera.
+    Samsung stock camera (GS21+ Android 15, Tab A9+ Android 16, reported by Peter_Kawa):
+    ignores the facing extras and keeps its last lens. So after the start `parseOpenCamera`
+    reads the open lens from `dumpsys media.camera` (static "Facing:" per camera id + "Device
+    <id> is open"; fallback id 0 = back, 1 = front) and, if wrong, swipes vertically over the
+    preview (Samsung's "swipe up/down to switch cameras", on by default) and logs the result.
+    Mock only: the real dumpsys format and the swipe are NOT confirmed on a Samsung.
   - Triggers `screenshot_taken` / `photo_taken` (image token): fired by `takeScreenshot()` /
     `takePhoto()` only (button or card), never by an image reload, or a Flow using the image
     would trigger itself.

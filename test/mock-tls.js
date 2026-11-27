@@ -61,7 +61,7 @@ let wake = 'Asleep'; let vol = 9;
 let bluetooth = 0; let zen = 0; let rotation = 1; let notifications = []; let rebooted = 0; const triggered = [];
 let front = 'com.spotify.music'; let playing = true; let wifiName = 'Home Wi-Fi'; const ran = []; const otherVolumes = { 2: 5, 4: 7, 5: 5 };
 const triggerTokens = {}; const flowTokens = {};
-let cameraOpen = false; let cameraStart = ''; const photos = ['IMG_1.jpg']; let photosAtMarker = 0; let frontBefore = null; let cameraStopped = 0;
+let cameraOpen = false; let cameraStart = ''; const photos = ['IMG_1.jpg']; let photosAtMarker = 0; let frontBefore = null; let cameraStopped = 0; let lens = 0; let lensSwipes = 0; // lens: Samsung-like, the extras are ignored and the last lens is kept
 const PHOTO_JPEG = Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0]), Buffer.alloc(2000, 7)]);
 // A 1x1 PNG, as 'screencap -p' output.
 const SCREEN_PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg' + 'A'.repeat(120) + '==', 'base64');
@@ -102,6 +102,10 @@ const adbd = net.createServer((plain) => {
         // Real OnePlus 9: camera key and volume down take no picture. Assumed: tapping the shutter button does.
         else if (svc.includes('touch /data/local/tmp/homey_photo_marker')) photosAtMarker = photos.length;
         else if (svc.includes('-newer /data/local/tmp/homey_photo_marker')) out = photos.slice(photosAtMarker).map((name) => `/sdcard/DCIM/Camera/${name}\n`).join('');
+        else if (svc.includes('dumpsys media.camera')) {
+          out = '== Camera HAL device device@1.1/internal/0 (v3.7) static information: ==\n    Facing: Back\n== Camera HAL device device@1.1/internal/1 (v3.7) static information: ==\n    Facing: Front\n'
+            + (cameraOpen ? `  Device ${lens} is open. Client instance dump:\n` : '');
+        } else if (cameraOpen && svc.includes('input swipe 540 378 540 756 200')) { lens = 1 - lens; lensSwipes++; }
         else if (svc.includes('wm size')) out = 'Physical size: 1080x2400\n';
         else if (cameraOpen && /KEYCODE_(CAMERA|VOLUME_DOWN|VOLUME_UP)/.test(svc)) out = '';
         else if (cameraOpen && svc.includes('input tap 540 2088')) photos.push(`IMG_${photos.length + 1}.jpg`);
@@ -311,10 +315,11 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   console.log('    button -> captures', afterButton, '| image updated', image.updated, '| refresh later -> captures', captures);
   if (afterButton !== 1 || image.updated !== 2 || captures !== 2) throw new Error('screenshot button / refresh');
   const volBefore = vol; const photo = await device.takePhoto('front'); const got = []; await photo.fn({ end: (b) => got.push(b) });
-  console.log('    photo:', photos[photos.length - 1], got[0].length, 'bytes | shutter', device.shutterMethod, '| front requested', cameraStart.includes('CAMERA_FACING 1'), '| camera closed', !cameraOpen, '| media volume untouched', vol === volBefore, '| device image', device.cameras.photo.image === photo, '| camera app force-stopped', cameraStopped);
+  console.log('    photo:', photos[photos.length - 1], got[0].length, 'bytes | shutter', device.shutterMethod, '| front requested', cameraStart.includes('CAMERA_FACING 1'), '| camera closed', !cameraOpen, '| media volume untouched', vol === volBefore, '| device image', device.cameras.photo.image === photo, '| camera app force-stopped', cameraStopped, '| lens switched by swipe', lens === 1 && lensSwipes === 1);
+  if (lens !== 1 || lensSwipes !== 1) throw new Error('front camera not selected');
   const frontStart = cameraStart; await device.listeners.photo_button_back(true);
   console.log('    back camera button: photos', photos.length, '| back requested', cameraStart.includes('CAMERA_FACING 0'), '| force-stopped', cameraStopped);
-  if (photos.length !== 3 || !cameraStart.includes('CAMERA_FACING 0') || cameraStopped !== 2) throw new Error('photo button');
+  if (photos.length !== 3 || !cameraStart.includes('CAMERA_FACING 0') || cameraStopped !== 2 || lens !== 0 || lensSwipes !== 2) throw new Error('photo button');
   photos.pop(); cameraStart = frontStart;
   if (photos.length !== 2 || got[0].length !== 2004 || device.shutterMethod !== 'tap' || !cameraStart.includes('CAMERA_FACING 1') || cameraOpen || vol !== volBefore || device.cameras.photo.image !== photo) throw new Error('photo');
   const imageTriggers = triggered.filter((id) => /_taken$/.test(id)).join(',');
