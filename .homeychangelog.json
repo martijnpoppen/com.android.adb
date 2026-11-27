@@ -43,5 +43,20 @@
     "pl": "Zrób zdjęcie: przyciski przedniego i tylnego aparatu wybierają teraz właściwy aparat na urządzeniach, których aplikacja aparatu zapamiętuje ostatnio używany (np. Samsung).",
     "ko": "사진 촬영: 카메라 앱이 마지막으로 사용한 카메라를 유지하는 기기(예: 삼성)에서도 전면 및 후면 카메라 버튼이 올바른 카메라를 선택합니다.",
     "ar": "التقاط صورة: زرّا الكاميرا الأمامية والخلفية يختاران الآن الكاميرا الصحيحة على الأجهزة التي يحتفظ تطبيق الكاميرا فيها بآخر كاميرا مستخدمة (مثل سامسونج)."
+  },
+  "1.1.2": {
+    "en": "Brightness now uses the right scale on Samsung devices (4% was already full brightness). The app uses less memory when taking screenshots and photos.",
+    "nl": "Helderheid gebruikt nu de juiste schaal op Samsung-apparaten (4% was al volle helderheid). De app gebruikt minder geheugen bij het maken van schermafbeeldingen en foto's.",
+    "de": "Die Helligkeit verwendet auf Samsung-Geräten jetzt die richtige Skala (4 % war bereits volle Helligkeit). Die App verbraucht beim Aufnehmen von Screenshots und Fotos weniger Speicher.",
+    "fr": "La luminosité utilise désormais la bonne échelle sur les appareils Samsung (4 % correspondait déjà à la luminosité maximale). L'application utilise moins de mémoire lors des captures d'écran et des photos.",
+    "it": "La luminosità ora usa la scala corretta sui dispositivi Samsung (il 4% era già la luminosità massima). L'app usa meno memoria quando acquisisce screenshot e foto.",
+    "sv": "Ljusstyrkan använder nu rätt skala på Samsung-enheter (4 % var redan full ljusstyrka). Appen använder mindre minne när skärmbilder och foton tas.",
+    "no": "Lysstyrken bruker nå riktig skala på Samsung-enheter (4 % var allerede full lysstyrke). Appen bruker mindre minne når den tar skjermbilder og bilder.",
+    "es": "El brillo ahora usa la escala correcta en dispositivos Samsung (el 4 % ya era el brillo máximo). La app usa menos memoria al hacer capturas de pantalla y fotos.",
+    "da": "Lysstyrken bruger nu den rigtige skala på Samsung-enheder (4 % var allerede fuld lysstyrke). Appen bruger mindre hukommelse, når der tages skærmbilleder og billeder.",
+    "ru": "Яркость теперь использует правильную шкалу на устройствах Samsung (4 % уже давали полную яркость). Приложение использует меньше памяти при создании снимков экрана и фотографий.",
+    "pl": "Jasność używa teraz właściwej skali na urządzeniach Samsung (4% dawało już pełną jasność). Aplikacja zużywa mniej pamięci podczas robienia zrzutów ekranu i zdjęć.",
+    "ko": "삼성 기기에서 밝기가 이제 올바른 범위를 사용합니다(4%에서 이미 최대 밝기였습니다). 스크린샷과 사진을 찍을 때 앱이 메모리를 덜 사용합니다.",
+    "ar": "السطوع يستخدم الآن المقياس الصحيح على أجهزة سامسونج (كانت نسبة 4% تعطي السطوع الكامل). يستخدم التطبيق ذاكرة أقل عند التقاط لقطات الشاشة والصور."
   }
 }
