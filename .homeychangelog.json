@@ -58,5 +58,20 @@
     "pl": "Jasność używa teraz właściwej skali na urządzeniach Samsung (4% dawało już pełną jasność). Aplikacja zużywa mniej pamięci podczas robienia zrzutów ekranu i zdjęć.",
     "ko": "삼성 기기에서 밝기가 이제 올바른 범위를 사용합니다(4%에서 이미 최대 밝기였습니다). 스크린샷과 사진을 찍을 때 앱이 메모리를 덜 사용합니다.",
     "ar": "السطوع يستخدم الآن المقياس الصحيح على أجهزة سامسونج (كانت نسبة 4% تعطي السطوع الكامل). يستخدم التطبيق ذاكرة أقل عند التقاط لقطات الشاشة والصور."
+  },
+  "1.1.3": {
+    "en": "Fixed the app icon in the Homey mobile app, where the phone was shown as a solid shape.",
+    "nl": "App-icoon in de mobiele Homey-app hersteld: de telefoon werd als een dicht vlak getoond.",
+    "de": "App-Symbol in der mobilen Homey-App korrigiert, wo das Telefon als ausgefüllte Fläche angezeigt wurde.",
+    "fr": "Correction de l’icône de l’app dans l’application mobile Homey, où le téléphone apparaissait comme une forme pleine.",
+    "it": "Corretta l’icona dell’app nell’app mobile Homey, dove il telefono appariva come una forma piena.",
+    "sv": "Rättade appikonen i Homeys mobilapp, där telefonen visades som en fylld form.",
+    "no": "Rettet appikonet i Homey-mobilappen, der telefonen ble vist som en fylt form.",
+    "es": "Corregido el icono de la app en la aplicación móvil de Homey, donde el teléfono se mostraba como una forma rellena.",
+    "da": "Rettede appikonet i Homey-mobilappen, hvor telefonen blev vist som en udfyldt form.",
+    "ru": "Исправлен значок приложения в мобильном приложении Homey, где телефон отображался сплошной фигурой.",
+    "pl": "Poprawiono ikonę aplikacji w aplikacji mobilnej Homey, gdzie telefon był wyświetlany jako wypełniony kształt.",
+    "ko": "Homey 모바일 앱에서 휴대폰이 채워진 도형으로 표시되던 앱 아이콘을 수정했습니다.",
+    "ar": "تم إصلاح أيقونة التطبيق في تطبيق Homey للهاتف، حيث كان الهاتف يظهر كشكل مصمت."
   }
 }
