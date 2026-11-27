@@ -39,7 +39,10 @@ const RETRY_SECONDS = 30;
 
 const CMD_VOLUME = '(cmd media_session volume --stream 3 --get 2>/dev/null || media volume --stream 3 --get 2>/dev/null)';
 const CMD_BRIGHTNESS = 'echo mode=$(settings get system screen_brightness_mode); '
-  + 'echo float=$(settings get system screen_brightness_float); echo raw=$(settings get system screen_brightness)';
+  + 'echo float=$(settings get system screen_brightness_float); echo raw=$(settings get system screen_brightness); '
+  + 'echo brand=$(getprop ro.product.manufacturer); '
+  // What the platform itself calls the top of the raw scale. Only logged, to learn what brands report.
+  + 'echo platform_max=$(cmd overlay lookup android android:integer/config_screenBrightnessSettingMaximum 2>/dev/null)';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -55,6 +58,7 @@ const CMD_STATE = [
   "dumpsys window | grep -E 'mCurrentFocus|mFocusedApp'",
   'echo brightness_float=$(settings get system screen_brightness_float 2>/dev/null)',
   'echo brightness_raw=$(settings get system screen_brightness)',
+  'echo brand=$(getprop ro.product.manufacturer)',
   'echo timeout=$(settings get system screen_off_timeout)',
   'echo stayon=$(settings get global stay_on_while_plugged_in)',
   'echo storage=$(df -k /data | tail -1)',
@@ -275,17 +279,36 @@ class TabletDevice extends Homey.Device {
       const match = output.match(new RegExp(`^${key}=([\\d.]+)\\s*$`, 'm'));
       return match ? Number(match[1]) : null;
     };
+    this.noteBrand(output);
+    const platformMax = get('platform_max');
+    if (platformMax !== null && platformMax !== this.platformBrightnessMax) {
+      this.platformBrightnessMax = platformMax;
+      this.log(`Brightness: the platform reports ${platformMax} as the top of the raw scale (${this.brand || 'unknown brand'}), using ${this.rawBrightnessMax()}`);
+    }
     return { mode: get('mode'), float: get('float'), raw: get('raw') };
+  }
+
+  /** Remembers the manufacturer from a 'brand=' line; the raw brightness scale depends on it. */
+  noteBrand(output) {
+    const brand = output.match(/^brand=(.+?)\s*$/m);
+    if (brand) this.brand = brand[1].toLowerCase();
+  }
+
+  /** Samsung: raw brightness is 0..255 and the float setting doesn't follow it, so nothing can be learned. */
+  fixedBrightnessScale() {
+    return this.brand === 'samsung' ? 255 : null;
   }
 
   /**
    * Top of the raw screen_brightness scale: 8191 on the OnePlus 9, 255 on stock
-   * Android. Starts at 8191: guessing from the current raw value got stuck at 255
-   * after a dark setting. Too high is corrected (the float setting saturates);
-   * the learned value is stored. ('brightnessRawMax' from an older build is ignored.)
+   * Android and Samsung. Starts at 8191: guessing from the current raw value got
+   * stuck at 255 after a dark setting. Too high is corrected (the float setting
+   * saturates); the learned value is stored. Samsung is fixed at 255: with 8191,
+   * 4% was already full brightness there (Galaxy S21+, Tab A9+).
+   * ('brightnessRawMax' from an older build is ignored.)
    */
   rawBrightnessMax() {
-    return this.getStoreValue('brightnessScale') || 8191;
+    return this.fixedBrightnessScale() || this.getStoreValue('brightnessScale') || 8191;
   }
 
   /**
@@ -322,7 +345,7 @@ class TabletDevice extends Homey.Device {
           mirrors = true;
           await this.setStoreValue('brightnessMirrors', true);
         }
-        if (!mirrors || after.float === null || after.float < 0.05) break;
+        if (this.fixedBrightnessScale() || !mirrors || after.float === null || after.float < 0.05) break;
         lastFloat = after.float;
         saturated = after.float >= 0.99 && level < 0.97;
         if (after.float >= 0.99 && !saturated) break; // asked for (nearly) full: nothing to learn
@@ -851,6 +874,7 @@ class TabletDevice extends Homey.Device {
 
     // Brightness 0..1 from the raw setting, the one that really drives the screen
     // (see setBrightness). Scale per phone; the float setting only as a fallback.
+    this.noteBrand(output);
     const raw = output.match(/^brightness_raw=(\d+)\s*$/m);
     const float = output.match(/^brightness_float=([\d.]+)\s*$/m);
     if (raw) await this.setValue('dim', Math.min(1, Math.round((Number(raw[1]) / this.rawBrightnessMax()) * 100) / 100));
@@ -907,7 +931,7 @@ class TabletDevice extends Homey.Device {
       this.volumeMax = Number(volume[3]);
       await this.setValue('volume_set', Math.round((Number(volume[1]) / this.volumeMax) * 100) / 100);
     } else {
-      const known = /mWakefulness=|^\s*(level|status|powered|AC powered|USB powered|Wireless powered|Dock powered):|^brightness/;
+      const known = /mWakefulness=|^\s*(level|status|powered|AC powered|USB powered|Wireless powered|Dock powered):|^brightness|^brand=/;
       this.logUnparsed('volume', output.split('\n').filter((l) => !known.test(l)).join('\n'));
     }
   }
