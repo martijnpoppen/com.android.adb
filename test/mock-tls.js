@@ -65,6 +65,7 @@ let cameraOpen = false; let cameraStart = ''; const photos = ['IMG_1.jpg']; let 
 const PHOTO_JPEG = Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0]), Buffer.alloc(2000, 7)]);
 // A 1x1 PNG, as 'screencap -p' output.
 const SCREEN_PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg' + 'A'.repeat(120) + '==', 'base64');
+const BIG = '0123456789abc'.repeat(250000); // 3.25 MB, arrives in many pieces
 let brightRaw = 2048; let BRIGHT_MAX = 8191; // raw brightness scale of the OnePlus 9
 let BRAND = 'OnePlus'; let floatMirrors = true; // Samsung: scale 255 and the float setting doesn't follow raw
 const brightFloat = () => (floatMirrors ? Math.min(1, brightRaw / BRIGHT_MAX).toFixed(4) : 'null');
@@ -147,7 +148,7 @@ const adbd = net.createServer((plain) => {
         else if (svc.includes('pm list packages')) out = 'package:com.android.chrome\npackage:com.spotify.music\npackage:com.android.settings\n';
         else if (svc.includes('dumpsys window')) out = `  mCurrentFocus=Window{a1b2 u0 ${front}/${front}.MainActivity}\n`;
         if (!svc.includes('dumpsys') && !svc.includes('getprop')) console.log('   [device ran]', svc.replace(/^exec:/, ''));
-        else if (svc.includes('big')) out = 'x'.repeat(200000);
+        if (svc.endsWith(':big')) out = BIG; // never ran before: it hung off the logging 'if' above
         s.write(pkt(CMD.OKAY, id, a0));
         for (let i = 0; i < out.length; i += 60000) s.write(pkt(CMD.WRTE, id, a0, Buffer.from(out.slice(i, i + 60000))));
         s.write(pkt(CMD.CLSE, id, a0));
@@ -180,7 +181,9 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   console.log('   state:', await c.shell('dumpsys power | grep mWakefulness='));
   await c.shell('input keyevent KEYCODE_WAKEUP');
   console.log('   state:', await c.shell('dumpsys power | grep mWakefulness='));
-  console.log('   large output bytes:', (await c.shell('big')).length);
+  const big = await c.shell('big', { timeout: 30000 }); const bigRaw = await c.exec('big', { timeout: 30000 });
+  console.log('   large output bytes:', big.length, bigRaw.length);
+  if (big !== BIG || bigRaw.toString() !== BIG) throw new Error('large output damaged');
   const gone = new Promise((r) => c.once('disconnect', r));
   c.socket.destroy(); await gone;
   await c.shell('input keyevent KEYCODE_SLEEP');
@@ -327,7 +330,7 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   const afterButton = captures; device.screenshotTime -= 6000; await image.fn({ end() {} }); // refresh later: a new capture
   console.log('    button -> captures', afterButton, '| image updated', image.updated, '| refresh later -> captures', captures);
   if (afterButton !== 1 || image.updated !== 2 || captures !== 2) throw new Error('screenshot button / refresh');
-  const volBefore = vol; const photo = await device.takePhoto('front'); const got = []; await photo.fn({ end: (b) => got.push(b) });
+  const volBefore = vol; const photo = await device.takePhoto('front'); const got = []; { const sink = new (require('node:stream').PassThrough)(); const parts = []; sink.on('data', (d) => parts.push(d)); const ended = new Promise((r) => sink.on('end', r)); await photo.fn(sink); await ended; got.push(Buffer.concat(parts)); }
   console.log('    photo:', photos[photos.length - 1], got[0].length, 'bytes | shutter', device.shutterMethod, '| front requested', cameraStart.includes('CAMERA_FACING 1'), '| camera closed', !cameraOpen, '| media volume untouched', vol === volBefore, '| device image', device.cameras.photo.image === photo, '| camera app force-stopped', cameraStopped, '| lens switched by swipe', lens === 1 && lensSwipes === 1);
   if (lens !== 1 || lensSwipes !== 1) throw new Error('front camera not selected');
   const frontStart = cameraStart; await device.listeners.photo_button_back(true);

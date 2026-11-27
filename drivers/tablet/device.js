@@ -1,5 +1,8 @@
 'use strict';
 
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 const Homey = require('homey');
 const AdbClient = require('../../lib/AdbClient');
 const { localizeError } = require('../../lib/errors');
@@ -161,10 +164,17 @@ class TabletDevice extends Homey.Device {
       stream.end(fresh ? this.screenshot : await this.captureScreen());
     });
     // Photos from the camera: only ever the last one taken (loading never opens the camera).
+    this.photoFile = path.join(fs.existsSync('/userdata') ? '/userdata' : os.tmpdir(), `photo-${String(this.getData().id).replace(/[^\w.-]/g, '_')}.jpg`);
     this.photoImage = await this.homey.images.createImage();
     this.photoImage.setStream(async (stream) => {
-      stream.contentType = this.photo ? 'image/jpeg' : 'image/png';
-      stream.end(this.photo || EMPTY_PNG); // nothing taken yet since the app started
+      // The last photo is kept on disk, not in memory (several MB per device).
+      if (fs.existsSync(this.photoFile)) {
+        stream.contentType = 'image/jpeg';
+        fs.createReadStream(this.photoFile).on('error', (err) => stream.destroy(err)).pipe(stream);
+      } else {
+        stream.contentType = 'image/png';
+        stream.end(EMPTY_PNG); // nothing taken yet
+      }
     });
     this.registerCapabilityListener('screenshot_button', translated(() => this.takeScreenshot()));
     this.registerCapabilityListener('photo_button_back', translated(() => this.takePhoto('back')));
@@ -446,6 +456,9 @@ class TabletDevice extends Homey.Device {
     }
     this.screenshot = png;
     this.screenshotTime = Date.now();
+    // Only reused for 5 s (see setStream): don't hold several MB after that.
+    this.homey.clearTimeout(this.screenshotTimer);
+    this.screenshotTimer = this.homey.setTimeout(() => { this.screenshot = null; }, 5000);
     return png;
   }
 
@@ -542,7 +555,7 @@ class TabletDevice extends Homey.Device {
       }
       const jpeg = await this.client.exec(`cat ${quote(file)}`, { timeout: 60000, purpose: 'photo' });
       if (jpeg.length < 1000 || jpeg[0] !== 0xff || jpeg[1] !== 0xd8) throw new Error(this.homey.__('errors.photo_failed'));
-      this.photo = jpeg;
+      await fs.promises.writeFile(this.photoFile, jpeg);
       this.log(`Photo taken: ${file} (${Math.round(jpeg.length / 1024)} kB)`);
     } finally {
       await this.client.shell('input keyevent KEYCODE_BACK').catch(this.error); // leave the camera app
@@ -951,11 +964,14 @@ class TabletDevice extends Homey.Device {
       if (token) await this.homey.flow.unregisterToken(token).catch(this.error);
     }
     this.homey.clearTimeout(this.pollTimer);
+    this.homey.clearTimeout(this.screenshotTimer);
+    this.screenshot = null;
     if (this.client) await this.client.disconnect();
   }
 
   async onDeleted() {
     await this.onUninit();
+    if (this.photoFile) await fs.promises.unlink(this.photoFile).catch(() => {});
   }
 
 }
