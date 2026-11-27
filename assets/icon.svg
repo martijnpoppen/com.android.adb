@@ -1,9 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960" fill="none" stroke="#000" stroke-width="56" stroke-linecap="round" stroke-linejoin="round">
-  <!-- Android Control: a phone, its screen being switched on remotely -->
-  <rect x="150" y="100" width="420" height="760" rx="84"/>
-  <path d="M300 800h120"/>
-  <path d="M291 404a110 110 0 1 0 138 0"/>
-  <path d="M360 340v130"/>
-  <path d="M712 312a140 140 0 0 1 0 198"/>
-  <path d="M800 224a264 264 0 0 1 0 374"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960">
+  <!-- Android Control: a phone, its screen being switched on remotely.
+       Filled shapes only (no strokes): the Homey mobile app fills stroked icons solid. -->
+  <path fill="#000" d="M234 72h252a112 112 0 0 1 112 112v592a112 112 0 0 1-112 112h-252a112 112 0 0 1-112-112v-592a112 112 0 0 1 112-112ZM234 128a56 56 0 0 0-56 56v592a56 56 0 0 0 56 56h252a56 56 0 0 0 56-56v-592a56 56 0 0 0-56-56Z"/>
+  <path fill="#000" d="M300 772h120a28 28 0 0 1 0 56h-120a28 28 0 0 1 0-56Z"/>
+  <path fill="#000" d="M332 340a28 28 0 0 1 56 0v130a28 28 0 0 1-56 0Z"/>
+  <path fill="#000" d="M273.44,382.19A138 138 0 1 0 446.56,382.19A28 28 0 0 0 411.44,425.81A82 82 0 1 1 308.56,425.81A28 28 0 0 0 273.44,382.19Z"/>
+  <path fill="#000" d="M731.8,292.2A168 168 0 0 1 731.8,529.8A28 28 0 0 1 692.2,490.2A112 112 0 0 0 692.2,331.8A28 28 0 0 1 731.8,292.2Z"/>
+  <path fill="#000" d="M819.76,204.17A292 292 0 0 1 819.76,617.83A28 28 0 0 1 780.24,578.17A236 236 0 0 0 780.24,243.83A28 28 0 0 1 819.76,204.17Z"/>
 </svg>
