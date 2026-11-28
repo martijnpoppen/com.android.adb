@@ -73,5 +73,20 @@
     "pl": "Poprawiono ikonę aplikacji w aplikacji mobilnej Homey, gdzie telefon był wyświetlany jako wypełniony kształt.",
     "ko": "Homey 모바일 앱에서 휴대폰이 채워진 도형으로 표시되던 앱 아이콘을 수정했습니다.",
     "ar": "تم إصلاح أيقونة التطبيق في تطبيق Homey للهاتف، حيث كان الهاتف يظهر كشكل مصمت."
+  },
+  "1.1.4": {
+    "en": "Added phone calls: Flow cards for ringing, answered, outgoing and ended calls, a condition and a sensor.",
+    "nl": "Telefoongesprekken toegevoegd: Flow-kaarten voor overgaan, opgenomen, uitgaande en beëindigde gesprekken, een voorwaarde en een sensor.",
+    "de": "Anrufe hinzugefügt: Flow-Karten für klingelnde, angenommene, ausgehende und beendete Anrufe, eine Bedingung und ein Sensor.",
+    "fr": "Ajout des appels téléphoniques : cartes Flow pour les appels qui sonnent, décrochés, sortants et terminés, une condition et un capteur.",
+    "it": "Aggiunte le chiamate: schede Flow per chiamate in arrivo, accettate, in uscita e terminate, una condizione e un sensore.",
+    "sv": "Telefonsamtal har lagts till: Flow-kort för ringande, besvarade, utgående och avslutade samtal, ett villkor och en sensor.",
+    "no": "Telefonsamtaler lagt til: Flow-kort for ringende, besvarte, utgående og avsluttede samtaler, en betingelse og en sensor.",
+    "es": "Añadidas las llamadas: tarjetas de Flow para llamadas que suenan, contestadas, salientes y terminadas, una condición y un sensor.",
+    "da": "Telefonopkald tilføjet: Flow-kort for ringende, besvarede, udgående og afsluttede opkald, en betingelse og en sensor.",
+    "ru": "Добавлены телефонные вызовы: карточки Flow для звонящих, принятых, исходящих и завершённых вызовов, условие и датчик.",
+    "pl": "Dodano połączenia telefoniczne: karty Flow dla dzwoniących, odebranych, wychodzących i zakończonych połączeń, warunek i czujnik.",
+    "ko": "전화 통화 추가: 벨 울림, 수신 응답, 발신, 통화 종료 Flow 카드와 조건, 센서.",
+    "ar": "تمت إضافة المكالمات الهاتفية: بطاقات Flow للرنين والرد والمكالمات الصادرة والمنتهية، مع شرط ومستشعر."
   }
 }
