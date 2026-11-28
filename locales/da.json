@@ -88,5 +88,10 @@
     "priority": "Kun prioritet",
     "alarms": "Kun alarmer",
     "none": "Total stilhed"
+  },
+  "call": {
+    "idle": "Intet opkald",
+    "ringing": "Ringer",
+    "in_call": "I opkald"
   }
 }

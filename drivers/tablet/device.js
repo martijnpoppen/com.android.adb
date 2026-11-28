@@ -9,7 +9,7 @@ const { localizeError } = require('../../lib/errors');
 const { appName } = require('../../lib/AppNames');
 
 const CAPABILITIES = ['onoff', 'dim', 'volume_set', 'measure_battery', 'battery_charging_state', 'measure_temperature',
-  'bluetooth_enabled', 'auto_rotate', 'dnd_mode', 'wifi_network', 'measure_signal_strength', 'foreground_app',
+  'bluetooth_enabled', 'auto_rotate', 'dnd_mode', 'wifi_network', 'measure_signal_strength', 'foreground_app', 'call_state',
   'screen_timeout', 'stay_awake', 'storage_free',
   'speaker_playing', 'speaker_prev', 'speaker_next', 'speaker_track', 'speaker_artist', 'speaker_album',
   'screenshot_button', 'photo_button_back', 'photo_button_front'];
@@ -24,6 +24,11 @@ const CMD_NEW_PHOTOS = `find /sdcard/DCIM /sdcard/Pictures -type f -newer ${PHOT
 // 'tap' taps where camera apps put the shutter button: bottom centre of the screen.
 // (OnePlus 9, com.oplus.camera: the camera key and volume down do nothing.)
 const SHUTTER_METHODS = ['KEYCODE_CAMERA', 'KEYCODE_VOLUME_DOWN', 'KEYCODE_VOLUME_UP', 'tap'];
+const CALL_STATES = { 0: 'idle', 1: 'ringing', 2: 'in_call' }; // TelephonyManager.CALL_STATE_*
+// One 'mCallState=<n>' per SIM, glued together.
+const CMD_CALL_STATE = "dumpsys telephony.registry | grep -o 'mCallState=[0-9]' | tr -d '\\n'";
+// Telecom lists each current call as '(MT - incoming)' or '(MO - outgoing)'.
+const CMD_CALL_DIRECTION = "dumpsys telecom | grep -m1 -oE 'M[OT] - (incoming|outgoing)'";
 const DND_MODES = { 0: 'off', 1: 'priority', 2: 'none', 3: 'alarms' }; // settings global zen_mode
 
 const CMD_SCREEN_ON = 'input keyevent KEYCODE_WAKEUP';
@@ -56,6 +61,7 @@ const CMD_STATE = [
   'echo bluetooth=$(settings get global bluetooth_on)',
   'echo rotation=$(settings get system accelerometer_rotation)',
   'echo zen=$(settings get global zen_mode)',
+  `echo call=$(${CMD_CALL_STATE})`,
   // e.g. 'WifiInfo: SSID: "Home", BSSID: ..., RSSI: -55, ...'. 'cmd wifi' is Android 11+.
   "echo wifi=$(cmd wifi status 2>/dev/null | grep -m1 'SSID:' || dumpsys wifi | grep -m1 'mWifiInfo')",
   "dumpsys window | grep -E 'mCurrentFocus|mFocusedApp'",
@@ -222,7 +228,9 @@ class TabletDevice extends Homey.Device {
     if (this.lastError) return Math.max(active, RETRY_SECONDS);
     // Keep-alive off = no checks at all: only read the state right after a command.
     if (this.config.keep_alive === false) return 0;
-    const inUse = this.getCapabilityValue('onoff') !== false || this.pluggedIn !== false;
+    // During a call the screen is often off (held to the ear): keep checking, to see it end.
+    const calling = Boolean(this.callState) && this.callState !== 'idle';
+    const inUse = this.getCapabilityValue('onoff') !== false || this.pluggedIn !== false || calling;
     if (inUse) return active;
     const idle = Number(this.config.poll_interval_idle);
     if (Number.isNaN(idle)) return 300;
@@ -662,6 +670,41 @@ class TabletDevice extends Homey.Device {
     await this.fire(on ? 'bluetooth_turned_on' : 'bluetooth_turned_off', {});
   }
 
+  /** 'idle', 'ringing' or 'in_call' (the busiest SIM counts), null when the device doesn't tell. */
+  parseCallState(output) {
+    const states = [...String(output).matchAll(/mCallState=(\d)/g)].map((match) => Number(match[1]));
+    return states.length ? CALL_STATES[Math.max(...states)] || 'idle' : null;
+  }
+
+  async readCallState() {
+    return this.parseCallState(await this.client.shell(CMD_CALL_STATE, { purpose: 'call state' }));
+  }
+
+  /** Remembers the call state; fires the triggers when it changed. */
+  async updateCallState(state) {
+    const before = this.callState;
+    this.callState = state;
+    await this.setValue('call_state', this.homey.__(`call.${state}`));
+    // Not on the first reading after start: that is no change.
+    if (!before || before === state) return;
+    this.log(`Phone call: ${before} -> ${state}`);
+    if (state === 'idle') await this.fire('call_ended', {});
+    else if (state === 'ringing') await this.fire('call_incoming', {});
+    else if (before === 'ringing') await this.fire('call_answered', {});
+    else {
+      // Straight from idle into a call: an outgoing call, or an incoming one that
+      // rang and was answered between two checks. Telecom knows which.
+      const direction = await this.client.shell(`${CMD_CALL_DIRECTION} 2>/dev/null`).catch(() => '');
+      this.log(`Call direction according to telecom: ${JSON.stringify(direction.trim())}`);
+      if (/incoming/.test(direction)) {
+        await this.fire('call_incoming', {});
+        await this.fire('call_answered', {});
+      } else {
+        await this.fire('call_outgoing', {});
+      }
+    }
+  }
+
   /** @param {'off'|'priority'|'alarms'|'none'} mode */
   async setDoNotDisturb(mode) {
     const ZEN = { off: '0', priority: '1', none: '2', alarms: '3' }; // settings global zen_mode
@@ -905,6 +948,9 @@ class TabletDevice extends Homey.Device {
     if (rotation) await this.setValue('auto_rotate', rotation[1] === '1');
     const zen = output.match(/^zen=(\d)/m);
     if (zen && DND_MODES[zen[1]]) await this.setValue('dnd_mode', this.homey.__(`dnd.${DND_MODES[zen[1]]}`));
+
+    const call = this.parseCallState((output.match(/^call=(.*)$/m) || [])[1] || '');
+    if (call) await this.updateCallState(call);
 
     // Wi-Fi the device is on. Android reports "<unknown ssid>" when it won't tell.
     const wifi = (output.match(/^wifi=(.*)$/m) || [])[1] || '';

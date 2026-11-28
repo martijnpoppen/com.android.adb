@@ -59,6 +59,7 @@ class TabletDriver extends Homey.Driver {
 
     condition('is_charging', async ({ device }) => device.pluggedIn === true);
     condition('bluetooth_on', async ({ device }) => (await device.readBluetooth()) === true);
+    condition('call_active', async ({ device }) => ['ringing', 'in_call'].includes(await device.readCallState()));
     condition('app_in_foreground', async ({ device, app }) => (await device.getForegroundApp()) === app.id)
       .registerArgumentAutocompleteListener('app', appSearch);
   }

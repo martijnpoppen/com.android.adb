@@ -28,6 +28,7 @@
     "wifi_network",
     "measure_signal_strength",
     "foreground_app",
+    "call_state",
     "screen_timeout",
     "stay_awake",
     "storage_free",

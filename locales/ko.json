@@ -88,5 +88,10 @@
     "priority": "중요한 알림만",
     "alarms": "알람만",
     "none": "알림 모두 차단"
+  },
+  "call": {
+    "idle": "통화 없음",
+    "ringing": "벨 울림",
+    "in_call": "통화 중"
   }
 }

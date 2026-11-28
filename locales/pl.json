@@ -88,5 +88,10 @@
     "priority": "Tylko priorytetowe",
     "alarms": "Tylko alarmy",
     "none": "Całkowita cisza"
+  },
+  "call": {
+    "idle": "Brak połączenia",
+    "ringing": "Dzwoni",
+    "in_call": "Trwa połączenie"
   }
 }

@@ -88,5 +88,10 @@
     "priority": "Prioritaires uniquement",
     "alarms": "Alarmes uniquement",
     "none": "Silence total"
+  },
+  "call": {
+    "idle": "Aucun appel",
+    "ringing": "Sonnerie",
+    "in_call": "En appel"
   }
 }

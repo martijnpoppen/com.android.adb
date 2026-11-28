@@ -67,6 +67,138 @@
       }
     },
     {
+      "id": "call_incoming",
+      "title": {
+        "en": "The phone is ringing",
+        "nl": "De telefoon gaat over",
+        "de": "Das Telefon klingelt",
+        "fr": "Le téléphone sonne",
+        "it": "Il telefono squilla",
+        "sv": "Telefonen ringer",
+        "no": "Telefonen ringer",
+        "es": "El teléfono está sonando",
+        "da": "Telefonen ringer",
+        "ru": "Телефон звонит",
+        "pl": "Telefon dzwoni",
+        "ko": "전화벨이 울림",
+        "ar": "الهاتف يرنّ"
+      },
+      "hint": {
+        "en": "Noticed at the next state check: only with \"Keep the connection open\" on, or after a command. A short call between two checks is missed. Calls in apps like WhatsApp are not seen.",
+        "nl": "Wordt opgemerkt bij de volgende controle: alleen als \"Verbinding open houden\" aan staat, of na een opdracht. Een kort gesprek tussen twee controles wordt gemist. Gesprekken in apps zoals WhatsApp worden niet gezien.",
+        "de": "Wird bei der nächsten Prüfung bemerkt: nur wenn „Verbindung offen halten“ an ist, oder nach einem Befehl. Ein kurzer Anruf zwischen zwei Prüfungen wird verpasst. Anrufe in Apps wie WhatsApp werden nicht erkannt.",
+        "fr": "Détecté lors de la vérification suivante : uniquement si « Garder la connexion ouverte » est activé, ou après une commande. Un appel court entre deux vérifications n'est pas détecté. Les appels dans des apps comme WhatsApp ne sont pas détectés.",
+        "it": "Rilevato al controllo successivo: solo se \"Mantieni la connessione aperta\" è attivo, o dopo un comando. Una chiamata breve tra due controlli non viene rilevata. Le chiamate in app come WhatsApp non vengono rilevate.",
+        "sv": "Upptäcks vid nästa kontroll: bara när ”Håll anslutningen öppen” är på, eller efter ett kommando. Ett kort samtal mellan två kontroller missas. Samtal i appar som WhatsApp upptäcks inte.",
+        "no": "Oppdages ved neste sjekk: bare når «Hold tilkoblingen åpen» er på, eller etter en kommando. En kort samtale mellom to sjekker blir ikke oppdaget. Samtaler i apper som WhatsApp oppdages ikke.",
+        "es": "Se detecta en la siguiente comprobación: solo si «Mantener la conexión abierta» está activado, o tras un comando. Una llamada corta entre dos comprobaciones no se detecta. Las llamadas en apps como WhatsApp no se detectan.",
+        "da": "Opdages ved næste tjek: kun når \"Hold forbindelsen åben\" er slået til, eller efter en kommando. Et kort opkald mellem to tjek bliver ikke opdaget. Opkald i apps som WhatsApp opdages ikke.",
+        "ru": "Обнаруживается при следующей проверке: только если включено «Не разрывать соединение», или после команды. Короткий вызов между двумя проверками будет пропущен. Вызовы в приложениях вроде WhatsApp не определяются.",
+        "pl": "Wykrywane przy następnym sprawdzeniu: tylko gdy włączone jest „Utrzymuj połączenie”, lub po poleceniu. Krótkie połączenie między dwoma sprawdzeniami zostanie pominięte. Połączenia w aplikacjach takich jak WhatsApp nie są wykrywane.",
+        "ko": "다음 확인 때 감지됩니다: '연결 계속 유지'가 켜져 있을 때나 명령을 보낸 후에만 해당됩니다. 두 번의 확인 사이에 끝난 짧은 통화는 놓칩니다. WhatsApp 같은 앱의 통화는 감지되지 않습니다.",
+        "ar": "يُكتشف عند التحقق التالي: فقط عند تفعيل «إبقاء الاتصال مفتوحًا»، أو بعد أمر. المكالمة القصيرة بين تحققين لا تُكتشف. المكالمات في تطبيقات مثل واتساب لا تُكتشف."
+      }
+    },
+    {
+      "id": "call_outgoing",
+      "title": {
+        "en": "An outgoing call started",
+        "nl": "Een uitgaand gesprek is gestart",
+        "de": "Ein ausgehender Anruf wurde gestartet",
+        "fr": "Un appel sortant a commencé",
+        "it": "È iniziata una chiamata in uscita",
+        "sv": "Ett utgående samtal startade",
+        "no": "En utgående samtale startet",
+        "es": "Se inició una llamada saliente",
+        "da": "Et udgående opkald blev startet",
+        "ru": "Начат исходящий вызов",
+        "pl": "Rozpoczęto połączenie wychodzące",
+        "ko": "발신 통화가 시작됨",
+        "ar": "بدأت مكالمة صادرة"
+      },
+      "hint": {
+        "en": "Noticed at the next state check: only with \"Keep the connection open\" on, or after a command. A short call between two checks is missed. Calls in apps like WhatsApp are not seen.",
+        "nl": "Wordt opgemerkt bij de volgende controle: alleen als \"Verbinding open houden\" aan staat, of na een opdracht. Een kort gesprek tussen twee controles wordt gemist. Gesprekken in apps zoals WhatsApp worden niet gezien.",
+        "de": "Wird bei der nächsten Prüfung bemerkt: nur wenn „Verbindung offen halten“ an ist, oder nach einem Befehl. Ein kurzer Anruf zwischen zwei Prüfungen wird verpasst. Anrufe in Apps wie WhatsApp werden nicht erkannt.",
+        "fr": "Détecté lors de la vérification suivante : uniquement si « Garder la connexion ouverte » est activé, ou après une commande. Un appel court entre deux vérifications n'est pas détecté. Les appels dans des apps comme WhatsApp ne sont pas détectés.",
+        "it": "Rilevato al controllo successivo: solo se \"Mantieni la connessione aperta\" è attivo, o dopo un comando. Una chiamata breve tra due controlli non viene rilevata. Le chiamate in app come WhatsApp non vengono rilevate.",
+        "sv": "Upptäcks vid nästa kontroll: bara när ”Håll anslutningen öppen” är på, eller efter ett kommando. Ett kort samtal mellan två kontroller missas. Samtal i appar som WhatsApp upptäcks inte.",
+        "no": "Oppdages ved neste sjekk: bare når «Hold tilkoblingen åpen» er på, eller etter en kommando. En kort samtale mellom to sjekker blir ikke oppdaget. Samtaler i apper som WhatsApp oppdages ikke.",
+        "es": "Se detecta en la siguiente comprobación: solo si «Mantener la conexión abierta» está activado, o tras un comando. Una llamada corta entre dos comprobaciones no se detecta. Las llamadas en apps como WhatsApp no se detectan.",
+        "da": "Opdages ved næste tjek: kun når \"Hold forbindelsen åben\" er slået til, eller efter en kommando. Et kort opkald mellem to tjek bliver ikke opdaget. Opkald i apps som WhatsApp opdages ikke.",
+        "ru": "Обнаруживается при следующей проверке: только если включено «Не разрывать соединение», или после команды. Короткий вызов между двумя проверками будет пропущен. Вызовы в приложениях вроде WhatsApp не определяются.",
+        "pl": "Wykrywane przy następnym sprawdzeniu: tylko gdy włączone jest „Utrzymuj połączenie”, lub po poleceniu. Krótkie połączenie między dwoma sprawdzeniami zostanie pominięte. Połączenia w aplikacjach takich jak WhatsApp nie są wykrywane.",
+        "ko": "다음 확인 때 감지됩니다: '연결 계속 유지'가 켜져 있을 때나 명령을 보낸 후에만 해당됩니다. 두 번의 확인 사이에 끝난 짧은 통화는 놓칩니다. WhatsApp 같은 앱의 통화는 감지되지 않습니다.",
+        "ar": "يُكتشف عند التحقق التالي: فقط عند تفعيل «إبقاء الاتصال مفتوحًا»، أو بعد أمر. المكالمة القصيرة بين تحققين لا تُكتشف. المكالمات في تطبيقات مثل واتساب لا تُكتشف."
+      }
+    },
+    {
+      "id": "call_answered",
+      "title": {
+        "en": "An incoming call was answered",
+        "nl": "Een inkomend gesprek is opgenomen",
+        "de": "Ein eingehender Anruf wurde angenommen",
+        "fr": "Un appel entrant a été décroché",
+        "it": "È stata accettata una chiamata in arrivo",
+        "sv": "Ett inkommande samtal besvarades",
+        "no": "En innkommende samtale ble besvart",
+        "es": "Se contestó una llamada entrante",
+        "da": "Et indgående opkald blev besvaret",
+        "ru": "Входящий вызов принят",
+        "pl": "Odebrano połączenie przychodzące",
+        "ko": "수신 전화를 받음",
+        "ar": "تم الرد على مكالمة واردة"
+      },
+      "hint": {
+        "en": "Noticed at the next state check: only with \"Keep the connection open\" on, or after a command. A short call between two checks is missed. Calls in apps like WhatsApp are not seen.",
+        "nl": "Wordt opgemerkt bij de volgende controle: alleen als \"Verbinding open houden\" aan staat, of na een opdracht. Een kort gesprek tussen twee controles wordt gemist. Gesprekken in apps zoals WhatsApp worden niet gezien.",
+        "de": "Wird bei der nächsten Prüfung bemerkt: nur wenn „Verbindung offen halten“ an ist, oder nach einem Befehl. Ein kurzer Anruf zwischen zwei Prüfungen wird verpasst. Anrufe in Apps wie WhatsApp werden nicht erkannt.",
+        "fr": "Détecté lors de la vérification suivante : uniquement si « Garder la connexion ouverte » est activé, ou après une commande. Un appel court entre deux vérifications n'est pas détecté. Les appels dans des apps comme WhatsApp ne sont pas détectés.",
+        "it": "Rilevato al controllo successivo: solo se \"Mantieni la connessione aperta\" è attivo, o dopo un comando. Una chiamata breve tra due controlli non viene rilevata. Le chiamate in app come WhatsApp non vengono rilevate.",
+        "sv": "Upptäcks vid nästa kontroll: bara när ”Håll anslutningen öppen” är på, eller efter ett kommando. Ett kort samtal mellan två kontroller missas. Samtal i appar som WhatsApp upptäcks inte.",
+        "no": "Oppdages ved neste sjekk: bare når «Hold tilkoblingen åpen» er på, eller etter en kommando. En kort samtale mellom to sjekker blir ikke oppdaget. Samtaler i apper som WhatsApp oppdages ikke.",
+        "es": "Se detecta en la siguiente comprobación: solo si «Mantener la conexión abierta» está activado, o tras un comando. Una llamada corta entre dos comprobaciones no se detecta. Las llamadas en apps como WhatsApp no se detectan.",
+        "da": "Opdages ved næste tjek: kun når \"Hold forbindelsen åben\" er slået til, eller efter en kommando. Et kort opkald mellem to tjek bliver ikke opdaget. Opkald i apps som WhatsApp opdages ikke.",
+        "ru": "Обнаруживается при следующей проверке: только если включено «Не разрывать соединение», или после команды. Короткий вызов между двумя проверками будет пропущен. Вызовы в приложениях вроде WhatsApp не определяются.",
+        "pl": "Wykrywane przy następnym sprawdzeniu: tylko gdy włączone jest „Utrzymuj połączenie”, lub po poleceniu. Krótkie połączenie między dwoma sprawdzeniami zostanie pominięte. Połączenia w aplikacjach takich jak WhatsApp nie są wykrywane.",
+        "ko": "다음 확인 때 감지됩니다: '연결 계속 유지'가 켜져 있을 때나 명령을 보낸 후에만 해당됩니다. 두 번의 확인 사이에 끝난 짧은 통화는 놓칩니다. WhatsApp 같은 앱의 통화는 감지되지 않습니다.",
+        "ar": "يُكتشف عند التحقق التالي: فقط عند تفعيل «إبقاء الاتصال مفتوحًا»، أو بعد أمر. المكالمة القصيرة بين تحققين لا تُكتشف. المكالمات في تطبيقات مثل واتساب لا تُكتشف."
+      }
+    },
+    {
+      "id": "call_ended",
+      "title": {
+        "en": "A call ended or was not answered",
+        "nl": "Een gesprek is beëindigd of niet opgenomen",
+        "de": "Ein Anruf wurde beendet oder nicht angenommen",
+        "fr": "Un appel s'est terminé ou est resté sans réponse",
+        "it": "Una chiamata è terminata o non ha avuto risposta",
+        "sv": "Ett samtal avslutades eller besvarades inte",
+        "no": "En samtale ble avsluttet eller ikke besvart",
+        "es": "Una llamada terminó o no fue contestada",
+        "da": "Et opkald blev afsluttet eller ikke besvaret",
+        "ru": "Вызов завершён или остался без ответа",
+        "pl": "Połączenie zakończyło się lub nie zostało odebrane",
+        "ko": "통화가 종료되었거나 받지 않음",
+        "ar": "انتهت مكالمة أو لم يُرد عليها"
+      },
+      "hint": {
+        "en": "Noticed at the next state check: only with \"Keep the connection open\" on, or after a command. A short call between two checks is missed. Calls in apps like WhatsApp are not seen.",
+        "nl": "Wordt opgemerkt bij de volgende controle: alleen als \"Verbinding open houden\" aan staat, of na een opdracht. Een kort gesprek tussen twee controles wordt gemist. Gesprekken in apps zoals WhatsApp worden niet gezien.",
+        "de": "Wird bei der nächsten Prüfung bemerkt: nur wenn „Verbindung offen halten“ an ist, oder nach einem Befehl. Ein kurzer Anruf zwischen zwei Prüfungen wird verpasst. Anrufe in Apps wie WhatsApp werden nicht erkannt.",
+        "fr": "Détecté lors de la vérification suivante : uniquement si « Garder la connexion ouverte » est activé, ou après une commande. Un appel court entre deux vérifications n'est pas détecté. Les appels dans des apps comme WhatsApp ne sont pas détectés.",
+        "it": "Rilevato al controllo successivo: solo se \"Mantieni la connessione aperta\" è attivo, o dopo un comando. Una chiamata breve tra due controlli non viene rilevata. Le chiamate in app come WhatsApp non vengono rilevate.",
+        "sv": "Upptäcks vid nästa kontroll: bara när ”Håll anslutningen öppen” är på, eller efter ett kommando. Ett kort samtal mellan två kontroller missas. Samtal i appar som WhatsApp upptäcks inte.",
+        "no": "Oppdages ved neste sjekk: bare når «Hold tilkoblingen åpen» er på, eller etter en kommando. En kort samtale mellom to sjekker blir ikke oppdaget. Samtaler i apper som WhatsApp oppdages ikke.",
+        "es": "Se detecta en la siguiente comprobación: solo si «Mantener la conexión abierta» está activado, o tras un comando. Una llamada corta entre dos comprobaciones no se detecta. Las llamadas en apps como WhatsApp no se detectan.",
+        "da": "Opdages ved næste tjek: kun når \"Hold forbindelsen åben\" er slået til, eller efter en kommando. Et kort opkald mellem to tjek bliver ikke opdaget. Opkald i apps som WhatsApp opdages ikke.",
+        "ru": "Обнаруживается при следующей проверке: только если включено «Не разрывать соединение», или после команды. Короткий вызов между двумя проверками будет пропущен. Вызовы в приложениях вроде WhatsApp не определяются.",
+        "pl": "Wykrywane przy następnym sprawdzeniu: tylko gdy włączone jest „Utrzymuj połączenie”, lub po poleceniu. Krótkie połączenie między dwoma sprawdzeniami zostanie pominięte. Połączenia w aplikacjach takich jak WhatsApp nie są wykrywane.",
+        "ko": "다음 확인 때 감지됩니다: '연결 계속 유지'가 켜져 있을 때나 명령을 보낸 후에만 해당됩니다. 두 번의 확인 사이에 끝난 짧은 통화는 놓칩니다. WhatsApp 같은 앱의 통화는 감지되지 않습니다.",
+        "ar": "يُكتشف عند التحقق التالي: فقط عند تفعيل «إبقاء الاتصال مفتوحًا»، أو بعد أمر. المكالمة القصيرة بين تحققين لا تُكتشف. المكالمات في تطبيقات مثل واتساب لا تُكتشف."
+      }
+    },
+    {
       "id": "foreground_app_changed",
       "title": {
         "en": "App on screen changed",
@@ -436,6 +568,24 @@
         "pl": "Bluetooth !{{jest|nie jest}} włączony",
         "ko": "블루투스가 !{{켜져 있음|꺼져 있음}}",
         "ar": "البلوتوث !{{مُشغَّل|غير مُشغَّل}}"
+      }
+    },
+    {
+      "id": "call_active",
+      "title": {
+        "en": "A phone call !{{is|is not}} ringing or in progress",
+        "nl": "Er !{{is|is geen}} oproep of telefoongesprek bezig",
+        "de": "Es !{{gibt einen|gibt keinen}} klingelnden oder laufenden Anruf",
+        "fr": "Un appel !{{est|n'est pas}} en train de sonner ou en cours",
+        "it": "Una chiamata !{{è|non è}} in arrivo o in corso",
+        "sv": "Ett samtal !{{ringer eller pågår|varken ringer eller pågår}}",
+        "no": "En samtale !{{ringer eller pågår|verken ringer eller pågår}}",
+        "es": "Una llamada !{{está|no está}} sonando o en curso",
+        "da": "Et opkald !{{ringer eller er i gang|hverken ringer eller er i gang}}",
+        "ru": "Телефон !{{звонит или занят вызовом|не звонит и не занят вызовом}}",
+        "pl": "Telefon !{{dzwoni lub trwa połączenie|nie dzwoni i nie trwa połączenie}}",
+        "ko": "전화가 !{{울리거나 통화 중임|울리지 않고 통화 중도 아님}}",
+        "ar": "الهاتف !{{يرنّ أو في مكالمة|لا يرنّ وليس في مكالمة}}"
       }
     }
   ],

@@ -175,6 +175,16 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
   Wi-Fi comes from `cmd wifi status | grep SSID:` (fallback `dumpsys wifi | grep mWifiInfo`);
   unparsed lines are logged as "Could not read Wi-Fi from". The mock's state branches must be guarded with `single`,
   because the combined state command contains the same words as the single commands.
+- Phone calls (requested by Trond_Nordfjaern, forum post 20; mock only, NOT confirmed on a real
+  phone): `dumpsys telephony.registry | grep -o 'mCallState=[0-9]'` in the state command (0 idle,
+  1 ringing, 2 in a call; one per SIM, the highest counts). Sensor `call_state` (text from
+  `locales` `call.*`), triggers `call_incoming` / `call_answered` / `call_outgoing` /
+  `call_ended` (also ringing → idle), condition `call_active`. Idle → in a call is "outgoing"
+  unless `dumpsys telecom` says `(MT - incoming)` (rang and was answered between two checks;
+  then incoming + answered fire); the telecom reply is logged. During a call the active check
+  interval is used even with the screen off. Limits: polling only, so a phone lying idle on
+  battery (300 s checks) misses calls; WhatsApp-style app calls are not telephony calls; no
+  caller number (Android hides it from the dump).
 - Not possible / left out on purpose: Wi-Fi off and airplane mode (would cut Homey's own
   connection), hardware sensors like light/proximity (Android only reports them to an app that
   is listening).

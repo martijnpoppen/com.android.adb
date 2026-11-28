@@ -88,5 +88,10 @@
     "priority": "Endast prioriterade",
     "alarms": "Endast alarm",
     "none": "Helt tyst"
+  },
+  "call": {
+    "idle": "Inget samtal",
+    "ringing": "Ringer",
+    "in_call": "I samtal"
   }
 }

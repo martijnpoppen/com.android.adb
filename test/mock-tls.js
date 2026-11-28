@@ -58,7 +58,7 @@ const pairingServer = tls.createServer({ ...deviceTls, requestCert: true, reject
 });
 
 let wake = 'Asleep'; let vol = 9;
-let bluetooth = 0; let zen = 0; let rotation = 1; let notifications = []; let rebooted = 0; const triggered = [];
+let call = '0'; let callDirection = ''; let bluetooth = 0; let zen = 0; let rotation = 1; let notifications = []; let rebooted = 0; const triggered = [];
 let front = 'com.spotify.music'; let playing = true; let wifiName = 'Home Wi-Fi'; const ran = []; const otherVolumes = { 2: 5, 4: 7, 5: 5 };
 const triggerTokens = {}; const flowTokens = {};
 let cameraOpen = false; let cameraStart = ''; const photos = ['IMG_1.jpg']; let photosAtMarker = 0; let frontBefore = null; let cameraStopped = 0; let lens = 0; let lensSwipes = 0; // lens: Samsung-like, the extras are ignored and the last lens is kept
@@ -124,6 +124,8 @@ const adbd = net.createServer((plain) => {
         else if (svc.includes('KEYCODE_MEDIA_PAUSE')) playing = false;
         else if (single && svc.includes('cmd bluetooth_manager ')) bluetooth = svc.includes('enable') ? 1 : 0;
         else if (single && svc.includes('settings get global bluetooth_on')) out = `${bluetooth}\n`;
+        else if (single && svc.includes('dumpsys telecom')) out = callDirection;
+        else if (single && svc.includes('dumpsys telephony.registry')) out = [...call].map((c) => `mCallState=${c}`).join('');
         else if (single && svc.includes('cmd notification set_dnd ')) zen = { off: 0, priority: 1, none: 2, alarms: 3 }[svc.match(/set_dnd (\w+)/)[1]];
         else if (single && svc.includes('settings get global zen_mode')) out = `${zen}\n`;
         else if (single && svc.includes('put system accelerometer_rotation')) rotation = Number(svc.match(/accelerometer_rotation (\d)/)[1]);
@@ -143,7 +145,7 @@ const adbd = net.createServer((plain) => {
           vol += (svc.match(/KEYCODE_VOLUME_UP/g) || []).length - (svc.match(/KEYCODE_VOLUME_DOWN/g) || []).length;
           vol = Math.max(0, Math.min(30, vol));
         } else if (svc.includes('media_session volume --stream 3 --get') && !svc.includes('mWakefulness')) out = `[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
-        else if (svc.includes('mWakefulness')) out = `  mWakefulness=${wake}\n  AC powered: true\n  USB powered: false\n  status: 2\n  level: 87\n  temperature: 312\nbluetooth=${bluetooth}\nrotation=${rotation}\nzen=${zen}\nwifi=WifiInfo: SSID: "${wifiName}", BSSID: 02:00:00:00:00:00, MAC: 02:00:00:00:00:00, RSSI: -55, Link speed: 866Mbps\n  mCurrentFocus=Window{a1b2 u0 ${front}/${front}.MainActivity}\ntimeout=30000\nstayon=3\nstorage=/dev/block/dm-48 111762240 61762240 50000000 56% /data\n      state=PlaybackState {state=${playing ? 'PLAYING(3)' : 'PAUSED(2)'}, position=1000, buffered position=0, speed=1.0}\n      metadata: size=12, description=Hello, Goodbye, The Beatles, Magical Mystery Tour\nbrightness_float=${brightFloat()}\nbrightness_raw=${brightRaw}\nbrand=${BRAND}\n[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
+        else if (svc.includes('mWakefulness')) out = `  mWakefulness=${wake}\n  AC powered: true\n  USB powered: false\n  status: 2\n  level: 87\n  temperature: 312\nbluetooth=${bluetooth}\nrotation=${rotation}\nzen=${zen}\ncall=${[...call].map((c) => `mCallState=${c}`).join('')}\nwifi=WifiInfo: SSID: "${wifiName}", BSSID: 02:00:00:00:00:00, MAC: 02:00:00:00:00:00, RSSI: -55, Link speed: 866Mbps\n  mCurrentFocus=Window{a1b2 u0 ${front}/${front}.MainActivity}\ntimeout=30000\nstayon=3\nstorage=/dev/block/dm-48 111762240 61762240 50000000 56% /data\n      state=PlaybackState {state=${playing ? 'PLAYING(3)' : 'PAUSED(2)'}, position=1000, buffered position=0, speed=1.0}\n      metadata: size=12, description=Hello, Goodbye, The Beatles, Magical Mystery Tour\nbrightness_float=${brightFloat()}\nbrightness_raw=${brightRaw}\nbrand=${BRAND}\n[V] will get volume\n[V] volume is ${vol} in range [0..30]\n`;
         else if (svc.includes('pm list packages -3')) out = 'package:com.spotify.music\n';
         else if (svc.includes('pm list packages')) out = 'package:com.android.chrome\npackage:com.spotify.music\npackage:com.android.settings\n';
         else if (svc.includes('dumpsys window')) out = `  mCurrentFocus=Window{a1b2 u0 ${front}/${front}.MainActivity}\n`;
@@ -312,6 +314,18 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   const sensors = ['bluetooth_enabled', 'auto_rotate', 'dnd_mode', 'wifi_network', 'measure_signal_strength', 'foreground_app'].map((k) => `${k}=${device.caps[k]}`).join(' ');
   console.log('    sensors:', sensors);
   if (sensors !== 'bluetooth_enabled=false auto_rotate=false dnd_mode=Off wifi_network=Home Wi-Fi measure_signal_strength=-55 foreground_app=Spotify') throw new Error('sensor values');
+
+  // Phone calls: rings and is answered; a call ends; an outgoing call; one that rang unseen (dual SIM: '02').
+  triggered.length = 0;
+  for (const [state, direction] of [['1', ''], ['2', ''], ['0', ''], ['2', '(MO - outgoing)\n'], ['00', ''], ['02', '(MT - incoming)\n']]) {
+    call = state; callDirection = direction; await device.poll();
+  }
+  const duringCall = `${device.caps.call_state} / ${await device.readCallState()}`;
+  call = '0'; await device.poll();
+  console.log('    calls -> triggers:', triggered.join(', '), '| during the last:', duringCall, '| after:', device.caps.call_state);
+  if (triggered.join() !== 'call_incoming,call_answered,call_ended,call_outgoing,call_ended,call_incoming,call_answered,call_ended'
+    || duringCall !== 'In a call / in_call' || device.caps.call_state !== 'No call') throw new Error('call triggers');
+  triggered.length = 0;
 
   const more = ['screen_timeout', 'stay_awake', 'storage_free', 'speaker_playing', 'speaker_track', 'speaker_artist', 'speaker_album'].map((k) => `${k}=${device.caps[k]}`).join(' | ');
   console.log('21. status + media:', more);

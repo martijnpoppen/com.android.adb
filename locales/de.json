@@ -88,5 +88,10 @@
     "priority": "Nur wichtige",
     "alarms": "Nur Wecker",
     "none": "Absolute Ruhe"
+  },
+  "call": {
+    "idle": "Kein Anruf",
+    "ringing": "Klingelt",
+    "in_call": "Im Gespräch"
   }
 }

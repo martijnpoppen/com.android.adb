@@ -1,0 +1,22 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Phone call",
+    "nl": "Telefoongesprek",
+    "de": "Anruf",
+    "fr": "Appel téléphonique",
+    "it": "Chiamata",
+    "sv": "Telefonsamtal",
+    "no": "Telefonsamtale",
+    "es": "Llamada",
+    "da": "Telefonopkald",
+    "ru": "Телефонный вызов",
+    "pl": "Połączenie telefoniczne",
+    "ko": "전화 통화",
+    "ar": "مكالمة هاتفية"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/call_state.svg"
+}

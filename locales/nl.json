@@ -88,5 +88,10 @@
     "priority": "Alleen prioriteit",
     "alarms": "Alleen wekkers",
     "none": "Totale stilte"
+  },
+  "call": {
+    "idle": "Geen gesprek",
+    "ringing": "Gaat over",
+    "in_call": "In gesprek"
   }
 }
