@@ -88,5 +88,20 @@
     "pl": "Dodano połączenia telefoniczne: karty Flow dla dzwoniących, odebranych, wychodzących i zakończonych połączeń, warunek i czujnik.",
     "ko": "전화 통화 추가: 벨 울림, 수신 응답, 발신, 통화 종료 Flow 카드와 조건, 센서.",
     "ar": "تمت إضافة المكالمات الهاتفية: بطاقات Flow للرنين والرد والمكالمات الصادرة والمنتهية، مع شرط ومستشعر."
+  },
+  "1.1.5": {
+    "en": "Added a Flow card to turn \"Keep the connection open\" on or off.",
+    "nl": "Flow-kaart toegevoegd om \"Verbinding open houden\" aan of uit te zetten.",
+    "de": "Flow-Karte hinzugefügt, um „Verbindung offen halten“ ein- oder auszuschalten.",
+    "fr": "Ajout d'une carte Flow pour activer ou désactiver « Garder la connexion ouverte ».",
+    "it": "Aggiunta una scheda Flow per attivare o disattivare \"Mantieni la connessione aperta\".",
+    "sv": "Lade till ett Flow-kort för att slå på eller av ”Håll anslutningen öppen”.",
+    "no": "La til et Flow-kort for å slå «Hold tilkoblingen åpen» på eller av.",
+    "es": "Añadida una tarjeta de Flow para activar o desactivar «Mantener la conexión abierta».",
+    "da": "Tilføjede et Flow-kort til at slå \"Hold forbindelsen åben\" til eller fra.",
+    "ru": "Добавлена карточка Flow для включения и выключения «Не разрывать соединение».",
+    "pl": "Dodano kartę Flow do włączania i wyłączania „Utrzymuj połączenie”.",
+    "ko": "'연결 계속 유지'를 켜거나 끄는 Flow 카드를 추가했습니다.",
+    "ar": "تمت إضافة بطاقة Flow لتشغيل «إبقاء الاتصال مفتوحًا» أو إيقافه."
   }
 }
