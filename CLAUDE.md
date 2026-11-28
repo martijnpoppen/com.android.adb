@@ -200,6 +200,9 @@ network with a pure-JavaScript ADB client. No adb binary, no adb server.
   connect for a command, read the state right after it (`pollSoon`), disconnect. The only
   exception: while the device is unreachable it retries every 30 s, or it would stay
   unavailable for good. The two check-interval settings only apply with keep-alive on.
+- Action card `set_keep_alive` (title = the setting's label) changes that setting from a Flow
+  (`setKeepAlive`: `setSettings`, which does not call `onSettings`, so it updates `this.config`
+  and the client's idle timeout itself). Mock only.
 - Memory (Peter_Kawa: 67 → 120 MB in two days with two devices, rising in steps): large
   transfers were the suspect, not a classic leak. `AdbClient` joined its receive buffer on
   every 16 kB piece (~32 MB allocated per MB received); it now collects pieces and joins once

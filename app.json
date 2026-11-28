@@ -3228,6 +3228,103 @@
             ]
           }
         ]
+      },
+      {
+        "id": "set_keep_alive",
+        "title": {
+          "en": "Keep the connection open",
+          "nl": "Verbinding open houden",
+          "de": "Verbindung offen halten",
+          "fr": "Garder la connexion ouverte",
+          "it": "Mantieni la connessione aperta",
+          "sv": "Håll anslutningen öppen",
+          "no": "Hold tilkoblingen åpen",
+          "es": "Mantener la conexión abierta",
+          "da": "Hold forbindelsen åben",
+          "ru": "Не разрывать соединение",
+          "pl": "Utrzymuj połączenie",
+          "ko": "연결 계속 유지",
+          "ar": "إبقاء الاتصال مفتوحًا"
+        },
+        "titleFormatted": {
+          "en": "Keep the connection open: [[state]]",
+          "nl": "Verbinding open houden: [[state]]",
+          "de": "Verbindung offen halten: [[state]]",
+          "fr": "Garder la connexion ouverte: [[state]]",
+          "it": "Mantieni la connessione aperta: [[state]]",
+          "sv": "Håll anslutningen öppen: [[state]]",
+          "no": "Hold tilkoblingen åpen: [[state]]",
+          "es": "Mantener la conexión abierta: [[state]]",
+          "da": "Hold forbindelsen åben: [[state]]",
+          "ru": "Не разрывать соединение: [[state]]",
+          "pl": "Utrzymuj połączenie: [[state]]",
+          "ko": "연결 계속 유지: [[state]]",
+          "ar": "إبقاء الاتصال مفتوحًا: [[state]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tablet"
+          },
+          {
+            "type": "dropdown",
+            "name": "state",
+            "title": {
+              "en": "State",
+              "nl": "Status",
+              "de": "Status",
+              "fr": "État",
+              "it": "Stato",
+              "sv": "Status",
+              "no": "Status",
+              "es": "Estado",
+              "da": "Status",
+              "ru": "Состояние",
+              "pl": "Stan",
+              "ko": "상태",
+              "ar": "الحالة"
+            },
+            "values": [
+              {
+                "id": "true",
+                "title": {
+                  "en": "On",
+                  "nl": "Aan",
+                  "de": "Ein",
+                  "fr": "Activé",
+                  "it": "Attivo",
+                  "sv": "På",
+                  "no": "På",
+                  "es": "Activado",
+                  "da": "Til",
+                  "ru": "Вкл.",
+                  "pl": "Wł.",
+                  "ko": "사용",
+                  "ar": "تشغيل"
+                }
+              },
+              {
+                "id": "false",
+                "title": {
+                  "en": "Off",
+                  "nl": "Uit",
+                  "de": "Aus",
+                  "fr": "Désactivé",
+                  "it": "Disattivo",
+                  "sv": "Av",
+                  "no": "Av",
+                  "es": "Desactivado",
+                  "da": "Fra",
+                  "ru": "Выкл.",
+                  "pl": "Wył.",
+                  "ko": "사용 안함",
+                  "ar": "إيقاف"
+                }
+              }
+            ]
+          }
+        ]
       }
     ]
   },

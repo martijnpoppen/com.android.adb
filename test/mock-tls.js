@@ -292,6 +292,11 @@ const listen = (srv) => new Promise((r) => srv.listen(0, '127.0.0.1', () => r(sr
   if (events.join(' ') !== expected) throw new Error(`connect/disconnect events: expected "${expected}"`);
   await device.onSettings({ newSettings: { ...device.config, keep_alive: false }, changedKeys: ['keep_alive'] });
   console.log('17. setting applied to client: idleTimeout =', device.client.idleTimeout);
+  await device.setKeepAlive(true); const wasPlugged = device.pluggedIn; device.pluggedIn = true; const onDelay = `${device.settings.keep_alive}/${device.client.idleTimeout}/${device.nextPollDelay()}`;
+  await device.setKeepAlive(false); const offDelay = `${device.settings.keep_alive}/${device.client.idleTimeout}/${device.nextPollDelay()}`;
+  device.pluggedIn = wasPlugged;
+  console.log('    keep-alive card: on ->', onDelay, '| off ->', offDelay);
+  if (onDelay !== 'true/0/15' || offDelay !== 'false/5000/0') throw new Error('keep-alive card');
   console.log('18. errors translated: unreachable ->', device.localizeError(Object.assign(new Error('x'), { code: 'ECONNREFUSED' })).message.slice(0, 40),
     '| other errors unchanged =', device.localizeError(new Error('raw')).message === 'raw');
   const problems = checkTranslations();

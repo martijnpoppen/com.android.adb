@@ -724,6 +724,16 @@ class TabletDevice extends Homey.Device {
     await this.setValue('auto_rotate', on);
   }
 
+  /** The "Keep the connection open" setting, from a Flow. */
+  async setKeepAlive(on) {
+    if ((this.config.keep_alive !== false) === on) return;
+    await this.setSettings({ keep_alive: on });
+    this.config = { ...this.config, keep_alive: on };
+    this.log(`"Keep the connection open" turned ${on ? 'on' : 'off'} by a Flow`);
+    this.client.setIdleTimeout(on ? 0 : IDLE_DISCONNECT_MS);
+    this.pollSoon(); // on: start checking; off: one last reading, then the idle disconnect
+  }
+
   /** Posts a notification from the Shell app. Each gets its own tag, so they stack. */
   async showNotification(title, text) {
     title = String(title || '').trim();

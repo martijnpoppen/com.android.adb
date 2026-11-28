@@ -52,6 +52,7 @@ class TabletDriver extends Homey.Driver {
     action('swipe_screen', async ({ device, x1, y1, x2, y2 }) => device.touch(x1, y1, x2, y2));
     action('set_stream_volume', async ({ device, stream, volume }) => device.setStreamVolume(stream, volume));
     action('set_bluetooth', async ({ device, state }) => device.setBluetooth(state === 'true'));
+    action('set_keep_alive', async ({ device, state }) => device.setKeepAlive(state === 'true'));
     action('restart_device', async ({ device }) => device.reboot());
     action('set_do_not_disturb', async ({ device, mode }) => device.setDoNotDisturb(mode));
     action('set_auto_rotate', async ({ device, state }) => device.setAutoRotate(state === 'true'));
